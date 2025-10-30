@@ -51,8 +51,7 @@ export enum Resource {
   DOCUMENT_MODEL = "DOCUMENT_MODEL",
   SNIPPET = "SNIPPET",
 
-  // Appointments & Scheduling
-  APPOINTMENT = "APPOINTMENT",
+  // Scheduling & Location
   LOCATION = "LOCATION",
   TASK_TYPE = "TASK_TYPE",
 
@@ -123,7 +122,6 @@ export const PUBLIC_RESOURCES: Resource[] = [
   Resource.GENERATED_DOCUMENT,
   Resource.DOCUMENT_MODEL,
   Resource.SNIPPET,
-  Resource.APPOINTMENT,
   Resource.LOCATION,
   Resource.TASK_TYPE,
   Resource.MEMBERSHIP,

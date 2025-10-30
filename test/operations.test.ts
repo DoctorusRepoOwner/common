@@ -129,7 +129,7 @@ describe("Operations Module", () => {
           "USER:LOGIN",
           "PRESCRIPTION:PRESCRIBE",
           "DIAGNOSIS:DIAGNOSE",
-          "APPOINTMENT:SCHEDULE",
+          "MEDICAL_SERVICE:SCHEDULE",
         ];
 
         testCases.forEach((opStr) => {

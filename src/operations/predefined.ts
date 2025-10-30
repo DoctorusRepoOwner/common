@@ -117,14 +117,16 @@ export const Operations = {
     Action.READ,
   ),
 
-  // Appointment operations
-  APPOINTMENT_CREATE: new Operation(Resource.APPOINTMENT, Action.CREATE),
-  APPOINTMENT_READ: new Operation(Resource.APPOINTMENT, Action.READ),
-  APPOINTMENT_UPDATE: new Operation(Resource.APPOINTMENT, Action.UPDATE),
-  APPOINTMENT_DELETE: new Operation(Resource.APPOINTMENT, Action.DELETE),
-  APPOINTMENT_SCHEDULE: new Operation(Resource.APPOINTMENT, Action.SCHEDULE),
-  APPOINTMENT_CANCEL: new Operation(Resource.APPOINTMENT, Action.CANCEL),
-  APPOINTMENT_LIST: new Operation(Resource.APPOINTMENT, Action.LIST),
+  // Medical service scheduling operations (appointments)
+  MEDICAL_SERVICE_SCHEDULE: new Operation(
+    Resource.MEDICAL_SERVICE,
+    Action.SCHEDULE,
+  ),
+  MEDICAL_SERVICE_CANCEL: new Operation(
+    Resource.MEDICAL_SERVICE,
+    Action.CANCEL,
+  ),
+  MEDICAL_SERVICE_LIST: new Operation(Resource.MEDICAL_SERVICE, Action.LIST),
 
   // User operations
   USER_CREATE: new Operation(Resource.USER, Action.CREATE),
