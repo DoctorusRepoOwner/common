@@ -23,9 +23,10 @@ describe("Operations Module", () => {
 
     it("should have public resources", () => {
       expect(Resource.USER).toBe("USER");
-      expect(Resource.PROFILE).toBe("PROFILE");
+      expect(Resource.ACCOUNT).toBe("ACCOUNT");
       expect(Resource.NOTIFICATION).toBe("NOTIFICATION");
       expect(Resource.SETTINGS).toBe("SETTINGS");
+      expect(Resource.CONTACT).toBe("CONTACT");
     });
   });
 
@@ -63,7 +64,7 @@ describe("Operations Module", () => {
 
     it("should return false for public resources", () => {
       expect(isMedicalResource(Resource.USER)).toBe(false);
-      expect(isMedicalResource(Resource.PROFILE)).toBe(false);
+      expect(isMedicalResource(Resource.ACCOUNT)).toBe(false);
       expect(isMedicalResource(Resource.NOTIFICATION)).toBe(false);
     });
   });
@@ -71,7 +72,7 @@ describe("Operations Module", () => {
   describe("isPublicResource", () => {
     it("should return true for public resources", () => {
       expect(isPublicResource(Resource.USER)).toBe(true);
-      expect(isPublicResource(Resource.PROFILE)).toBe(true);
+      expect(isPublicResource(Resource.ACCOUNT)).toBe(true);
       expect(isPublicResource(Resource.SETTINGS)).toBe(true);
     });
 
@@ -256,7 +257,7 @@ describe("Operations Module", () => {
 
     it("should have PUBLIC_RESOURCES array", () => {
       expect(PUBLIC_RESOURCES).toContain(Resource.USER);
-      expect(PUBLIC_RESOURCES).toContain(Resource.PROFILE);
+      expect(PUBLIC_RESOURCES).toContain(Resource.ACCOUNT);
       expect(PUBLIC_RESOURCES).toContain(Resource.SETTINGS);
     });
 

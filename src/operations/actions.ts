@@ -7,7 +7,13 @@ export enum Action {
   READ = "READ",
   UPDATE = "UPDATE",
   DELETE = "DELETE",
+  PUT = "PUT",
   LIST = "LIST",
+
+  // General actions
+  MANAGE = "MANAGE",
+  VIEW = "VIEW",
+  SEARCH = "SEARCH",
 
   // Access control
   GRANT = "GRANT",
@@ -22,6 +28,16 @@ export enum Action {
   REJECT = "REJECT",
   SIGN = "SIGN",
   VERIFY = "VERIFY",
+
+  // Medical service specific
+  SET_MEDICAL_SERVICE_STATUS = "SET_MEDICAL_SERVICE_STATUS",
+  SET_MEDICAL_SERVICE_FEES = "SET_MEDICAL_SERVICE_FEES",
+
+  // Patient specific
+  UPDATE_STATUS = "UPDATE_STATUS",
+  VIEW_PATIENTS = "VIEW_PATIENTS",
+  PUT_PATIENT_PAYMENT = "PUT_PATIENT_PAYMENT",
+  DELETE_PATIENT_PAYMENT = "DELETE_PATIENT_PAYMENT",
 
   // Data operations
   EXPORT = "EXPORT",
