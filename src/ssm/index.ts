@@ -4,4 +4,5 @@ export {
   buildSSMPathWithPrefix,
   extractEnvFromPath,
   extractKeyFromPath,
+  isEnvAgnostic,
 } from "./utils";

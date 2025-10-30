@@ -1,8 +1,8 @@
 import { SSM_PARAM_KEY } from "./keys";
 
 /**
- * Build SSM parameter path with environment prefix
- * @param env - Environment name (e.g., 'dev', 'staging', 'prod')
+ * Build SSM parameter path with optional environment prefix
+ * @param env - Environment name (e.g., 'dev', 'staging', 'prod'), or null for env-agnostic parameters
  * @param key - SSM parameter key
  * @returns Full SSM parameter path
  *
@@ -10,10 +10,13 @@ import { SSM_PARAM_KEY } from "./keys";
  * ```ts
  * buildSSMPath('prod', SSM_PARAM_KEY.COGNITO_USER_POOL_ID)
  * // Returns: '/prod/user-pool-id'
+ *
+ * buildSSMPath(null, SSM_PARAM_KEY.DB_USER)
+ * // Returns: '/db-user' (env-agnostic)
  * ```
  */
-export function buildSSMPath(env: string, key: SSM_PARAM_KEY): string {
-  return `/${env}/${key}`;
+export function buildSSMPath(env: string | null, key: SSM_PARAM_KEY): string {
+  return env ? `/${env}/${key}` : `/${key}`;
 }
 
 /**
@@ -40,12 +43,15 @@ export function buildSSMPathWithPrefix(
 /**
  * Extract environment from SSM parameter path
  * @param path - SSM parameter path
- * @returns Environment name or null if not found
+ * @returns Environment name or null if env-agnostic or not found
  *
  * @example
  * ```ts
  * extractEnvFromPath('/prod/user-pool-id')
  * // Returns: 'prod'
+ *
+ * extractEnvFromPath('/db-user')
+ * // Returns: null (env-agnostic parameter)
  * ```
  */
 export function extractEnvFromPath(path: string): string | null {
@@ -62,6 +68,9 @@ export function extractEnvFromPath(path: string): string | null {
  * ```ts
  * extractKeyFromPath('/prod/user-pool-id')
  * // Returns: SSM_PARAM_KEY.COGNITO_USER_POOL_ID
+ *
+ * extractKeyFromPath('/db-user')
+ * // Returns: SSM_PARAM_KEY.DB_USER (env-agnostic)
  * ```
  */
 export function extractKeyFromPath(path: string): SSM_PARAM_KEY | null {
@@ -75,4 +84,24 @@ export function extractKeyFromPath(path: string): SSM_PARAM_KEY | null {
   }
 
   return null;
+}
+
+/**
+ * Check if an SSM parameter path is environment-agnostic
+ * @param path - SSM parameter path
+ * @returns true if the path is env-agnostic (no environment prefix)
+ *
+ * @example
+ * ```ts
+ * isEnvAgnostic('/db-user')
+ * // Returns: true
+ *
+ * isEnvAgnostic('/prod/user-pool-id')
+ * // Returns: false
+ * ```
+ */
+export function isEnvAgnostic(path: string): boolean {
+  // Env-agnostic paths have format: /key (only 2 parts when split by /)
+  const parts = path.split("/").filter((p) => p.length > 0);
+  return parts.length === 1;
 }

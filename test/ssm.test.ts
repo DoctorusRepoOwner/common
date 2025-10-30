@@ -4,6 +4,7 @@ import {
   buildSSMPathWithPrefix,
   extractEnvFromPath,
   extractKeyFromPath,
+  isEnvAgnostic,
 } from "../src/ssm";
 
 describe("SSM Utilities", () => {
@@ -19,6 +20,19 @@ describe("SSM Utilities", () => {
 
       expect(devPath).toBe("/dev/db-user");
       expect(stagingPath).toBe("/staging/db-user");
+    });
+
+    it("should build env-agnostic path when env is null", () => {
+      const path = buildSSMPath(null, SSM_PARAM_KEY.DB_USER);
+      expect(path).toBe("/db-user");
+    });
+
+    it("should handle multiple env-agnostic parameters", () => {
+      const path1 = buildSSMPath(null, SSM_PARAM_KEY.BASE_HOST);
+      const path2 = buildSSMPath(null, SSM_PARAM_KEY.EMAIL_FROM_ADDRESS);
+
+      expect(path1).toBe("/base-host");
+      expect(path2).toBe("/email-from-address");
     });
   });
 
@@ -68,6 +82,11 @@ describe("SSM Utilities", () => {
       const env = extractEnvFromPath("/");
       expect(env).toBeNull();
     });
+
+    it("should return null for env-agnostic paths", () => {
+      const env = extractEnvFromPath("/db-user");
+      expect(env).toBeNull();
+    });
   });
 
   describe("extractKeyFromPath", () => {
@@ -79,6 +98,11 @@ describe("SSM Utilities", () => {
     it("should extract key from complex path", () => {
       const key = extractKeyFromPath("/myapp/staging/db-password");
       expect(key).toBe(SSM_PARAM_KEY.DB_PASSWORD);
+    });
+
+    it("should extract key from env-agnostic path", () => {
+      const key = extractKeyFromPath("/db-user");
+      expect(key).toBe(SSM_PARAM_KEY.DB_USER);
     });
 
     it("should return null for invalid key", () => {
@@ -105,6 +129,29 @@ describe("SSM Utilities", () => {
       testCases.forEach(({ path, expected }) => {
         expect(extractKeyFromPath(path)).toBe(expected);
       });
+    });
+  });
+
+  describe("isEnvAgnostic", () => {
+    it("should return true for env-agnostic paths", () => {
+      expect(isEnvAgnostic("/db-user")).toBe(true);
+      expect(isEnvAgnostic("/base-host")).toBe(true);
+      expect(isEnvAgnostic("/email-from-address")).toBe(true);
+    });
+
+    it("should return false for environment-specific paths", () => {
+      expect(isEnvAgnostic("/prod/user-pool-id")).toBe(false);
+      expect(isEnvAgnostic("/dev/db-password")).toBe(false);
+      expect(isEnvAgnostic("/staging/graphql-api-id")).toBe(false);
+    });
+
+    it("should return false for complex paths", () => {
+      expect(isEnvAgnostic("/myapp/prod/db-user")).toBe(false);
+    });
+
+    it("should return false for invalid paths", () => {
+      expect(isEnvAgnostic("/")).toBe(false);
+      expect(isEnvAgnostic("")).toBe(false);
     });
   });
 
