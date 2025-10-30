@@ -39,7 +39,7 @@ export class Operation {
   constructor(
     public readonly resource: Resource,
     public readonly action: Action,
-  ) {}
+  ) { }
 
   /**
    * Get operation string in RESOURCE:ACTION format
@@ -65,4 +65,58 @@ export class Operation {
       operation: this.toString(),
     };
   }
+}
+
+/**
+ * Extract Resource from an OPERATION string
+ * @param operation - Operation string in RESOURCE:ACTION format
+ * @returns Resource or null if invalid
+ *
+ * @example
+ * ```ts
+ * getResourceFromOperation("PATIENT:READ") // Returns: Resource.PATIENT
+ * getResourceFromOperation("INVALID:ACTION") // Returns: null
+ * ```
+ */
+export function getResourceFromOperation(operation: string): Resource | null {
+  const parts = operation.split(":");
+  if (parts.length !== 2) {
+    return null;
+  }
+
+  const [resourceStr] = parts;
+
+  // Validate resource
+  if (Object.values(Resource).includes(resourceStr as Resource)) {
+    return resourceStr as Resource;
+  }
+
+  return null;
+}
+
+/**
+ * Extract Action from an OPERATION string
+ * @param operation - Operation string in RESOURCE:ACTION format
+ * @returns Action or null if invalid
+ *
+ * @example
+ * ```ts
+ * getActionFromOperation("PATIENT:READ") // Returns: Action.READ
+ * getActionFromOperation("PATIENT:INVALID") // Returns: null
+ * ```
+ */
+export function getActionFromOperation(operation: string): Action | null {
+  const parts = operation.split(":");
+  if (parts.length !== 2) {
+    return null;
+  }
+
+  const [, actionStr] = parts;
+
+  // Validate action
+  if (Object.values(Action).includes(actionStr as Action)) {
+    return actionStr as Action;
+  }
+
+  return null;
 }
