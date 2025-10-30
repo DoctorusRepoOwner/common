@@ -2,6 +2,11 @@ import { Action } from "./actions";
 import { Resource } from "./resources";
 
 /**
+ * Operation string type in RESOURCE:ACTION format
+ */
+export type OPERATION = `${Resource}:${Action}`;
+
+/**
  * Operation in RESOURCE:ACTION format
  */
 export class Operation {
@@ -39,8 +44,8 @@ export class Operation {
   /**
    * Get operation string in RESOURCE:ACTION format
    */
-  toString(): string {
-    return `${this.resource}:${this.action}`;
+  toString(): OPERATION {
+    return `${this.resource}:${this.action}` as OPERATION;
   }
 
   /**
@@ -53,7 +58,7 @@ export class Operation {
   /**
    * Convert to JSON representation
    */
-  toJSON(): { resource: Resource; action: Action; operation: string } {
+  toJSON(): { resource: Resource; action: Action; operation: OPERATION } {
     return {
       resource: this.resource,
       action: this.action,

@@ -6,7 +6,7 @@ export {
   isPublicResource,
 } from "./resources";
 export { Action } from "./actions";
-export { Operation } from "./operation";
+export { Operation, OPERATION } from "./operation";
 export {
   Operations,
   getAllOperations,
