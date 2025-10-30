@@ -17,7 +17,7 @@ const project = new typescript.TypeScriptProject({
   release: true,
   releaseTrigger: ReleaseTrigger.continuous(), // release on every push to main
   releaseToNpm: true,
-  npmAccess: NpmAccess.PUBLIC,        // <-- public package
+  npmAccess: NpmAccess.PUBLIC, // <-- public package
   npmProvenance: true,
 
   tsconfig: {
@@ -35,7 +35,7 @@ const project = new typescript.TypeScriptProject({
 });
 
 project.addFields({
-  publishConfig: { access: "public" },      // ensure scoped package is public
+  publishConfig: { access: "public" }, // ensure scoped package is public
   exports: { ".": { types: "./lib/index.d.ts", require: "./lib/index.js" } },
 });
 
