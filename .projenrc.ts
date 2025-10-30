@@ -1,12 +1,41 @@
-import { typescript } from 'projen';
-const project = new typescript.TypeScriptAppProject({
-  defaultReleaseBranch: 'main',
-  name: 'common',
-  projenrcTs: true,
+import { typescript } from "projen";
+import { NodePackageManager, NpmAccess } from "projen/lib/javascript";
+import { ReleaseTrigger } from "projen/lib/release";
 
-  // deps: [],                /* Runtime dependencies of this module. */
-  // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
-  // devDeps: [],             /* Build dependencies for this module. */
-  // packageName: undefined,  /* The "name" in package.json. */
+const project = new typescript.TypeScriptProject({
+  defaultReleaseBranch: "main",
+  name: "@doctorus/utils",
+  description: "Common TypeScript utilities for Doctorus",
+  repository: "git@github.com:DoctorusRepoOwner/doctorus-common.git",
+  packageManager: NodePackageManager.PNPM,
+  eslint: true,
+  prettier: true,
+  jest: true,
+
+  // Build & Release
+  release: true,
+  releaseTrigger: ReleaseTrigger.continuous(), // release on every push to main
+  releaseToNpm: true,
+  npmAccess: NpmAccess.PUBLIC,        // <-- public package
+  npmProvenance: true,
+
+  tsconfig: {
+    compilerOptions: {
+      target: "ES2022",
+      module: "CommonJS",
+      declaration: true,
+      outDir: "lib",
+      strict: true,
+      esModuleInterop: true,
+      skipLibCheck: true,
+    },
+    include: ["src/**/*.ts"],
+  },
 });
+
+project.addFields({
+  publishConfig: { access: "public" },      // ensure scoped package is public
+  exports: { ".": { types: "./lib/index.d.ts", require: "./lib/index.js" } },
+});
+
 project.synth();
