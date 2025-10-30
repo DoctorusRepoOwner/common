@@ -4,9 +4,9 @@ import { ReleaseTrigger } from "projen/lib/release";
 
 const project = new typescript.TypeScriptProject({
   defaultReleaseBranch: "main",
-  name: "@doctorus/utils",
+  name: "@doctorus/common",
   description: "Common TypeScript utilities for Doctorus",
-  repository: "git@github.com:DoctorusRepoOwner/doctorus-common.git",
+  repository: "git@github.com:DoctorusRepoOwner/common.git",
   packageManager: NodePackageManager.PNPM,
   projenrcTs: true, // Add this line to enable TypeScript config
   eslint: true,
