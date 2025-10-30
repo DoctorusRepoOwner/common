@@ -8,6 +8,7 @@ const project = new typescript.TypeScriptProject({
   description: "Common TypeScript utilities for Doctorus",
   repository: "git@github.com:DoctorusRepoOwner/doctorus-common.git",
   packageManager: NodePackageManager.PNPM,
+  projenrcTs: true, // Add this line to enable TypeScript config
   eslint: true,
   prettier: true,
   jest: true,
