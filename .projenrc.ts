@@ -1,5 +1,9 @@
 import { typescript } from "projen";
-import { NodePackageManager, NpmAccess } from "projen/lib/javascript";
+import {
+  NodePackageManager,
+  NpmAccess,
+  TrailingComma,
+} from "projen/lib/javascript";
 import { ReleaseTrigger } from "projen/lib/release";
 
 const project = new typescript.TypeScriptProject({
@@ -11,6 +15,14 @@ const project = new typescript.TypeScriptProject({
   projenrcTs: true, // Add this line to enable TypeScript config
   eslint: true,
   prettier: true,
+  prettierOptions: {
+    settings: {
+      tabWidth: 2,
+      semi: true,
+      singleQuote: false,
+      trailingComma: TrailingComma.ALL,
+    },
+  },
   jest: true,
 
   // Build & Release
@@ -38,5 +50,24 @@ project.addFields({
   publishConfig: { access: "public" }, // ensure scoped package is public
   exports: { ".": { types: "./lib/index.d.ts", require: "./lib/index.js" } },
 });
+
+// Add format script for convenience
+project.addTask("format", {
+  description: "Format code with prettier",
+  exec: 'prettier --write "src/**/*.ts" "test/**/*.ts" ".projenrc.ts"',
+});
+
+// Add husky for git hooks
+project.addDevDeps("husky@^9", "lint-staged@^15");
+
+// Add lint-staged configuration
+project.addFields({
+  "lint-staged": {
+    "*.ts": ["prettier --write"],
+  },
+});
+
+// Add prepare script for husky
+project.packageTask.exec("husky || true");
 
 project.synth();

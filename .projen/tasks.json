@@ -118,6 +118,15 @@
         }
       ]
     },
+    "format": {
+      "name": "format",
+      "description": "Format code with prettier",
+      "steps": [
+        {
+          "exec": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \".projenrc.ts\""
+        }
+      ]
+    },
     "install": {
       "name": "install",
       "description": "Install project dependencies and update lockfile (non-frozen)",
@@ -145,6 +154,9 @@
         },
         {
           "exec": "pnpm pack --pack-destination dist/js"
+        },
+        {
+          "exec": "husky || true"
         }
       ]
     },
@@ -237,7 +249,7 @@
           "exec": "pnpm i --no-frozen-lockfile"
         },
         {
-          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser commit-and-tag-version constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit prettier projen ts-jest ts-node typescript"
+          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser commit-and-tag-version constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint husky jest jest-junit lint-staged prettier projen ts-jest ts-node typescript"
         },
         {
           "exec": "npx projen"
