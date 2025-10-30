@@ -39,7 +39,7 @@ export class Operation {
   constructor(
     public readonly resource: Resource,
     public readonly action: Action,
-  ) { }
+  ) {}
 
   /**
    * Get operation string in RESOURCE:ACTION format

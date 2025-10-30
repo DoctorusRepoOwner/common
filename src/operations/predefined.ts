@@ -174,6 +174,3 @@ export function getOperationsByResource(resource: Resource): Operation[] {
 export function getOperationsByAction(action: Action): Operation[] {
   return getAllOperations().filter((op) => op.action === action);
 }
-/**
- * retreive
- */
