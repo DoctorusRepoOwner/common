@@ -1,9 +1,9 @@
 {
-  "name": "@doctorus/utils",
+  "name": "@doctorus/common",
   "description": "Common TypeScript utilities for Doctorus",
   "repository": {
     "type": "git",
-    "url": "git@github.com:DoctorusRepoOwner/doctorus-common.git"
+    "url": "git@github.com:DoctorusRepoOwner/common.git"
   },
   "scripts": {
     "build": "npx projen build",
