@@ -162,7 +162,12 @@
     },
     "post-compile": {
       "name": "post-compile",
-      "description": "Runs after successful compilation"
+      "description": "Runs after successful compilation",
+      "steps": [
+        {
+          "exec": "tsc -p tsconfig.esm.json"
+        }
+      ]
     },
     "post-upgrade": {
       "name": "post-upgrade",

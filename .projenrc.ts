@@ -1,8 +1,9 @@
-import { typescript } from "projen";
+import { typescript, JsonFile } from "projen";
 import {
   NodePackageManager,
   NpmAccess,
   TrailingComma,
+  TypeScriptModuleResolution,
 } from "projen/lib/javascript";
 import { ReleaseTrigger } from "projen/lib/release";
 
@@ -44,12 +45,28 @@ const project = new typescript.TypeScriptProject({
     },
     include: ["src/**/*.ts"],
   },
+  // Ensure dev config (used by ts-node/jest/projen) runs in CJS for compatibility
+  tsconfigDev: {
+    compilerOptions: {
+      module: "CommonJS",
+      moduleResolution: TypeScriptModuleResolution.NODE,
+      target: "ES2022",
+      resolveJsonModule: true,
+      outDir: "lib",
+    },
+  },
 });
 
-project.addFields({
-  publishConfig: { access: "public" }, // ensure scoped package is public
-  exports: { ".": { types: "./lib/index.d.ts", require: "./lib/index.js" } },
+// Configure package for dual CJS + ESM consumers
+project.package.addField("publishConfig", { access: "public" });
+project.package.addField("exports", {
+  ".": {
+    types: "./lib/index.d.ts",
+    require: "./lib/index.js",
+    import: "./esm/index.js",
+  },
 });
+project.package.addField("module", "./esm/index.js");
 
 // Add format script for convenience
 project.addTask("format", {
@@ -61,13 +78,35 @@ project.addTask("format", {
 project.addDevDeps("husky@^9", "lint-staged@^15");
 
 // Add lint-staged configuration
-project.addFields({
-  "lint-staged": {
-    "*.ts": ["prettier --write"],
-  },
+project.package.addField("lint-staged", {
+  "*.ts": ["prettier --write"],
 });
 
 // Add prepare script for husky
 project.packageTask.exec("husky || true");
+
+// Keep Jest default (CommonJS) for local tests; consumers can use ESM via exports.import
+
+// Generate ESM tsconfig and build task
+new JsonFile(project, "tsconfig.esm.json", {
+  obj: {
+    $schema: "https://json.schemastore.org/tsconfig",
+    extends: "./tsconfig.dev.json",
+    compilerOptions: {
+      module: "ES2022",
+      moduleResolution: "node",
+      outDir: "esm",
+      declaration: false,
+      emitDeclarationOnly: false,
+      target: "ES2022",
+      esModuleInterop: true,
+      skipLibCheck: true,
+    },
+    include: ["src/**/*.ts"],
+  },
+});
+
+// Run ESM compilation after main compile
+project.postCompileTask.exec("tsc -p tsconfig.esm.json");
 
 project.synth();

@@ -25,7 +25,8 @@
     "stripInternal": true,
     "target": "ES2022",
     "outDir": "lib",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "moduleResolution": "node"
   },
   "include": [
     "src/**/*.ts",

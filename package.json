@@ -104,9 +104,11 @@
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
-      "require": "./lib/index.js"
+      "require": "./lib/index.js",
+      "import": "./esm/index.js"
     }
   },
+  "module": "./esm/index.js",
   "lint-staged": {
     "*.ts": [
       "prettier --write"

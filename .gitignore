@@ -50,4 +50,5 @@ junit.xml
 /lib
 /dist/
 !/.eslintrc.json
+!/tsconfig.esm.json
 !/.projenrc.ts
