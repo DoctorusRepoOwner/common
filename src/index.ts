@@ -3,3 +3,6 @@ export class Hello {
     return "hello, world!";
   }
 }
+
+// Export SSM module
+export * from "./ssm";
