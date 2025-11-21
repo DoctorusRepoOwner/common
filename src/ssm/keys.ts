@@ -14,6 +14,7 @@ export enum SSM_PARAM_KEY {
   GRAPHQL_API_ID = "graphql-api-id",
   MEDICAL_ASSETS_AWS_CLOUDFRONT_PRIVATE_KEY = "medical-assets-dist-private-key",
   MEDICAL_ASSETS_AWS_CLOUDFRONT_KEY_ID = "medical-assets-dist-public-key-id",
+  MEDICAL_ASSETS_AWS_CLOUDFRONT_PUB_KEY = "medical-assets-dist-public-key",
   MEDICAL_ASSETS_BUCKET_NAME = "medical-assets-bucket-name",
   PUBLIC_ASSETS_BUCKET_NAME = "public-assets-bucket-name",
   DB_USER = "db-user",
