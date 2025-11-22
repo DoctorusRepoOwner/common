@@ -15,7 +15,7 @@ const project = new typescript.TypeScriptProject({
   npmAccess: NpmAccess.PUBLIC,
   packageManager: NodePackageManager.PNPM,
   npmProvenance: false, // Disable provenance for private repositories
-
+  eslint: true,
   // Repository settings
   repository: 'git@github.com:DoctorusRepoOwner/common.git',
 
@@ -72,7 +72,7 @@ if (project.vscode) {
 }
 
 // Add format task for manual use (writes changes)
-const formatTask = project.addTask('format', {
+project.addTask('format', {
   description: 'Format all source files',
   exec: 'prettier --write "src/**/*.ts" "test/**/*.ts" .projenrc.ts',
 });
@@ -83,10 +83,7 @@ const formatCheckTask = project.addTask('format:check', {
   exec: 'prettier --check "src/**/*.ts" "test/**/*.ts" .projenrc.ts',
 });
 
-// Format before compile to prevent git diff errors
-project.preCompileTask.spawn(formatTask);
-
-// Then check formatting during compile
+// Only check formatting during compile (avoid write operations in build to keep git diff clean)
 project.compileTask.prependSpawn(formatCheckTask);
 
 // Add lint-staged and husky for pre-commit formatting
