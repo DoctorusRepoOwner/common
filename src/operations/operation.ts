@@ -1,5 +1,5 @@
-import { Action } from "./actions";
-import { Resource } from "./resources";
+import { Action } from './actions';
+import { Resource } from './resources';
 
 /**
  * Operation string type in RESOURCE:ACTION format
@@ -16,7 +16,7 @@ export class Operation {
    * @returns Operation instance or null if invalid
    */
   static fromString(operationString: string): Operation | null {
-    const parts = operationString.split(":");
+    const parts = operationString.split(':');
     if (parts.length !== 2) {
       return null;
     }
@@ -79,7 +79,7 @@ export class Operation {
  * ```
  */
 export function getResourceFromOperation(operation: string): Resource | null {
-  const parts = operation.split(":");
+  const parts = operation.split(':');
   if (parts.length !== 2) {
     return null;
   }
@@ -106,7 +106,7 @@ export function getResourceFromOperation(operation: string): Resource | null {
  * ```
  */
 export function getActionFromOperation(operation: string): Action | null {
-  const parts = operation.split(":");
+  const parts = operation.split(':');
   if (parts.length !== 2) {
     return null;
   }

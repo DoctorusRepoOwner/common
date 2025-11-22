@@ -1,4 +1,4 @@
-import { SSM_PARAM_KEY } from "./keys";
+import { SSM_PARAM_KEY } from './keys';
 
 /**
  * Build SSM parameter path with optional environment prefix
@@ -35,8 +35,8 @@ export function buildSSMPathWithPrefix(
   prefix: string,
   key: SSM_PARAM_KEY,
 ): string {
-  const normalizedPrefix = prefix.endsWith("/") ? prefix.slice(0, -1) : prefix;
-  const normalizedKey = key.startsWith("/") ? key : `/${key}`;
+  const normalizedPrefix = prefix.endsWith('/') ? prefix.slice(0, -1) : prefix;
+  const normalizedKey = key.startsWith('/') ? key : `/${key}`;
   return `${normalizedPrefix}${normalizedKey}`;
 }
 
@@ -74,7 +74,7 @@ export function extractEnvFromPath(path: string): string | null {
  * ```
  */
 export function extractKeyFromPath(path: string): SSM_PARAM_KEY | null {
-  const parts = path.split("/");
+  const parts = path.split('/');
   const keyValue = parts[parts.length - 1];
 
   // Check if the key value matches any enum value
@@ -102,6 +102,6 @@ export function extractKeyFromPath(path: string): SSM_PARAM_KEY | null {
  */
 export function isEnvAgnostic(path: string): boolean {
   // Env-agnostic paths have format: /key (only 2 parts when split by /)
-  const parts = path.split("/").filter((p) => p.length > 0);
+  const parts = path.split('/').filter((p) => p.length > 0);
   return parts.length === 1;
 }

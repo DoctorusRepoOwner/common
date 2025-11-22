@@ -1,6 +1,6 @@
-import { Action } from "./actions";
-import { Operation } from "./operation";
-import { Resource } from "./resources";
+import { Action } from './actions';
+import { Operation } from './operation';
+import { Resource } from './resources';
 
 /**
  * Predefined common operations for convenience

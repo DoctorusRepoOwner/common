@@ -13,6 +13,7 @@
     "default": "npx projen default",
     "eject": "npx projen eject",
     "eslint": "npx projen eslint",
+    "eslint:check": "npx projen eslint:check",
     "format": "npx projen format",
     "format:check": "npx projen format:check",
     "package": "npx projen package",

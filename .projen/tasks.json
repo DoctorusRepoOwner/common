@@ -121,6 +121,19 @@
         }
       ]
     },
+    "eslint:check": {
+      "name": "eslint:check",
+      "description": "Run eslint without fixing (CI-safe)",
+      "env": {
+        "ESLINT_USE_FLAT_CONFIG": "false",
+        "NODE_NO_WARNINGS": "1"
+      },
+      "steps": [
+        {
+          "exec": "eslint --ext .ts,.tsx --no-error-on-unmatched-pattern src test .projenrc.ts"
+        }
+      ]
+    },
     "format": {
       "name": "format",
       "description": "Format all source files",
@@ -210,11 +223,10 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --updateSnapshot",
-          "receiveArgs": true
+          "exec": "jest --passWithNoTests --updateSnapshot"
         },
         {
-          "spawn": "eslint"
+          "spawn": "eslint:check"
         }
       ]
     },

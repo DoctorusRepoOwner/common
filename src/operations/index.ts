@@ -4,17 +4,17 @@ export {
   PUBLIC_RESOURCES,
   isMedicalResource,
   isPublicResource,
-} from "./resources";
-export { Action } from "./actions";
+} from './resources';
+export { Action } from './actions';
 export {
   Operation,
   OPERATION,
   getResourceFromOperation,
   getActionFromOperation,
-} from "./operation";
+} from './operation';
 export {
   Operations,
   getAllOperations,
   getOperationsByResource,
   getOperationsByAction,
-} from "./predefined";
+} from './predefined';

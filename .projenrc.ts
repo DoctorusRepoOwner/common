@@ -86,6 +86,22 @@ const formatCheckTask = project.addTask('format:check', {
 // Only check formatting during compile (avoid write operations in build to keep git diff clean)
 project.compileTask.prependSpawn(formatCheckTask);
 
+// Add an eslint:check task that runs eslint without --fix to keep release read-only
+// and avoid git diffs caused by auto-fixes during CI release.
+const eslintCheckTask = project.addTask('eslint:check', {
+  description: 'Run eslint without fixing (CI-safe)',
+  env: {
+    ESLINT_USE_FLAT_CONFIG: 'false',
+    NODE_NO_WARNINGS: '1',
+  },
+  exec: 'eslint --ext .ts,.tsx --no-error-on-unmatched-pattern src test .projenrc.ts',
+});
+
+// Reset default test task to use jest then eslint:check (rather than eslint --fix)
+project.testTask.reset();
+project.testTask.exec('jest --passWithNoTests --updateSnapshot');
+project.testTask.spawn(eslintCheckTask);
+
 // Add lint-staged and husky for pre-commit formatting
 project.addDevDeps('lint-staged', 'husky');
 project.package.addField('lint-staged', {
