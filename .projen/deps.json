@@ -51,7 +51,6 @@
     },
     {
       "name": "husky",
-      "version": "^9",
       "type": "build"
     },
     {
@@ -65,7 +64,6 @@
     },
     {
       "name": "lint-staged",
-      "version": "^15",
       "type": "build"
     },
     {

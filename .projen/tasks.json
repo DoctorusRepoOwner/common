@@ -79,6 +79,9 @@
       "description": "Only compile",
       "steps": [
         {
+          "spawn": "format:check"
+        },
+        {
           "exec": "tsc --build"
         }
       ]
@@ -120,10 +123,19 @@
     },
     "format": {
       "name": "format",
-      "description": "Format code with prettier",
+      "description": "Format all source files",
       "steps": [
         {
-          "exec": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \".projenrc.ts\""
+          "exec": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" .projenrc.ts"
+        }
+      ]
+    },
+    "format:check": {
+      "name": "format:check",
+      "description": "Check if all source files are formatted",
+      "steps": [
+        {
+          "exec": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\" .projenrc.ts"
         }
       ]
     },
@@ -154,20 +166,12 @@
         },
         {
           "exec": "pnpm pack --pack-destination dist/js"
-        },
-        {
-          "exec": "husky || true"
         }
       ]
     },
     "post-compile": {
       "name": "post-compile",
-      "description": "Runs after successful compilation",
-      "steps": [
-        {
-          "exec": "tsc -p tsconfig.esm.json"
-        }
-      ]
+      "description": "Runs after successful compilation"
     },
     "post-upgrade": {
       "name": "post-upgrade",
@@ -175,7 +179,12 @@
     },
     "pre-compile": {
       "name": "pre-compile",
-      "description": "Prepare the project for compilation"
+      "description": "Prepare the project for compilation",
+      "steps": [
+        {
+          "spawn": "format"
+        }
+      ]
     },
     "release": {
       "name": "release",
@@ -248,7 +257,7 @@
       },
       "steps": [
         {
-          "exec": "pnpm dlx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jest,prettier,projen,ts-jest,ts-node,typescript"
+          "exec": "pnpm dlx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,husky,jest,lint-staged,prettier,projen,ts-jest,ts-node,typescript"
         },
         {
           "exec": "pnpm i --no-frozen-lockfile"
