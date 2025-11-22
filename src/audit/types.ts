@@ -1,4 +1,4 @@
-import { Operation } from '../operations';
+import { OPERATION, Operation } from '../operations';
 
 export type ISODateTime = string;
 export type UUID = string;
@@ -24,7 +24,7 @@ export interface AuditLogRecord<
   SK: string;
   timestamp: ISODateTime;
   userId: string;
-  operation: Operation;
+  operation: OPERATION;
   objectId: string;
   eventId: UUID;
   lastKnownState?: T;
