@@ -12,6 +12,10 @@ export const Operations = {
   ACCOUNT_UPDATE: new Operation(Resource.ACCOUNT, Action.UPDATE),
   ACCOUNT_DELETE: new Operation(Resource.ACCOUNT, Action.DELETE),
   ACCOUNT_MANAGE: new Operation(Resource.ACCOUNT, Action.MANAGE),
+  ACCOUNT_OWNERSHIP_TRANSFER: new Operation(
+    Resource.ACCOUNT_OWNERSHIP,
+    Action.UPDATE,
+  ),
 
   // Patient operations
   PATIENT_CREATE: new Operation(Resource.PATIENT, Action.CREATE),

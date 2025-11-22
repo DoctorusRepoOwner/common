@@ -1,4 +1,4 @@
-import { OPERATION, Operation } from '../operations';
+import { OPERATION } from '../operations';
 
 export type ISODateTime = string;
 export type UUID = string;
