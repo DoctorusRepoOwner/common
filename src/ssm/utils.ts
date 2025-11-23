@@ -31,10 +31,7 @@ export function buildSSMPath(env: string | null, key: SSM_PARAM_KEY): string {
  * // Returns: '/myapp/prod/db-user'
  * ```
  */
-export function buildSSMPathWithPrefix(
-  prefix: string,
-  key: SSM_PARAM_KEY,
-): string {
+export function buildSSMPathWithPrefix(prefix: string, key: SSM_PARAM_KEY): string {
   const normalizedPrefix = prefix.endsWith('/') ? prefix.slice(0, -1) : prefix;
   const normalizedKey = key.startsWith('/') ? key : `/${key}`;
   return `${normalizedPrefix}${normalizedKey}`;

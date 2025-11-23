@@ -38,26 +38,17 @@ describe('SSM Utilities', () => {
 
   describe('buildSSMPathWithPrefix', () => {
     it('should build path with custom prefix', () => {
-      const path = buildSSMPathWithPrefix(
-        '/myapp/prod',
-        SSM_PARAM_KEY.GRAPHQL_API_ID,
-      );
+      const path = buildSSMPathWithPrefix('/myapp/prod', SSM_PARAM_KEY.GRAPHQL_API_ID);
       expect(path).toBe('/myapp/prod/graphql-api-id');
     });
 
     it('should handle prefix with trailing slash', () => {
-      const path = buildSSMPathWithPrefix(
-        '/myapp/prod/',
-        SSM_PARAM_KEY.DB_PASSWORD,
-      );
+      const path = buildSSMPathWithPrefix('/myapp/prod/', SSM_PARAM_KEY.DB_PASSWORD);
       expect(path).toBe('/myapp/prod/db-password');
     });
 
     it('should handle key with leading slash', () => {
-      const path = buildSSMPathWithPrefix(
-        '/myapp/prod',
-        SSM_PARAM_KEY.BASE_HOST,
-      );
+      const path = buildSSMPathWithPrefix('/myapp/prod', SSM_PARAM_KEY.BASE_HOST);
       expect(path).toBe('/myapp/prod/base-host');
     });
   });

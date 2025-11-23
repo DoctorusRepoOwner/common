@@ -1,24 +1,11 @@
 function isSystemField(key: string): boolean {
-  const systemFields = [
-    'updatedAt',
-    'lastModified',
-    'modifiedAt',
-    'lastUpdated',
-    'version',
-    'etag',
-    'ttl',
-  ];
+  const systemFields = ['updatedAt', 'lastModified', 'modifiedAt', 'lastUpdated', 'version', 'etag', 'ttl'];
   return systemFields.includes(key);
 }
 
 function deepEqual(obj1: any, obj2: any): boolean {
   if (obj1 === obj2) return true;
-  if (
-    obj1 == null ||
-    obj2 == null ||
-    typeof obj1 !== 'object' ||
-    typeof obj2 !== 'object'
-  ) {
+  if (obj1 == null || obj2 == null || typeof obj1 !== 'object' || typeof obj2 !== 'object') {
     return false;
   }
   if (Array.isArray(obj1) !== Array.isArray(obj2)) return false;
@@ -59,11 +46,7 @@ function calculateDifferences(
       added[key] = newValue;
     } else if (key in oldData && !(key in newData)) {
       removed[key] = oldValue;
-    } else if (
-      key in oldData &&
-      key in newData &&
-      !deepEqual(oldValue, newValue)
-    ) {
+    } else if (key in oldData && key in newData && !deepEqual(oldValue, newValue)) {
       modified[key] = { from: oldValue, to: newValue };
     }
   }
@@ -103,9 +86,6 @@ export function changedDataIncludesField(
   if (!changedData) return false;
   const { added, modified, removed } = changedData;
   return (
-    (added && fieldName in added) ||
-    (modified && fieldName in modified) ||
-    (removed && fieldName in removed) ||
-    false
+    (added && fieldName in added) || (modified && fieldName in modified) || (removed && fieldName in removed) || false
   );
 }

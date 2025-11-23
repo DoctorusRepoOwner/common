@@ -92,15 +92,9 @@ describe('Operations Module', () => {
       });
 
       it('should handle different resource and action combinations', () => {
-        expect(new Operation(Resource.USER, Action.CREATE).toString()).toBe(
-          'USER:CREATE',
-        );
-        expect(
-          new Operation(Resource.PRESCRIPTION, Action.PRESCRIBE).toString(),
-        ).toBe('PRESCRIPTION:PRESCRIBE');
-        expect(new Operation(Resource.AUDIT_LOG, Action.AUDIT).toString()).toBe(
-          'AUDIT_LOG:AUDIT',
-        );
+        expect(new Operation(Resource.USER, Action.CREATE).toString()).toBe('USER:CREATE');
+        expect(new Operation(Resource.PRESCRIPTION, Action.PRESCRIBE).toString()).toBe('PRESCRIPTION:PRESCRIBE');
+        expect(new Operation(Resource.AUDIT_LOG, Action.AUDIT).toString()).toBe('AUDIT_LOG:AUDIT');
       });
     });
 
@@ -127,12 +121,7 @@ describe('Operations Module', () => {
       });
 
       it('should handle multiple valid operations', () => {
-        const testCases = [
-          'USER:LOGIN',
-          'PRESCRIPTION:PRESCRIBE',
-          'DIAGNOSIS:DIAGNOSE',
-          'MEDICAL_SERVICE:SCHEDULE',
-        ];
+        const testCases = ['USER:LOGIN', 'PRESCRIPTION:PRESCRIBE', 'DIAGNOSIS:DIAGNOSE', 'MEDICAL_SERVICE:SCHEDULE'];
 
         testCases.forEach((opStr) => {
           const op = Operation.fromString(opStr);
@@ -185,21 +174,13 @@ describe('Operations Module', () => {
     });
 
     it('should have medical record operations', () => {
-      expect(Operations.MEDICAL_RECORD_CREATE.toString()).toBe(
-        'MEDICAL_RECORD:CREATE',
-      );
-      expect(Operations.MEDICAL_RECORD_READ.toString()).toBe(
-        'MEDICAL_RECORD:READ',
-      );
-      expect(Operations.MEDICAL_RECORD_SHARE.toString()).toBe(
-        'MEDICAL_RECORD:SHARE',
-      );
+      expect(Operations.MEDICAL_RECORD_CREATE.toString()).toBe('MEDICAL_RECORD:CREATE');
+      expect(Operations.MEDICAL_RECORD_READ.toString()).toBe('MEDICAL_RECORD:READ');
+      expect(Operations.MEDICAL_RECORD_SHARE.toString()).toBe('MEDICAL_RECORD:SHARE');
     });
 
     it('should have prescription operations with medical actions', () => {
-      expect(Operations.PRESCRIPTION_PRESCRIBE.toString()).toBe(
-        'PRESCRIPTION:PRESCRIBE',
-      );
+      expect(Operations.PRESCRIPTION_PRESCRIBE.toString()).toBe('PRESCRIPTION:PRESCRIBE');
       expect(Operations.PRESCRIPTION_SIGN.toString()).toBe('PRESCRIPTION:SIGN');
     });
 
@@ -264,9 +245,7 @@ describe('Operations Module', () => {
     });
 
     it('should not overlap between medical and public resources', () => {
-      const overlap = MEDICAL_RESOURCES.filter((r) =>
-        PUBLIC_RESOURCES.includes(r),
-      );
+      const overlap = MEDICAL_RESOURCES.filter((r) => PUBLIC_RESOURCES.includes(r));
       expect(overlap).toHaveLength(0);
     });
   });
@@ -275,9 +254,7 @@ describe('Operations Module', () => {
     it('should extract resource from valid operation string', () => {
       expect(getResourceFromOperation('PATIENT:READ')).toBe(Resource.PATIENT);
       expect(getResourceFromOperation('USER:LOGIN')).toBe(Resource.USER);
-      expect(getResourceFromOperation('PRESCRIPTION:PRESCRIBE')).toBe(
-        Resource.PRESCRIPTION,
-      );
+      expect(getResourceFromOperation('PRESCRIPTION:PRESCRIBE')).toBe(Resource.PRESCRIPTION);
     });
 
     it('should return null for invalid operation format', () => {
@@ -291,12 +268,8 @@ describe('Operations Module', () => {
     });
 
     it('should work with all valid resources', () => {
-      expect(getResourceFromOperation('MEDICAL_SERVICE:CREATE')).toBe(
-        Resource.MEDICAL_SERVICE,
-      );
-      expect(getResourceFromOperation('AUDIT_LOG:READ')).toBe(
-        Resource.AUDIT_LOG,
-      );
+      expect(getResourceFromOperation('MEDICAL_SERVICE:CREATE')).toBe(Resource.MEDICAL_SERVICE);
+      expect(getResourceFromOperation('AUDIT_LOG:READ')).toBe(Resource.AUDIT_LOG);
     });
   });
 
@@ -304,9 +277,7 @@ describe('Operations Module', () => {
     it('should extract action from valid operation string', () => {
       expect(getActionFromOperation('PATIENT:READ')).toBe(Action.READ);
       expect(getActionFromOperation('USER:LOGIN')).toBe(Action.LOGIN);
-      expect(getActionFromOperation('PRESCRIPTION:PRESCRIBE')).toBe(
-        Action.PRESCRIBE,
-      );
+      expect(getActionFromOperation('PRESCRIPTION:PRESCRIBE')).toBe(Action.PRESCRIBE);
     });
 
     it('should return null for invalid operation format', () => {
@@ -321,12 +292,8 @@ describe('Operations Module', () => {
 
     it('should work with all valid actions', () => {
       expect(getActionFromOperation('PATIENT:CREATE')).toBe(Action.CREATE);
-      expect(getActionFromOperation('MEDICAL_SERVICE:SCHEDULE')).toBe(
-        Action.SCHEDULE,
-      );
-      expect(getActionFromOperation('DIAGNOSIS:DIAGNOSE')).toBe(
-        Action.DIAGNOSE,
-      );
+      expect(getActionFromOperation('MEDICAL_SERVICE:SCHEDULE')).toBe(Action.SCHEDULE);
+      expect(getActionFromOperation('DIAGNOSIS:DIAGNOSE')).toBe(Action.DIAGNOSE);
     });
   });
 });
