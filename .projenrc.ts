@@ -1,4 +1,4 @@
-import { typescript } from 'projen';
+import { github, typescript } from 'projen';
 import { NodePackageManager, NpmAccess } from 'projen/lib/javascript';
 const project = new typescript.TypeScriptProject({
   defaultReleaseBranch: 'main',
@@ -37,6 +37,11 @@ const project = new typescript.TypeScriptProject({
       semi: true,
       printWidth: 120,
     },
+  },
+  githubOptions: {
+    projenCredentials: github.GithubCredentials.fromPersonalAccessToken({
+      secret: 'NPM_TOKEN',
+    }),
   },
 
   // VS Code configuration
