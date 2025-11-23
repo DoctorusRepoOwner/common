@@ -35,6 +35,7 @@ const project = new typescript.TypeScriptProject({
       singleQuote: true,
       tabWidth: 2,
       semi: true,
+      printWidth: 120,
     },
   },
 
@@ -65,10 +66,7 @@ if (project.vscode) {
     },
   });
 
-  project.vscode.extensions.addRecommendations(
-    'esbenp.prettier-vscode',
-    'dbaeumer.vscode-eslint',
-  );
+  project.vscode.extensions.addRecommendations('esbenp.prettier-vscode', 'dbaeumer.vscode-eslint');
 }
 
 // Add format task for manual use (writes changes)
