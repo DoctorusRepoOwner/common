@@ -2,15 +2,8 @@ import { Action } from './actions';
 import { Operation } from './operation';
 import { Resource } from './resources';
 
-// Accept full BCP-47 locale codes like en-US, fr-FR but internally normalize to base language
-export type LocaleInput = string; // e.g. 'en', 'en-US', 'fr', 'fr-FR'
-
-function normalizeLocale(locale?: LocaleInput): 'en' | 'fr' {
-  if (!locale) return 'en';
-  const lower = locale.toLowerCase();
-  if (lower.startsWith('fr')) return 'fr';
-  return 'en';
-}
+// Core i18n locale type (only support these explicit codes)
+export type Locale = 'fr-FR' | 'us-EN';
 
 const enAction: Partial<Record<Action, string>> = {
   [Action.CREATE]: 'Create',
@@ -149,30 +142,27 @@ function humanizeKey(key: string): string {
     .join(' ');
 }
 
-export function getActionLabel(action: Action, locale: LocaleInput = 'en'): string {
-  const norm = normalizeLocale(locale);
-  if (norm === 'fr') return frAction[action] ?? humanizeKey(action);
+export function getActionLabel(action: Action, locale: Locale = 'us-EN'): string {
+  if (locale === 'fr-FR') return frAction[action] ?? humanizeKey(action);
   return enAction[action] ?? humanizeKey(action);
 }
 
-export function getResourceLabel(resource: Resource, locale: LocaleInput = 'en'): string {
-  const norm = normalizeLocale(locale);
-  if (norm === 'fr') return frResourceOverrides[resource] ?? humanizeKey(resource);
+export function getResourceLabel(resource: Resource, locale: Locale = 'us-EN'): string {
+  if (locale === 'fr-FR') return frResourceOverrides[resource] ?? humanizeKey(resource);
   return humanizeKey(resource);
 }
 
 export function getOperationLabel(
   operation: Operation | string,
-  locale: LocaleInput = 'en',
+  locale: Locale = 'us-EN',
   opts?: { order?: 'action-resource' | 'resource-action'; separator?: string },
 ): string {
-  const norm = normalizeLocale(locale);
   const order = opts?.order ?? 'action-resource';
   const sep = opts?.separator ?? ' ';
 
   const op = typeof operation === 'string' ? Operation.fromString(operation) : operation;
   if (!op) return '';
-  const a = getActionLabel(op.action, norm);
-  const r = getResourceLabel(op.resource, norm);
+  const a = getActionLabel(op.action, locale);
+  const r = getResourceLabel(op.resource, locale);
   return order === 'resource-action' ? `${r}${sep}${a}` : `${a}${sep}${r}`;
 }
