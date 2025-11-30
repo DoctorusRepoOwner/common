@@ -29,6 +29,10 @@ export enum Action {
   SIGN = 'SIGN',
   VERIFY = 'VERIFY',
 
+  // Medical Account specific
+  RECOVER = 'RECOVER',
+  DISABLE = 'DISABLE',
+
   // Medical service specific
   SET_MEDICAL_SERVICE_STATUS = 'SET_MEDICAL_SERVICE_STATUS',
   SET_MEDICAL_SERVICE_FEES = 'SET_MEDICAL_SERVICE_FEES',
