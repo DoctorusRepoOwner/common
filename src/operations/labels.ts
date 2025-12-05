@@ -109,6 +109,7 @@ const frResourceOverrides: Partial<Record<Resource, string>> = {
   [Resource.MEDICAL_HISTORY]: 'Antécédents médicaux',
   [Resource.MEDICAL_HISTORY_MODEL]: "Modèle d'antécédents médicaux",
   [Resource.PRESCRIPTION]: 'Ordonnance',
+  [Resource.PRESCRIPTION_MODEL]: "Modèle d'ordonnance",
   [Resource.DIAGNOSIS]: 'Diagnostic',
   [Resource.OBSERVATION]: 'Observation',
   [Resource.MEDICATION]: 'Médication',
