@@ -41,7 +41,7 @@ describe('Medical Service Status', () => {
 
     it('should have correct icons for each status', () => {
       expect(MEDICAL_SERVICE_STATUS_METADATA[MedicalServiceStatus.PENDING].icon).toBe('schedule');
-      expect(MEDICAL_SERVICE_STATUS_METADATA[MedicalServiceStatus.ON_WAITING_ROOM].icon).toBe('person_pin_circle');
+      expect(MEDICAL_SERVICE_STATUS_METADATA[MedicalServiceStatus.ON_WAITING_ROOM].icon).toBe('event_busy');
       expect(MEDICAL_SERVICE_STATUS_METADATA[MedicalServiceStatus.IN_PROGRESS].icon).toBe('medical_services');
       expect(MEDICAL_SERVICE_STATUS_METADATA[MedicalServiceStatus.COMPLETED].icon).toBe('check_circle');
       expect(MEDICAL_SERVICE_STATUS_METADATA[MedicalServiceStatus.CANCELED].icon).toBe('cancel');
@@ -68,7 +68,7 @@ describe('Medical Service Status', () => {
   describe('getStatusIcon', () => {
     it('should return the correct icon for each status', () => {
       expect(getStatusIcon(MedicalServiceStatus.PENDING)).toBe('schedule');
-      expect(getStatusIcon(MedicalServiceStatus.ON_WAITING_ROOM)).toBe('person_pin_circle');
+      expect(getStatusIcon(MedicalServiceStatus.ON_WAITING_ROOM)).toBe('event_busy');
       expect(getStatusIcon(MedicalServiceStatus.IN_PROGRESS)).toBe('medical_services');
       expect(getStatusIcon(MedicalServiceStatus.COMPLETED)).toBe('check_circle');
       expect(getStatusIcon(MedicalServiceStatus.CANCELED)).toBe('cancel');

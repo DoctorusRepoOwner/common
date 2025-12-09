@@ -57,7 +57,7 @@ export const MEDICAL_SERVICE_STATUS_METADATA: Record<MedicalServiceStatus, Statu
     },
   },
   [MedicalServiceStatus.ON_WAITING_ROOM]: {
-    icon: 'person_pin_circle',
+    icon: 'event_busy',
     color: '#FF9800', // Orange
     label: {
       short: {
