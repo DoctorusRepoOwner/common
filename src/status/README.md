@@ -368,6 +368,177 @@ function renderActionsForStatus(status: MedicalServiceStatus) {
 }
 ```
 
+## Status Utilities: Feature-Specific Extraction
+
+The `utils` module provides a unified API for querying and extracting status metadata for any feature-specific status. This is useful when you need to work with multiple different status types (Medical Service, Account Location, Medical History) with a common interface.
+
+### Key Features
+
+- 🎯 **Feature-agnostic** - Works with any status type via feature key
+- 🔍 **Rich querying** - Filter, search, map, and group statuses
+- 📦 **Type-safe** - Full TypeScript support with feature-specific types
+- 🎨 **Flexible rendering** - Group by color or icon for UI components
+- 🌍 **Locale-aware** - Bilingual support across all utilities
+
+### Basic Usage
+
+```typescript
+import {
+  getStatusMetadataForFeature,
+  getStatusLabelForFeature,
+  getStatusColorForFeature,
+  getStatusIconForFeature,
+  getAllStatusesForFeature,
+} from '@doctorus/common';
+
+// Get metadata for a specific feature and status
+const medicalStatus = 'in_progress';
+const metadata = getStatusMetadataForFeature('medicalService', medicalStatus);
+
+// Get individual properties
+const label = getStatusLabelForFeature('medicalService', medicalStatus, 'us-EN', 'short');
+// "In Progress"
+
+const color = getStatusColorForFeature('medicalService', medicalStatus);
+// "#2196F3"
+
+const icon = getStatusIconForFeature('medicalService', medicalStatus);
+// "medical_services"
+
+// Get all statuses for a feature
+const allStatuses = getAllStatusesForFeature('medicalService');
+// ['pending', 'on_waiting_room', 'in_progress', 'completed', 'canceled']
+```
+
+### Advanced Querying
+
+#### Filter Statuses
+
+```typescript
+import { filterStatusesByFeature } from '@doctorus/common';
+
+// Find all green statuses
+const successStatuses = filterStatusesByFeature('medicalService', (metadata) => {
+  return metadata.color === '#4CAF50';
+});
+// ['completed']
+
+// Find all statuses containing "progress" in label
+const progressStatuses = filterStatusesByFeature('medicalService', (metadata) => {
+  return metadata.label.short['us-EN'].toLowerCase().includes('progress');
+});
+// ['in_progress']
+```
+
+#### Search Statuses
+
+```typescript
+import { searchStatusesByFeature } from '@doctorus/common';
+
+// Search by label, long label, or description
+const results = searchStatusesByFeature('medicalService', 'waiting', 'us-EN');
+// ['on_waiting_room']
+
+// Works with any locale
+const resultsFr = searchStatusesByFeature('medicalService', 'attente', 'fr-FR');
+// ['on_waiting_room', 'pending']
+```
+
+#### Map Statuses
+
+```typescript
+import { mapStatusesByFeature } from '@doctorus/common';
+
+// Transform all statuses to a specific format
+const labels = mapStatusesByFeature('medicalService', (metadata, status) => ({
+  value: status,
+  label: metadata.label.short['us-EN'],
+  color: metadata.color,
+}));
+
+// Result:
+// {
+//   pending: { value: 'pending', label: 'Pending', color: '#9E9E9E' },
+//   on_waiting_room: { value: 'on_waiting_room', label: 'Waiting', color: '#FF9800' },
+//   ...
+// }
+```
+
+#### Group Statuses
+
+```typescript
+import { groupStatusesByColorForFeature, groupStatusesByIconForFeature } from '@doctorus/common';
+
+// Group all statuses by their color
+const byColor = groupStatusesByColorForFeature('medicalService');
+// {
+//   '#9E9E9E': ['pending'],
+//   '#FF9800': ['on_waiting_room'],
+//   '#2196F3': ['in_progress'],
+//   '#4CAF50': ['completed'],
+//   '#F44336': ['canceled']
+// }
+
+// Group all statuses by their icon
+const byIcon = groupStatusesByIconForFeature('medicalService');
+// {
+//   'schedule': ['pending'],
+//   'event_busy': ['on_waiting_room'],
+//   'medical_services': ['in_progress'],
+//   'check_circle': ['completed'],
+//   'cancel': ['canceled']
+// }
+```
+
+### Extended Metadata
+
+Get metadata with pre-computed locale-specific values:
+
+```typescript
+import { getExtendedStatusMetadataForFeature } from '@doctorus/common';
+
+// Get metadata with computed labels and descriptions for a specific locale
+const extended = getExtendedStatusMetadataForFeature('medicalService', 'in_progress', 'fr-FR');
+
+// Result includes:
+// {
+//   icon: 'medical_services',
+//   color: '#2196F3',
+//   label: { short: {...}, long: {...} },
+//   shortLabel: 'En cours',           // Pre-computed for fr-FR
+//   longLabel: 'Service en cours',    // Pre-computed for fr-FR
+//   description: 'La consultation...' // Pre-computed for fr-FR
+// }
+```
+
+### Working with Multiple Features
+
+```typescript
+import { getAllStatusesForFeature, getStatusLabelForFeature, type StatusFeature } from '@doctorus/common';
+
+function renderStatusOptions(feature: StatusFeature, locale: 'us-EN' | 'fr-FR') {
+  const statuses = getAllStatusesForFeature(feature);
+
+  return statuses.map((status) => ({
+    value: status,
+    label: getStatusLabelForFeature(feature, status, locale),
+  }));
+}
+
+// Usage:
+const medicalOptions = renderStatusOptions('medicalService', 'us-EN');
+const locationOptions = renderStatusOptions('accountLocation', 'fr-FR');
+const historyOptions = renderStatusOptions('medicalHistory', 'us-EN');
+```
+
+### Supported Features
+
+The utilities work with these built-in features:
+
+- `'medicalService'` - Medical service workflow status (5 states)
+- `'accountLocation'` - Account location availability policy (4 states)
+- `'medicalHistory'` - Medical history record status (2 states)
+
 ## Extending the Pattern
 
 This status pattern is designed for reuse across other entities. To add a new status type:
@@ -410,13 +581,19 @@ export const APPOINTMENT_STATUS_METADATA: Record<AppointmentStatus, StatusMetada
 ### Enums
 
 - `MedicalServiceStatus` - Status enum with 5 values
+- `AccountLocationStatus` - Status enum with 4 values
+- `MedicalHistoryStatus` - Status enum with 2 values
 
 ### Types
 
 - `StatusMetadata` - Interface for status metadata
+- `StatusConfiguration<T>` - Generic type for status configurations
+- `StatusFeature` - Union type of all supported features
+- `StatusTypeMap` - Maps feature names to their status types
+- `ExtendedStatusMetadata` - StatusMetadata with pre-computed locale values
 - `Locale` - Type alias for supported locales ('us-EN' | 'fr-FR')
 
-### Functions
+### Medical Service Functions
 
 - `getStatusMetadata(status)` - Get complete metadata object
 - `getStatusIcon(status)` - Get Material icon name
@@ -428,10 +605,56 @@ export const APPOINTMENT_STATUS_METADATA: Record<AppointmentStatus, StatusMetada
 - `isValidTransition(from, to)` - Check if transition is allowed
 - `getAllowedTransitions(status)` - Get array of valid next states
 
+### Feature-Generic Utilities
+
+**Basic Operations:**
+
+- `getStatusMetadataForFeature(feature, status)` - Get complete metadata for any feature
+- `getStatusIconForFeature(feature, status)` - Get icon for any feature
+- `getStatusColorForFeature(feature, status)` - Get color for any feature
+- `getStatusLabelForFeature(feature, status, locale?, format?)` - Get label for any feature
+- `getStatusDescriptionForFeature(feature, status, locale?)` - Get description for any feature
+- `getExtendedStatusMetadataForFeature(feature, status, locale?)` - Get extended metadata
+
+**Querying & Filtering:**
+
+- `getAllStatusesForFeature(feature)` - Get all statuses for a feature
+- `getAllStatusMetadataForFeature(feature)` - Get all metadata for a feature
+- `filterStatusesByFeature(feature, predicate)` - Filter statuses by condition
+- `searchStatusesByFeature(feature, searchTerm, locale?)` - Search statuses by label/description
+
+**Transformations:**
+
+- `mapStatusesByFeature(feature, transform)` - Transform all statuses
+- `groupStatusesByColorForFeature(feature)` - Group statuses by color
+- `groupStatusesByIconForFeature(feature)` - Group statuses by icon
+
 ### Constants
 
-- `MEDICAL_SERVICE_STATUS_METADATA` - Complete metadata for all statuses
-- `MEDICAL_SERVICE_STATUS_TRANSITIONS` - Transition rules matrix
+- `MEDICAL_SERVICE_STATUS_METADATA` - Complete metadata for medical statuses
+- `ACCOUNT_LOCATION_STATUS_METADATA` - Complete metadata for location statuses
+- `MEDICAL_HISTORY_STATUS_METADATA` - Complete metadata for history statuses
+- `METADATA_REGISTRY` - Registry mapping features to their metadata
+
+### Account Location Functions
+
+- `getStatusMetadata(status)` - Get complete metadata
+- `getStatusIcon(status)` - Get Material icon name
+- `getStatusColor(status)` - Get hex color
+- `getStatusLabel(status, locale?, format?)` - Get translated label
+- `getStatusDescription(status, locale?)` - Get translated description
+- `getAllAccountLocationStatuses()` - Get all statuses
+- `isValidAccountLocationStatus(value)` - Validation
+
+### Medical History Functions
+
+- `getStatusMetadata(status)` - Get complete metadata
+- `getStatusIcon(status)` - Get Material icon name
+- `getStatusColor(status)` - Get hex color
+- `getStatusLabel(status, locale?, format?)` - Get translated label
+- `getStatusDescription(status, locale?)` - Get translated description
+- `getAllMedicalHistoryStatuses()` - Get all statuses
+- `isValidMedicalHistoryStatus(value)` - Validation
 
 ## Testing
 
