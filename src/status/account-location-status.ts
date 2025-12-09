@@ -3,35 +3,13 @@
  * Defines availability policies for medical service locations
  */
 
-import type { Locale } from '../operations/labels';
+import type { StatusMetadata, Locale } from './types';
 
 export enum AccountLocationStatus {
   INHERIT = 'inherit',
   ALWAYS_OPEN = 'always_open',
   CLOSED = 'closed',
   PERIODS = 'periods',
-}
-
-/**
- * Status metadata including icons, colors, and translations
- */
-export interface StatusMetadata {
-  icon: string; // Material icon name
-  color: string; // Hex color or CSS color name
-  label: {
-    short: {
-      'us-EN': string;
-      'fr-FR': string;
-    };
-    long: {
-      'us-EN': string;
-      'fr-FR': string;
-    };
-  };
-  description: {
-    'us-EN': string;
-    'fr-FR': string;
-  };
 }
 
 /**

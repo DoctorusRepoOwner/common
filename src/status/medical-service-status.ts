@@ -2,7 +2,7 @@
  * Medical Service Status enumeration and metadata
  */
 
-import type { Locale } from '../operations/labels';
+import type { StatusMetadata, Locale } from './types';
 
 export enum MedicalServiceStatus {
   PENDING = 'pending',
@@ -10,28 +10,6 @@ export enum MedicalServiceStatus {
   ON_WAITING_ROOM = 'on_waiting_room',
   CANCELED = 'canceled',
   COMPLETED = 'completed',
-}
-
-/**
- * Status metadata including icons, colors, and translations
- */
-export interface StatusMetadata {
-  icon: string; // Material icon name
-  color: string; // Hex color or CSS color name
-  label: {
-    short: {
-      'us-EN': string;
-      'fr-FR': string;
-    };
-    long: {
-      'us-EN': string;
-      'fr-FR': string;
-    };
-  };
-  description: {
-    'us-EN': string;
-    'fr-FR': string;
-  };
 }
 
 /**
