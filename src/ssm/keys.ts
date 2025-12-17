@@ -17,6 +17,7 @@ export enum SSM_PARAM_KEY {
   MEDICAL_ASSETS_AWS_CLOUDFRONT_PUB_KEY = 'medical-assets-dist-public-key',
   MEDICAL_ASSETS_BUCKET_NAME = 'medical-assets-bucket-name',
   PUBLIC_ASSETS_BUCKET_NAME = 'public-assets-bucket-name',
+  PUBLIC_ASSETS_DISTRIBUTION_DOMAIN_NAME = 'public-assets-dist-domain-name',
   DB_USER = 'db-user',
   DB_PASSWORD = 'db-password',
   MEDICAL_ASSETS_DISTRIBUTION_DOMAIN_NAME = 'medical-assets-dist-domain-name',
