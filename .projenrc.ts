@@ -14,6 +14,7 @@ const project = new typescript.TypeScriptProject({
   releaseToNpm: true,
   npmAccess: NpmAccess.PUBLIC,
   packageManager: NodePackageManager.PNPM,
+  npmTrustedPublishing: true,
   npmProvenance: false, // Disable provenance for private repositories
   eslint: true,
   // Repository settings
