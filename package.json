@@ -1,6 +1,6 @@
 {
   "name": "@doctorus/common",
-  "description": "Common utilities and libraries for the SMC project",
+  "description": "Common utilities and libraries for the DOCTORUS project",
   "repository": {
     "type": "git",
     "url": "git@github.com:DoctorusRepoOwner/common.git"

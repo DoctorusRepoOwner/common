@@ -6,7 +6,7 @@ const project = new typescript.TypeScriptProject({
   packageName: '@doctorus/common',
   projenrcTs: true,
   depsUpgrade: true,
-  description: 'Common utilities and libraries for the SMC project',
+  description: 'Common utilities and libraries for the DOCTORUS project',
   deps: [],
   devDeps: ['@types/node', 'prettier'],
   peerDeps: [],
