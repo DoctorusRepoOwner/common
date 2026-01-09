@@ -9,6 +9,8 @@ import {
   getStatusDescriptionForFeature,
   getAllStatusesForFeature,
   getAllStatusMetadataForFeature,
+  getAllFeatures,
+  getAllMetadata,
 } from '../src/status';
 
 describe('Boolean Status', () => {
@@ -295,6 +297,52 @@ describe('Boolean Status', () => {
           expect(metadata.description['fr-FR']).toBeTruthy();
         });
       });
+    });
+  });
+
+  describe('getAllFeatures', () => {
+    it('should return all available features including boolean presets', () => {
+      const features = getAllFeatures();
+      expect(features).toContain('yesNo');
+      expect(features).toContain('activeInactive');
+      expect(features).toContain('enabledDisabled');
+      expect(features).toContain('validInvalid');
+      expect(features).toContain('medicalService');
+      expect(features).toContain('accountLocation');
+      expect(features).toContain('medicalHistory');
+      expect(features.length).toBeGreaterThanOrEqual(7);
+    });
+
+    it('should return unique feature names', () => {
+      const features = getAllFeatures();
+      const uniqueFeatures = [...new Set(features)];
+      expect(features.length).toBe(uniqueFeatures.length);
+    });
+  });
+
+  describe('getAllMetadata', () => {
+    it('should return metadata for all features', () => {
+      const allMetadata = getAllMetadata();
+      expect(allMetadata.yesNo).toBeDefined();
+      expect(allMetadata.activeInactive).toBeDefined();
+      expect(allMetadata.enabledDisabled).toBeDefined();
+      expect(allMetadata.validInvalid).toBeDefined();
+      expect(allMetadata.medicalService).toBeDefined();
+    });
+
+    it('should return complete metadata for boolean presets', () => {
+      const allMetadata = getAllMetadata();
+      expect(allMetadata.yesNo[BooleanStatus.TRUE]).toBeDefined();
+      expect(allMetadata.yesNo[BooleanStatus.FALSE]).toBeDefined();
+      expect(allMetadata.activeInactive[BooleanStatus.TRUE]).toBeDefined();
+      expect(allMetadata.activeInactive[BooleanStatus.FALSE]).toBeDefined();
+    });
+
+    it('should return a copy of the registry', () => {
+      const metadata1 = getAllMetadata();
+      const metadata2 = getAllMetadata();
+      expect(metadata1).not.toBe(metadata2);
+      expect(metadata1).toEqual(metadata2);
     });
   });
 });

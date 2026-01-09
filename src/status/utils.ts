@@ -154,6 +154,22 @@ export function getAllStatusesForFeature<T extends StatusFeature>(feature: T): S
 }
 
 /**
+ * Get all available status features
+ * @returns Array of all feature names
+ */
+export function getAllFeatures(): StatusFeature[] {
+  return Object.keys(METADATA_REGISTRY) as StatusFeature[];
+}
+
+/**
+ * Get all metadata across all features
+ * @returns Record mapping each feature to its complete metadata registry
+ */
+export function getAllMetadata(): Record<StatusFeature, Record<string | number, StatusMetadata>> {
+  return { ...METADATA_REGISTRY };
+}
+
+/**
  * Filter statuses by criteria
  * @param feature - The feature name
  * @param predicate - Function to test each status metadata
