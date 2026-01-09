@@ -63,7 +63,8 @@ export type BooleanStatusPreset = 'yesNo' | 'activeInactive' | 'enabledDisabled'
  */
 const YES_NO_METADATA: Record<BooleanStatus, StatusMetadata> = {
   [BooleanStatus.TRUE]: {
-    ...BOOLEAN_STATUS_METADATA[BooleanStatus.TRUE],
+    icon: 'check_circle',
+    color: '#4CAF50', // Green
     label: {
       short: {
         'us-EN': 'Yes',
@@ -74,9 +75,14 @@ const YES_NO_METADATA: Record<BooleanStatus, StatusMetadata> = {
         'fr-FR': 'Oui',
       },
     },
+    description: {
+      'us-EN': 'Status is active or enabled',
+      'fr-FR': 'Le statut est actif ou activé',
+    },
   },
   [BooleanStatus.FALSE]: {
-    ...BOOLEAN_STATUS_METADATA[BooleanStatus.FALSE],
+    icon: 'cancel',
+    color: '#F44336', // Red
     label: {
       short: {
         'us-EN': 'No',
@@ -86,13 +92,18 @@ const YES_NO_METADATA: Record<BooleanStatus, StatusMetadata> = {
         'us-EN': 'No',
         'fr-FR': 'Non',
       },
+    },
+    description: {
+      'us-EN': 'Status is inactive or disabled',
+      'fr-FR': 'Le statut est inactif ou désactivé',
     },
   },
 };
 
 const ACTIVE_INACTIVE_METADATA: Record<BooleanStatus, StatusMetadata> = {
   [BooleanStatus.TRUE]: {
-    ...BOOLEAN_STATUS_METADATA[BooleanStatus.TRUE],
+    icon: 'check_circle',
+    color: '#4CAF50', // Green
     label: {
       short: {
         'us-EN': 'Active',
@@ -103,9 +114,14 @@ const ACTIVE_INACTIVE_METADATA: Record<BooleanStatus, StatusMetadata> = {
         'fr-FR': 'Actif',
       },
     },
+    description: {
+      'us-EN': 'Status is active or enabled',
+      'fr-FR': 'Le statut est actif ou activé',
+    },
   },
   [BooleanStatus.FALSE]: {
-    ...BOOLEAN_STATUS_METADATA[BooleanStatus.FALSE],
+    icon: 'cancel',
+    color: '#F44336', // Red
     label: {
       short: {
         'us-EN': 'Inactive',
@@ -115,13 +131,18 @@ const ACTIVE_INACTIVE_METADATA: Record<BooleanStatus, StatusMetadata> = {
         'us-EN': 'Inactive',
         'fr-FR': 'Inactif',
       },
+    },
+    description: {
+      'us-EN': 'Status is inactive or disabled',
+      'fr-FR': 'Le statut est inactif ou désactivé',
     },
   },
 };
 
 const ENABLED_DISABLED_METADATA: Record<BooleanStatus, StatusMetadata> = {
   [BooleanStatus.TRUE]: {
-    ...BOOLEAN_STATUS_METADATA[BooleanStatus.TRUE],
+    icon: 'check_circle',
+    color: '#4CAF50', // Green
     label: {
       short: {
         'us-EN': 'Enabled',
@@ -132,9 +153,14 @@ const ENABLED_DISABLED_METADATA: Record<BooleanStatus, StatusMetadata> = {
         'fr-FR': 'Activé',
       },
     },
+    description: {
+      'us-EN': 'Status is enabled',
+      'fr-FR': 'Le statut est activé',
+    },
   },
   [BooleanStatus.FALSE]: {
-    ...BOOLEAN_STATUS_METADATA[BooleanStatus.FALSE],
+    icon: 'cancel',
+    color: '#F44336', // Red
     label: {
       short: {
         'us-EN': 'Disabled',
@@ -144,13 +170,18 @@ const ENABLED_DISABLED_METADATA: Record<BooleanStatus, StatusMetadata> = {
         'us-EN': 'Disabled',
         'fr-FR': 'Désactivé',
       },
+    },
+    description: {
+      'us-EN': 'Status is disabled',
+      'fr-FR': 'Le statut est désactivé',
     },
   },
 };
 
 const VALID_INVALID_METADATA: Record<BooleanStatus, StatusMetadata> = {
   [BooleanStatus.TRUE]: {
-    ...BOOLEAN_STATUS_METADATA[BooleanStatus.TRUE],
+    icon: 'check_circle',
+    color: '#4CAF50', // Green
     label: {
       short: {
         'us-EN': 'Valid',
@@ -161,9 +192,14 @@ const VALID_INVALID_METADATA: Record<BooleanStatus, StatusMetadata> = {
         'fr-FR': 'Valide',
       },
     },
+    description: {
+      'us-EN': 'Status is valid',
+      'fr-FR': 'Le statut est valide',
+    },
   },
   [BooleanStatus.FALSE]: {
-    ...BOOLEAN_STATUS_METADATA[BooleanStatus.FALSE],
+    icon: 'cancel',
+    color: '#F44336', // Red
     label: {
       short: {
         'us-EN': 'Invalid',
@@ -173,6 +209,10 @@ const VALID_INVALID_METADATA: Record<BooleanStatus, StatusMetadata> = {
         'us-EN': 'Invalid',
         'fr-FR': 'Invalide',
       },
+    },
+    description: {
+      'us-EN': 'Status is invalid',
+      'fr-FR': 'Le statut est invalide',
     },
   },
 };
