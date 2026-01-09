@@ -54,134 +54,136 @@ export const BOOLEAN_STATUS_METADATA: Record<BooleanStatus, StatusMetadata> = {
 };
 
 /**
+ * Boolean Status preset type
+ */
+export type BooleanStatusPreset = 'yesNo' | 'activeInactive' | 'enabledDisabled' | 'validInvalid';
+
+/**
  * Preset metadata configurations for common boolean label pairs
  */
-export const BOOLEAN_STATUS_PRESETS = {
-  /**
-   * Yes/No preset
-   */
-  yesNo: (): Record<BooleanStatus, StatusMetadata> => ({
-    [BooleanStatus.TRUE]: {
-      ...BOOLEAN_STATUS_METADATA[BooleanStatus.TRUE],
-      label: {
-        short: {
-          'us-EN': 'Yes',
-          'fr-FR': 'Oui',
-        },
-        long: {
-          'us-EN': 'Yes',
-          'fr-FR': 'Oui',
-        },
+const YES_NO_METADATA: Record<BooleanStatus, StatusMetadata> = {
+  [BooleanStatus.TRUE]: {
+    ...BOOLEAN_STATUS_METADATA[BooleanStatus.TRUE],
+    label: {
+      short: {
+        'us-EN': 'Yes',
+        'fr-FR': 'Oui',
+      },
+      long: {
+        'us-EN': 'Yes',
+        'fr-FR': 'Oui',
       },
     },
-    [BooleanStatus.FALSE]: {
-      ...BOOLEAN_STATUS_METADATA[BooleanStatus.FALSE],
-      label: {
-        short: {
-          'us-EN': 'No',
-          'fr-FR': 'Non',
-        },
-        long: {
-          'us-EN': 'No',
-          'fr-FR': 'Non',
-        },
+  },
+  [BooleanStatus.FALSE]: {
+    ...BOOLEAN_STATUS_METADATA[BooleanStatus.FALSE],
+    label: {
+      short: {
+        'us-EN': 'No',
+        'fr-FR': 'Non',
+      },
+      long: {
+        'us-EN': 'No',
+        'fr-FR': 'Non',
       },
     },
-  }),
+  },
+};
 
-  /**
-   * Active/Inactive preset
-   */
-  activeInactive: (): Record<BooleanStatus, StatusMetadata> => ({
-    [BooleanStatus.TRUE]: {
-      ...BOOLEAN_STATUS_METADATA[BooleanStatus.TRUE],
-      label: {
-        short: {
-          'us-EN': 'Active',
-          'fr-FR': 'Actif',
-        },
-        long: {
-          'us-EN': 'Active',
-          'fr-FR': 'Actif',
-        },
+const ACTIVE_INACTIVE_METADATA: Record<BooleanStatus, StatusMetadata> = {
+  [BooleanStatus.TRUE]: {
+    ...BOOLEAN_STATUS_METADATA[BooleanStatus.TRUE],
+    label: {
+      short: {
+        'us-EN': 'Active',
+        'fr-FR': 'Actif',
+      },
+      long: {
+        'us-EN': 'Active',
+        'fr-FR': 'Actif',
       },
     },
-    [BooleanStatus.FALSE]: {
-      ...BOOLEAN_STATUS_METADATA[BooleanStatus.FALSE],
-      label: {
-        short: {
-          'us-EN': 'Inactive',
-          'fr-FR': 'Inactif',
-        },
-        long: {
-          'us-EN': 'Inactive',
-          'fr-FR': 'Inactif',
-        },
+  },
+  [BooleanStatus.FALSE]: {
+    ...BOOLEAN_STATUS_METADATA[BooleanStatus.FALSE],
+    label: {
+      short: {
+        'us-EN': 'Inactive',
+        'fr-FR': 'Inactif',
+      },
+      long: {
+        'us-EN': 'Inactive',
+        'fr-FR': 'Inactif',
       },
     },
-  }),
+  },
+};
 
-  /**
-   * Enabled/Disabled preset
-   */
-  enabledDisabled: (): Record<BooleanStatus, StatusMetadata> => ({
-    [BooleanStatus.TRUE]: {
-      ...BOOLEAN_STATUS_METADATA[BooleanStatus.TRUE],
-      label: {
-        short: {
-          'us-EN': 'Enabled',
-          'fr-FR': 'Activé',
-        },
-        long: {
-          'us-EN': 'Enabled',
-          'fr-FR': 'Activé',
-        },
+const ENABLED_DISABLED_METADATA: Record<BooleanStatus, StatusMetadata> = {
+  [BooleanStatus.TRUE]: {
+    ...BOOLEAN_STATUS_METADATA[BooleanStatus.TRUE],
+    label: {
+      short: {
+        'us-EN': 'Enabled',
+        'fr-FR': 'Activé',
+      },
+      long: {
+        'us-EN': 'Enabled',
+        'fr-FR': 'Activé',
       },
     },
-    [BooleanStatus.FALSE]: {
-      ...BOOLEAN_STATUS_METADATA[BooleanStatus.FALSE],
-      label: {
-        short: {
-          'us-EN': 'Disabled',
-          'fr-FR': 'Désactivé',
-        },
-        long: {
-          'us-EN': 'Disabled',
-          'fr-FR': 'Désactivé',
-        },
+  },
+  [BooleanStatus.FALSE]: {
+    ...BOOLEAN_STATUS_METADATA[BooleanStatus.FALSE],
+    label: {
+      short: {
+        'us-EN': 'Disabled',
+        'fr-FR': 'Désactivé',
+      },
+      long: {
+        'us-EN': 'Disabled',
+        'fr-FR': 'Désactivé',
       },
     },
-  }),
+  },
+};
 
-  /**
-   * Valid/Invalid preset
-   */
-  validInvalid: (): Record<BooleanStatus, StatusMetadata> => ({
-    [BooleanStatus.TRUE]: {
-      ...BOOLEAN_STATUS_METADATA[BooleanStatus.TRUE],
-      label: {
-        short: {
-          'us-EN': 'Valid',
-          'fr-FR': 'Valide',
-        },
-        long: {
-          'us-EN': 'Valid',
-          'fr-FR': 'Valide',
-        },
+const VALID_INVALID_METADATA: Record<BooleanStatus, StatusMetadata> = {
+  [BooleanStatus.TRUE]: {
+    ...BOOLEAN_STATUS_METADATA[BooleanStatus.TRUE],
+    label: {
+      short: {
+        'us-EN': 'Valid',
+        'fr-FR': 'Valide',
+      },
+      long: {
+        'us-EN': 'Valid',
+        'fr-FR': 'Valide',
       },
     },
-    [BooleanStatus.FALSE]: {
-      ...BOOLEAN_STATUS_METADATA[BooleanStatus.FALSE],
-      label: {
-        short: {
-          'us-EN': 'Invalid',
-          'fr-FR': 'Invalide',
-        },
-        long: {
-          'us-EN': 'Invalid',
-          'fr-FR': 'Invalide',
-        },
+  },
+  [BooleanStatus.FALSE]: {
+    ...BOOLEAN_STATUS_METADATA[BooleanStatus.FALSE],
+    label: {
+      short: {
+        'us-EN': 'Invalid',
+        'fr-FR': 'Invalide',
+      },
+      long: {
+        'us-EN': 'Invalid',
+        'fr-FR': 'Invalide',
       },
     },
-  }),
+  },
+};
+
+/**
+ * Boolean Status preset metadata registry
+ * Maps preset names to their metadata configurations
+ */
+export const BOOLEAN_METADATA_REGISTRY: Record<BooleanStatusPreset, Record<BooleanStatus, StatusMetadata>> = {
+  yesNo: YES_NO_METADATA,
+  activeInactive: ACTIVE_INACTIVE_METADATA,
+  enabledDisabled: ENABLED_DISABLED_METADATA,
+  validInvalid: VALID_INVALID_METADATA,
 };

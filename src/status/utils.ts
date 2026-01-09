@@ -6,17 +6,17 @@
 import type { AccountLocationStatus } from './account-location-status';
 import type { MedicalHistoryStatus } from './medical-history-status';
 import type { MedicalServiceStatus } from './medical-service-status';
-import type { BooleanStatus } from './boolean-status';
+import type { BooleanStatus, BooleanStatusPreset } from './boolean-status';
 import type { StatusMetadata, Locale } from './types';
 import { ACCOUNT_LOCATION_STATUS_METADATA } from './account-location-status';
 import { MEDICAL_HISTORY_STATUS_METADATA } from './medical-history-status';
 import { MEDICAL_SERVICE_STATUS_METADATA } from './medical-service-status';
-import { BOOLEAN_STATUS_METADATA } from './boolean-status';
+import { BOOLEAN_METADATA_REGISTRY } from './boolean-status';
 
 /**
  * Feature type for status selection
  */
-export type StatusFeature = 'medicalService' | 'accountLocation' | 'medicalHistory' | 'boolean';
+export type StatusFeature = 'medicalService' | 'accountLocation' | 'medicalHistory' | BooleanStatusPreset;
 
 /**
  * Status type mapping for each feature
@@ -25,7 +25,10 @@ export type StatusTypeMap = {
   medicalService: MedicalServiceStatus;
   accountLocation: AccountLocationStatus;
   medicalHistory: MedicalHistoryStatus;
-  boolean: BooleanStatus;
+  yesNo: BooleanStatus;
+  activeInactive: BooleanStatus;
+  enabledDisabled: BooleanStatus;
+  validInvalid: BooleanStatus;
 };
 
 /**
@@ -35,7 +38,10 @@ const METADATA_REGISTRY: Record<StatusFeature, Record<string | number, StatusMet
   medicalService: MEDICAL_SERVICE_STATUS_METADATA,
   accountLocation: ACCOUNT_LOCATION_STATUS_METADATA,
   medicalHistory: MEDICAL_HISTORY_STATUS_METADATA,
-  boolean: BOOLEAN_STATUS_METADATA,
+  yesNo: BOOLEAN_METADATA_REGISTRY['yesNo'],
+  activeInactive: BOOLEAN_METADATA_REGISTRY['activeInactive'],
+  enabledDisabled: BOOLEAN_METADATA_REGISTRY['enabledDisabled'],
+  validInvalid: BOOLEAN_METADATA_REGISTRY['validInvalid'],
 };
 
 /**
