@@ -3,7 +3,7 @@
  * Provides common functions to work with status configurations
  */
 
-import type { BooleanStatus, BooleanStatusPreset } from './boolean-status';
+import type { BooleanStatus } from './boolean-status';
 import type { AccountLocationStatus } from './account-location-status';
 import type { MedicalHistoryStatus } from './medical-history-status';
 import type { MedicalServiceStatus } from './medical-service-status';
@@ -16,7 +16,14 @@ import { MEDICAL_SERVICE_STATUS_METADATA } from './medical-service-status';
 /**
  * Feature type for status selection
  */
-export type StatusFeature = 'medicalService' | 'accountLocation' | 'medicalHistory' | BooleanStatusPreset;
+export type StatusFeature =
+  | 'medicalService'
+  | 'accountLocation'
+  | 'medicalHistory'
+  | 'yesNo'
+  | 'activeInactive'
+  | 'enabledDisabled'
+  | 'validInvalid';
 
 /**
  * Status type mapping for each feature
