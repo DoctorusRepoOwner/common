@@ -102,3 +102,18 @@ export function isEnvAgnostic(path: string): boolean {
   const parts = path.split('/').filter((p) => p.length > 0);
   return parts.length === 1;
 }
+
+/**
+ * Build SSM parameter path for iCal token by user ID
+ * @param userId - User ID
+ * @returns Full SSM parameter path in format `/ical/${userId}/token` (environment-agnostic)
+ *
+ * @example
+ * ```ts
+ * buildICalTokenPath('user-123')
+ * // Returns: '/ical/user-123/token'
+ * ```
+ */
+export function buildICalTokenPath(userId: string): string {
+  return `/ical/${userId}/token`;
+}
