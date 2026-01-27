@@ -56,7 +56,12 @@ export const BOOLEAN_STATUS_METADATA: Record<BooleanStatus, StatusMetadata> = {
 /**
  * Boolean Status preset type
  */
-export type BooleanStatusPreset = 'yesNo' | 'activeInactive' | 'enabledDisabled' | 'validInvalid';
+export type BooleanStatusPreset =
+  | 'yesNo'
+  | 'activeInactive'
+  | 'enabledDisabled'
+  | 'validInvalid'
+  | 'verifiedUnverified';
 
 /**
  * Preset metadata configurations for common boolean label pairs
@@ -217,6 +222,45 @@ const VALID_INVALID_METADATA: Record<BooleanStatus, StatusMetadata> = {
   },
 };
 
+const VERIFIED_UNVERIFIED_METADATA: Record<BooleanStatus, StatusMetadata> = {
+  [BooleanStatus.TRUE]: {
+    icon: 'check_circle',
+    color: '#4CAF50', // Green
+    label: {
+      short: {
+        'us-EN': 'Verified',
+        'fr-FR': 'Vérifié',
+      },
+      long: {
+        'us-EN': 'Verified',
+        'fr-FR': 'Vérifié',
+      },
+    },
+    description: {
+      'us-EN': 'Status is verified',
+      'fr-FR': 'Le statut est vérifié',
+    },
+  },
+  [BooleanStatus.FALSE]: {
+    icon: 'cancel',
+    color: '#F44336', // Red
+    label: {
+      short: {
+        'us-EN': 'Unverified',
+        'fr-FR': 'Non vérifié',
+      },
+      long: {
+        'us-EN': 'Unverified',
+        'fr-FR': 'Non vérifié',
+      },
+    },
+    description: {
+      'us-EN': 'Status is unverified',
+      'fr-FR': "Le statut n'est pas vérifié",
+    },
+  },
+};
+
 /**
  * Boolean Status preset metadata registry
  * Maps preset names to their metadata configurations
@@ -226,4 +270,5 @@ export const BOOLEAN_METADATA_REGISTRY: Record<BooleanStatusPreset, Record<Boole
   activeInactive: ACTIVE_INACTIVE_METADATA,
   enabledDisabled: ENABLED_DISABLED_METADATA,
   validInvalid: VALID_INVALID_METADATA,
+  verifiedUnverified: VERIFIED_UNVERIFIED_METADATA,
 };
