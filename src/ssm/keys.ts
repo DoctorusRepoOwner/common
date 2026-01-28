@@ -26,5 +26,6 @@ export enum SSM_PARAM_KEY {
   EVENT_API_REAL_TIME_DNS = 'event-api-real-time-dns',
   EVENT_API_HTTP_DNS = 'event-api-http-dns',
   NOTIFIED_EVENT_ACTIONS = 'notified-event-actions',
+  HOSTED_ZONE_ID = 'hosted-zone-id',
   ICAL_TOKEN = 'ical-token',
 }
