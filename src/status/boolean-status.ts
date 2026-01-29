@@ -61,7 +61,8 @@ export type BooleanStatusPreset =
   | 'activeInactive'
   | 'enabledDisabled'
   | 'validInvalid'
-  | 'verifiedUnverified';
+  | 'verifiedUnverified'
+  | 'subscribedNotSubscribed';
 
 /**
  * Preset metadata configurations for common boolean label pairs
@@ -261,6 +262,45 @@ const VERIFIED_UNVERIFIED_METADATA: Record<BooleanStatus, StatusMetadata> = {
   },
 };
 
+const SUBSCRIBED_NOT_SUBSCRIBED_METADATA: Record<BooleanStatus, StatusMetadata> = {
+  [BooleanStatus.TRUE]: {
+    icon: 'check_circle',
+    color: '#4CAF50', // Green
+    label: {
+      short: {
+        'us-EN': 'Subscribed',
+        'fr-FR': 'Abonné',
+      },
+      long: {
+        'us-EN': 'Subscribed',
+        'fr-FR': 'Abonné',
+      },
+    },
+    description: {
+      'us-EN': 'User is subscribed',
+      'fr-FR': "L'utilisateur est abonné",
+    },
+  },
+  [BooleanStatus.FALSE]: {
+    icon: 'block',
+    color: '#9E9E9E', // Gray
+    label: {
+      short: {
+        'us-EN': 'Not Subscribed',
+        'fr-FR': 'Non abonné',
+      },
+      long: {
+        'us-EN': 'Not Subscribed',
+        'fr-FR': 'Non abonné',
+      },
+    },
+    description: {
+      'us-EN': 'User is not subscribed',
+      'fr-FR': "L'utilisateur n'est pas abonné",
+    },
+  },
+};
+
 /**
  * Boolean Status preset metadata registry
  * Maps preset names to their metadata configurations
@@ -271,4 +311,5 @@ export const BOOLEAN_METADATA_REGISTRY: Record<BooleanStatusPreset, Record<Boole
   enabledDisabled: ENABLED_DISABLED_METADATA,
   validInvalid: VALID_INVALID_METADATA,
   verifiedUnverified: VERIFIED_UNVERIFIED_METADATA,
+  subscribedNotSubscribed: SUBSCRIBED_NOT_SUBSCRIBED_METADATA,
 };
