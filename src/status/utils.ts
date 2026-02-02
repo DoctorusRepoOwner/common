@@ -23,7 +23,9 @@ export type StatusFeature =
   | 'yesNo'
   | 'activeInactive'
   | 'enabledDisabled'
-  | 'validInvalid';
+  | 'validInvalid'
+  | 'verifiedUnverified'
+  | 'subscribedNotSubscribed';
 
 /**
  * Status type mapping for each feature
@@ -36,6 +38,8 @@ export type StatusTypeMap = {
   activeInactive: BooleanStatus;
   enabledDisabled: BooleanStatus;
   validInvalid: BooleanStatus;
+  verifiedUnverified: BooleanStatus;
+  subscribedNotSubscribed: BooleanStatus;
 };
 
 /**
@@ -49,6 +53,8 @@ const METADATA_REGISTRY: Record<StatusFeature, Record<string | number, StatusMet
   activeInactive: BOOLEAN_METADATA_REGISTRY.activeInactive,
   enabledDisabled: BOOLEAN_METADATA_REGISTRY.enabledDisabled,
   validInvalid: BOOLEAN_METADATA_REGISTRY.validInvalid,
+  verifiedUnverified: BOOLEAN_METADATA_REGISTRY.verifiedUnverified,
+  subscribedNotSubscribed: BOOLEAN_METADATA_REGISTRY.subscribedNotSubscribed,
 };
 
 /**
