@@ -12,6 +12,7 @@ export enum SSM_PARAM_KEY {
   GRAPHQL_WS_URL = 'graphql-ws-url',
   GRAPHQL_HOST = 'graphql-host',
   GRAPHQL_API_ID = 'graphql-api-id',
+  MEDICALSPACE_WEB_APP_URL = 'medicalspace-web-app-url',
   MEDICAL_ASSETS_AWS_CLOUDFRONT_PRIVATE_KEY = 'medical-assets-dist-private-key',
   MEDICAL_ASSETS_AWS_CLOUDFRONT_KEY_ID = 'medical-assets-dist-public-key-id',
   MEDICAL_ASSETS_AWS_CLOUDFRONT_PUB_KEY = 'medical-assets-dist-public-key',
