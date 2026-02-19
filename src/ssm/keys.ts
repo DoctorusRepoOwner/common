@@ -28,6 +28,8 @@ export enum SSM_PARAM_KEY {
   WEBSITE_DIST_BUCKET_NAME = '/website/dist-bucket-name',
   WEBSITE_DIST_MAPS_BUCKET_NAME = '/website/dist-maps-bucket-name',
   WEBSITE_DISTRIBUTION_ID = '/website/distribution-id',
+  CICD_GITHUB_OIDC_PROVIDER_ARN = '/cicd/github-oidc-provider-arn',
+  CICD_WEBSITE_GITHUB_ROLE_ARN = '/cicd/website/github-role-arn',
   DB_USER = 'db-user',
   DB_PASSWORD = 'db-password',
   MEDICAL_ASSETS_DISTRIBUTION_DOMAIN_NAME = 'medical-assets-dist-domain-name',
