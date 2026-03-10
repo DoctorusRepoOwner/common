@@ -8,7 +8,7 @@ const project = new typescript.TypeScriptProject({
   depsUpgrade: true,
   description: 'Common utilities and libraries for the DOCTORUS project',
   deps: [],
-  devDeps: ['@types/node', 'prettier'],
+  devDeps: ['@types/node', 'prettier', '@types/jest'],
   peerDeps: [],
   // Publishing configuration
   releaseToNpm: true,

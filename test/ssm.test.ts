@@ -1,5 +1,7 @@
 import {
+  getSSMParamDescription,
   SSM_PARAM_KEY,
+  SSM_PARAM_METADATA,
   buildSSMPath,
   buildSSMPathWithPrefix,
   extractEnvFromPath,
@@ -153,6 +155,21 @@ describe('SSM Utilities', () => {
       expect(SSM_PARAM_KEY.DB_PASSWORD).toBe('db-password');
       expect(SSM_PARAM_KEY.GRAPHQL_API_ID).toBe('graphql-api-id');
       expect(SSM_PARAM_KEY.BASE_HOST).toBe('base-host');
+    });
+  });
+
+  describe('SSM_PARAM_METADATA', () => {
+    it('should provide a description for every SSM parameter key', () => {
+      const keys = Object.values(SSM_PARAM_KEY);
+
+      keys.forEach((key) => {
+        expect(SSM_PARAM_METADATA[key]).toBeDefined();
+        expect(SSM_PARAM_METADATA[key].description.length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should return a description via helper', () => {
+      expect(getSSMParamDescription(SSM_PARAM_KEY.DB_PASSWORD)).toBe('Database password used by application services.');
     });
   });
 });

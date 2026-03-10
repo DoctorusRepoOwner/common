@@ -1,4 +1,5 @@
-export { SSM_PARAM_KEY } from './keys';
+export { getSSMParamDescription, SSM_PARAM_KEY, SSM_PARAM_METADATA } from './keys';
+export type { SSMParamMetadata } from './keys';
 export {
   buildSSMPath,
   buildSSMPathWithPrefix,
