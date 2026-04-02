@@ -74,7 +74,7 @@ export class Operation {
  *
  * @example
  * ```ts
- * getResourceFromOperation("PATIENT:READ") // Returns: Resource.PATIENT
+ * getResourceFromOperation("PATIENT:RETRIEVE") // Returns: Resource.PATIENT
  * getResourceFromOperation("INVALID:ACTION") // Returns: null
  * ```
  */
@@ -101,7 +101,7 @@ export function getResourceFromOperation(operation: string): Resource | null {
  *
  * @example
  * ```ts
- * getActionFromOperation("PATIENT:READ") // Returns: Action.READ
+ * getActionFromOperation("PATIENT:RETRIEVE") // Returns: Action.RETRIEVE
  * getActionFromOperation("PATIENT:INVALID") // Returns: null
  * ```
  */

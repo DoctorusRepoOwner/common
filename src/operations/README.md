@@ -2,320 +2,324 @@
 
 ## Overview
 
-The Operations module provides a comprehensive system for defining, categorizing, and labeling operations, actions, and resources across the Doctorus platform. It includes full internationalization (i18n) support for English and French.
+The operations module gives Doctorus a shared vocabulary for authorization, audit logging, and UI labels.
 
-## Key Components
+It is built from three pieces:
 
-### 1. **Action Enum** (`actions.ts`)
+- `Resource`: the thing being acted on
+- `Action`: the kind of intent or behavior
+- `Operation`: the pair of `resource + action`
 
-Defines all possible actions that can be performed in the system.
+An operation is always serialized as:
 
-**Categories:**
-
-- **CRUD Operations**: `CREATE`, `READ`, `UPDATE`, `DELETE`, `PUT`, `LIST`
-- **General Actions**: `MANAGE`, `VIEW`, `SEARCH`
-- **Access Control**: `GRANT`, `REVOKE`
-- **Medical Specific**: `PRESCRIBE`, `DIAGNOSE`, `SCHEDULE`, `CANCEL`, `APPROVE`, `REJECT`, `SIGN`, `VERIFY`
-- **Medical Service Status Actions**: `CHECK_IN`, `UNDO_CHECK_IN`, `START_SERVICE`, `UNSTART_SERVICE`, `COMPLETE_SERVICE`, `REOPEN_COMPLETED_SERVICE`, `CANCEL_SERVICE`, `UNDO_CANCEL_SERVICE`, `FORCE_RESET_STATUS`, `CORRECT_TIMESTAMPS`
-- **Account Actions**: `RECOVER`, `DISABLE`
-- **Data Operations**: `EXPORT`, `IMPORT`, `ARCHIVE`, `RESTORE`, `SHARE`, `DOWNLOAD`, `UPLOAD`
-- **System Operations**: `LOGIN`, `LOGOUT`, `CONFIGURE`, `AUDIT`
-
-**Usage Example:**
-
-```typescript
-import { Action } from '@doctorus/common';
-
-const action = Action.CREATE;
-const medicalAction = Action.PRESCRIBE;
-const statusAction = Action.CHECK_IN;
+```ts
+RESOURCE:ACTION
 ```
 
-### 2. **Resource Enum** (`resources.ts`)
+Example:
 
-Defines all resource types in the system with categorization into medical and public resources.
+```ts
+PATIENT:RETRIEVE
+MEDICAL_SERVICE_STATUS:CHECK_IN
+CALENDAR_SYNC:ENABLE_CALENDAR_SYNC
+```
 
-**Total Resources**: 49 resource types
+## Design Logic
 
-**Medical Resources** (require special access control):
+### 1. Resources follow the GraphQL domain
 
-- Patient resources: `PATIENT`, `PATIENT_MEDICAL_NOTES`, `PATIENT_MEDICAL_PROPERTIES`, `PATIENT_PAYMENT`
-- Medical service resources: `MEDICAL_SERVICE`, `MEDICAL_SERVICE_NOTE`, `MEDICAL_SERVICE_SCHEDULE`, `MEDICAL_SERVICE_FEES`, `MEDICAL_SERVICE_STATUS`
-- Clinical resources: `MEDICAL_NOTE`, `MEDICAL_RECORD`, `MEDICAL_HISTORY`, `PRESCRIPTION`, `DIAGNOSIS`, `OBSERVATION`, `MEDICATION`, `ALLERGY`, `IMMUNIZATION`, `PROCEDURE`, `CLINICAL_NOTE`, `VITAL_SIGNS`
-- Lab/Imaging: `LAB_RESULT`, `IMAGING`
-- Models: `MEDICAL_HISTORY_MODEL`, `PRESCRIPTION_MODEL`, `MEASURE_MODEL`, `CALCULATED_MEASURE_MODEL`
+Resources are aligned with the domain exposed by the schema and its business concepts.
+That means we model things like:
 
-**Public Resources** (standard access control):
+- `ACCOUNT`
+- `ACCOUNT_LOCATION`
+- `PATIENT`
+- `PATIENT_PROFILE`
+- `MEDICAL_SERVICE`
+- `MEDICAL_SERVICE_STATUS`
+- `PRESCRIPTION`
+- `DOCUMENT_LAYOUT`
+- `CALENDAR_TOKEN`
 
-- Account resources: `ACCOUNT`, `ACCOUNT_OWNERSHIP`, `ACCOUNT_PREFERENCES`, `USER`, `CONTACT`
-- Document resources: `UPLOADED_DOCUMENT`, `DOCUMENT_LAYOUT`, `GENERATED_DOCUMENT`, `DOCUMENT_MODEL`
-- System resources: `SETTINGS`, `NOTIFICATION`, `REPORT`, `AUDIT_LOG`, `SYSTEM`
-- Other: `SNIPPET`, `LOCATION`, `TASK_TYPE`, `MEMBERSHIP`
+The important rule is:
 
-**Helper Functions:**
+- resources should describe domain objects or subdomains
+- resources should not try to mirror every resolver name one-to-one
+- related mutations can target the same resource when they affect the same domain concern
 
-```typescript
+For example:
+
+- `setMedicalServiceStatus`
+- `checkInMedicalService`
+- `startMedicalService`
+- `completeMedicalService`
+
+all belong to the same general area, so they can be expressed through resources like:
+
+- `MEDICAL_SERVICE`
+- `MEDICAL_SERVICE_STATUS`
+
+### 2. Actions stay richer than the schema enum
+
+The GraphQL schema contains an `ActionType`, but this package does **not** use that enum as the source of truth.
+
+That is intentional.
+
+The schema enum is too small for application-level needs. We still need expressive actions for:
+
+- authorization
+- audit logging
+- admin tooling
+- UI labels
+- workflow-specific permissions
+
+So the action model includes both generic actions and domain-specific ones, such as:
+
+- generic: `CREATE`, `READ`, `RETRIEVE`, `UPDATE`, `DELETE`, `PUT`, `LIST`
+- search/display: `SEARCH`, `VIEW`
+- medical workflows: `CHECK_IN`, `START_SERVICE`, `COMPLETE_SERVICE`, `CORRECT_TIMESTAMPS`
+- business-specific updates: `SET_MEDICAL_SERVICE_STATUS`, `SET_MEDICAL_SERVICE_FEES`
+- payments and uploads: `PUT_PATIENT_PAYMENT`, `UPLOAD`
+- calendar flows: `ENABLE_CALENDAR_SYNC`, `DISABLE_CALENDAR_SYNC`, `REGENERATE_CALENDAR_LINK`
+
+In short:
+
+- resources are schema/domain aligned
+- actions are application/workflow aligned
+
+This gives us a model that stays close to the API without losing business intent.
+
+### 3. `RETRIEVE` and `READ` can both exist
+
+This is also intentional.
+
+- `RETRIEVE` is useful for "fetch a resource" semantics and pairs well with GraphQL-style access
+- `READ` is useful when the operation is more like inspection, logs, or general viewing
+
+We do not force the whole system into one verb when different parts of the product communicate better with different language.
+
+### 4. Predefined operations map product behaviors to the shared vocabulary
+
+`predefined.ts` is where concrete product actions are normalized into reusable operations.
+
+Examples:
+
+```ts
+Operations.PATIENT_RETRIEVE;
+Operations.MEDICAL_SERVICE_CHECK_IN;
+Operations.MEDICAL_SERVICE_FEES_UPDATE;
+Operations.CALENDAR_SYNC_ENABLE;
+Operations.CALENDAR_TOKEN_REGENERATE;
+```
+
+These constants are the recommended entry point for feature code because they:
+
+- avoid repeated string construction
+- keep naming consistent across services
+- make audit and permission logic easier to grep and review
+
+## Main Types
+
+### `Action`
+
+Defined in `actions.ts`.
+
+This enum contains the intent of the operation.
+
+Examples:
+
+```ts
+Action.CREATE;
+Action.RETRIEVE;
+Action.CHECK_IN;
+Action.SET_MEDICAL_SERVICE_FEES;
+Action.ENABLE_CALENDAR_SYNC;
+```
+
+### `Resource`
+
+Defined in `resources.ts`.
+
+This enum contains the domain target of the operation.
+
+Examples:
+
+```ts
+Resource.PATIENT;
+Resource.MEDICAL_SERVICE;
+Resource.MEDICAL_SERVICE_STATUS;
+Resource.DOCUMENT_LAYOUT;
+Resource.CALENDAR_SYNC;
+```
+
+### `Operation`
+
+Defined in `operation.ts`.
+
+This class combines a resource and an action.
+
+```ts
+import { Action, Operation, Resource } from '@doctorus/common';
+
+const op = new Operation(Resource.PATIENT, Action.RETRIEVE);
+
+op.toString(); // "PATIENT:RETRIEVE"
+```
+
+You can also parse from strings:
+
+```ts
+const parsed = Operation.fromString('MEDICAL_SERVICE_STATUS:CHECK_IN');
+```
+
+Helper utilities:
+
+- `Operation.fromString(...)`
+- `getResourceFromOperation(...)`
+- `getActionFromOperation(...)`
+
+## Resource Categories
+
+Resources are split into two buckets:
+
+- `MEDICAL_RESOURCES`
+- `PUBLIC_RESOURCES`
+
+Use helpers from `resources.ts`:
+
+```ts
 import {
-  Resource,
-  isMedicalResource,
-  isPublicResource,
+  MEDICAL_RESOURCES,
+  PUBLIC_RESOURCES,
   getAllResources,
   getResourceCategories,
+  isMedicalResource,
+  isPublicResource,
+} from '@doctorus/common';
+```
+
+This is useful when policy differs for medical versus non-medical data.
+
+Examples of medical resources:
+
+- `PATIENT`
+- `MEDICAL_HISTORY`
+- `MEDICAL_SERVICE`
+- `OBSERVATION`
+- `PRESCRIPTION`
+
+Examples of public resources:
+
+- `ACCOUNT`
+- `ACCOUNT_LOCATION`
+- `DOCUMENT_LAYOUT`
+- `MEMBERSHIP`
+- `USER`
+
+## Labels and i18n
+
+`labels.ts` exposes user-facing labels for:
+
+- actions
+- resources
+- full operations
+
+Supported locales:
+
+- `'us-EN'`
+- `'fr-FR'`
+
+Examples:
+
+```ts
+import {
+  Action,
+  Operation,
+  Resource,
+  getActionLabel,
+  getOperationLabel,
+  getResourceLabel,
 } from '@doctorus/common';
 
-// Check resource type
-if (isMedicalResource(Resource.PATIENT)) {
-  // Apply special medical access control
-}
-
-// Get all resources
-const allResources = getAllResources();
-
-// Get categorized resources
-const categories = getResourceCategories();
-// Returns: { medical: Resource[], public: Resource[] }
-```
-
-### 3. **Operation Class** (`operation.ts`)
-
-Combines Action and Resource to represent a complete operation.
-
-**Usage Example:**
-
-```typescript
-import { Operation, Action, Resource } from '@doctorus/common';
-
-// Create an operation
-const op = new Operation(Action.CREATE, Resource.PRESCRIPTION);
-
-// Access properties
-console.log(op.action); // Action.CREATE
-console.log(op.resource); // Resource.PRESCRIPTION
-console.log(op.toString()); // "CREATE:PRESCRIPTION"
-
-// Parse from string
-const parsed = Operation.fromString('READ:PATIENT');
-console.log(parsed.action); // Action.READ
-console.log(parsed.resource); // Resource.PATIENT
-
-// Check equality
-const op1 = new Operation(Action.CREATE, Resource.PATIENT);
-const op2 = new Operation(Action.CREATE, Resource.PATIENT);
-console.log(op1.equals(op2)); // true
-```
-
-### 4. **Predefined Operations** (`predefined.ts`)
-
-Common operation combinations for quick reference.
-
-**Available Predefined Operations:**
-
-```typescript
-import { PredefinedOperations } from '@doctorus/common';
-
-// Patient operations
-PredefinedOperations.PATIENT_CREATE;
-PredefinedOperations.PATIENT_READ;
-PredefinedOperations.PATIENT_UPDATE;
-PredefinedOperations.PATIENT_DELETE;
-PredefinedOperations.PATIENT_VIEW;
-
-// Medical service operations
-PredefinedOperations.MEDICAL_SERVICE_CREATE;
-PredefinedOperations.MEDICAL_SERVICE_READ;
-PredefinedOperations.MEDICAL_SERVICE_UPDATE;
-PredefinedOperations.MEDICAL_SERVICE_DELETE;
-PredefinedOperations.MEDICAL_SERVICE_SCHEDULE;
-PredefinedOperations.MEDICAL_SERVICE_CANCEL;
-
-// Prescription operations
-PredefinedOperations.PRESCRIPTION_CREATE;
-PredefinedOperations.PRESCRIPTION_READ;
-PredefinedOperations.PRESCRIPTION_UPDATE;
-PredefinedOperations.PRESCRIPTION_DELETE;
-PredefinedOperations.PRESCRIPTION_PRESCRIBE;
-PredefinedOperations.PRESCRIPTION_SIGN;
-
-// And many more...
-```
-
-### 5. **Internationalization (i18n) Labels** (`labels.ts`)
-
-Provides human-readable labels for actions, resources, and operations in multiple languages.
-
-**Supported Locales:**
-
-- `'us-EN'` - United States English
-- `'fr-FR'` - French (France)
-
-**Usage Examples:**
-
-#### Action Labels
-
-```typescript
-import { getActionLabel, Action } from '@doctorus/common';
-
-// Get English label (default)
-const label = getActionLabel(Action.CREATE); // "Create"
-
-// Get French label
-const labelFr = getActionLabel(Action.CREATE, 'fr-FR'); // "Créer"
-
-// More examples
 getActionLabel(Action.CHECK_IN, 'us-EN'); // "Check In"
-getActionLabel(Action.CHECK_IN, 'fr-FR'); // "Enregistrement à l'arrivée"
+getResourceLabel(Resource.MEDICAL_SERVICE_STATUS, 'us-EN'); // "Medical Service Status"
 
-getActionLabel(Action.PRESCRIBE, 'us-EN'); // "Prescribe"
-getActionLabel(Action.PRESCRIBE, 'fr-FR'); // "Prescrire"
+const op = new Operation(Resource.MEDICAL_SERVICE_STATUS, Action.CHECK_IN);
+getOperationLabel(op, 'us-EN'); // "Check In Medical Service Status"
 ```
 
-#### Resource Labels
+English labels are mostly direct mappings.
+French labels use explicit overrides where needed and humanized fallbacks for anything not customized.
 
-```typescript
-import { getResourceLabel, Resource } from '@doctorus/common';
+## How to Choose a Resource
 
-// Get English label (default)
-const label = getResourceLabel(Resource.PATIENT); // "Patient"
+Use these rules:
 
-// Get French label
-const labelFr = getResourceLabel(Resource.PATIENT, 'fr-FR'); // "Patient"
+1. Choose the business object, not the resolver name.
+2. Prefer a stable domain noun over a temporary implementation detail.
+3. If several mutations affect one concern, group them under one resource family.
+4. Split into a subresource only when the concern is meaningfully distinct.
 
-// More examples
-getResourceLabel(Resource.PRESCRIPTION, 'us-EN'); // "Prescription"
-getResourceLabel(Resource.PRESCRIPTION, 'fr-FR'); // "Ordonnance"
+Good examples:
 
-getResourceLabel(Resource.MEDICAL_SERVICE, 'us-EN'); // "Medical Service"
-getResourceLabel(Resource.MEDICAL_SERVICE, 'fr-FR'); // "Service médical"
+- `PATIENT_STATUS` for activation/deactivation flows
+- `PATIENT_PAYMENT` for payment mutations
+- `MEDICAL_SERVICE_STATUS` for status transitions
+- `MEDICAL_SERVICE_TIMESTAMPS` for timestamp correction
+
+## How to Choose an Action
+
+Use these rules:
+
+1. Use a generic action when business intent is obvious enough.
+2. Use a workflow-specific action when the distinction matters for permissions, audit, or UI copy.
+3. Prefer consistency with existing predefined operations over inventing a near-duplicate action.
+
+Examples:
+
+- use `RETRIEVE` for fetching a patient
+- use `PUT_PATIENT_PAYMENT` instead of generic `UPDATE` when the payment workflow matters
+- use `CHECK_IN` instead of `UPDATE` for medical-service arrival workflows
+- use `ENABLE_CALENDAR_SYNC` instead of `UPDATE` for calendar lifecycle events
+
+## Recommended Usage
+
+Prefer predefined operations:
+
+```ts
+import { Operations } from '@doctorus/common';
+
+const permission = Operations.MEDICAL_SERVICE_CHECK_IN;
 ```
 
-#### Operation Labels
+If you need something custom:
 
-```typescript
-import { getOperationLabel, Operation, Action, Resource } from '@doctorus/common';
+```ts
+import { Action, Operation, Resource } from '@doctorus/common';
 
-const op = new Operation(Action.CREATE, Resource.PRESCRIPTION);
-
-// Get English label (default: "action resource")
-const label = getOperationLabel(op); // "Create Prescription"
-
-// Get French label
-const labelFr = getOperationLabel(op, 'fr-FR'); // "Créer Ordonnance"
-
-// Customize separator
-getOperationLabel(op, 'us-EN', { separator: ' - ' }); // "Create - Prescription"
-
-// Reverse order (resource first)
-getOperationLabel(op, 'us-EN', { order: 'resource-action' }); // "Prescription Create"
+const permission = new Operation(Resource.PATIENT_PROFILE, Action.UPDATE);
 ```
 
-**Fallback Behavior:**
-If a specific translation is missing, the system will automatically humanize the enum key:
+For permission checks:
 
-- `PATIENT_MEDICAL_NOTES` → "Patient Medical Notes"
-- `CHECK_IN` → "Check In"
-
-## Common Use Cases
-
-### 1. Permission Checking
-
-```typescript
-import { Operation, Action, Resource, getOperationLabel } from '@doctorus/common';
-
-function checkPermission(userPermissions: Operation[], requiredOp: Operation): boolean {
-  return userPermissions.some((perm) => perm.equals(requiredOp));
-}
-
-const requiredOp = new Operation(Action.CREATE, Resource.PRESCRIPTION);
-if (checkPermission(userPermissions, requiredOp)) {
-  console.log(`User can ${getOperationLabel(requiredOp)}`);
+```ts
+function hasPermission(userOps: Operation[], required: Operation): boolean {
+  return userOps.some((op) => op.equals(required));
 }
 ```
 
-### 2. Audit Logging
+For audit logs:
 
-```typescript
-import { Operation, Action, Resource, getOperationLabel } from '@doctorus/common';
+```ts
+import { getOperationLabel } from '@doctorus/common';
 
-function logAudit(userId: string, operation: Operation, locale: 'us-EN' | 'fr-FR' = 'us-EN') {
-  const actionLabel = getOperationLabel(operation, locale);
-  console.log(`User ${userId} performed: ${actionLabel}`);
-}
-
-const op = new Operation(Action.UPDATE, Resource.PATIENT);
-logAudit('user123', op, 'fr-FR'); // "User user123 performed: Mettre à jour Patient"
+const label = getOperationLabel(Operations.CALENDAR_SYNC_ENABLE, 'us-EN');
 ```
 
-### 3. UI Display
+## Current Mental Model
 
-```typescript
-import { getAllResources, getResourceLabel, isMedicalResource } from '@doctorus/common';
+If you only remember one thing, remember this:
 
-function buildResourceMenu(locale: 'us-EN' | 'fr-FR' = 'us-EN') {
-  const resources = getAllResources();
-
-  return resources.map((resource) => ({
-    id: resource,
-    label: getResourceLabel(resource, locale),
-    category: isMedicalResource(resource) ? 'Medical' : 'Public',
-  }));
-}
-```
-
-### 4. Medical Service Status Management
-
-```typescript
-import { Action, Resource, Operation, getActionLabel } from '@doctorus/common';
-
-// Available status actions
-const statusActions = [
-  Action.CHECK_IN,
-  Action.UNDO_CHECK_IN,
-  Action.START_SERVICE,
-  Action.UNSTART_SERVICE,
-  Action.COMPLETE_SERVICE,
-  Action.REOPEN_COMPLETED_SERVICE,
-  Action.CANCEL_SERVICE,
-  Action.UNDO_CANCEL_SERVICE,
-  Action.FORCE_RESET_STATUS,
-  Action.CORRECT_TIMESTAMPS,
-];
-
-// Build status action buttons
-statusActions.forEach((action) => {
-  console.log({
-    action,
-    label: getActionLabel(action, 'us-EN'),
-    labelFr: getActionLabel(action, 'fr-FR'),
-  });
-});
-```
-
-## Type Safety
-
-All enums and operations are fully typed, providing excellent IntelliSense and compile-time checking:
-
-```typescript
-import { Action, Resource, Operation } from '@doctorus/common';
-
-// TypeScript will autocomplete available actions
-const action: Action = Action.CREATE;
-
-// TypeScript will autocomplete available resources
-const resource: Resource = Resource.PATIENT;
-
-// Operation is type-safe
-const op = new Operation(action, resource);
-```
-
-## Best Practices
-
-1. **Always use enums** instead of string literals to benefit from type safety
-2. **Use predefined operations** when available to maintain consistency
-3. **Leverage i18n labels** for all user-facing text
-4. **Check resource categories** (medical vs public) for proper access control
-5. **Use Operation.equals()** for comparison instead of `===`
-6. **Provide locale context** when displaying labels to users
-
-## Testing
-
-The operations module has comprehensive test coverage (99%+). See `test/operations.test.ts` and `test/operations.labels.test.ts` for examples.
+- the schema helps shape the resource model
+- the product workflow shapes the action model
+- the operation string is the shared contract between authorization, audit, and UI labeling

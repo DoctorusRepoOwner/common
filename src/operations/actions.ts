@@ -1,25 +1,26 @@
 /**
- * Action types for operations
+ * Action types for operations.
+ *
+ * The GraphQL schema's ActionType enum is intentionally not treated as the
+ * source of truth here. This package keeps a richer application-level action
+ * vocabulary for authorization, audit logging, and UI labels.
  */
 export enum Action {
-  // CRUD operations
   CREATE = 'CREATE',
   READ = 'READ',
-  UPDATE = 'UPDATE',
   DELETE = 'DELETE',
+  RETRIEVE = 'RETRIEVE',
+  UPDATE = 'UPDATE',
   PUT = 'PUT',
   LIST = 'LIST',
 
-  // General actions
   MANAGE = 'MANAGE',
   VIEW = 'VIEW',
   SEARCH = 'SEARCH',
 
-  // Access control
   GRANT = 'GRANT',
   REVOKE = 'REVOKE',
 
-  // Medical specific
   PRESCRIBE = 'PRESCRIBE',
   DIAGNOSE = 'DIAGNOSE',
   SCHEDULE = 'SCHEDULE',
@@ -29,11 +30,9 @@ export enum Action {
   SIGN = 'SIGN',
   VERIFY = 'VERIFY',
 
-  // Medical Account specific
   RECOVER = 'RECOVER',
   DISABLE = 'DISABLE',
 
-  // Medical service specific
   SET_MEDICAL_SERVICE_STATUS = 'SET_MEDICAL_SERVICE_STATUS',
   SET_MEDICAL_SERVICE_FEES = 'SET_MEDICAL_SERVICE_FEES',
   CHECK_IN = 'CHECK_IN',
@@ -47,13 +46,11 @@ export enum Action {
   FORCE_RESET_STATUS = 'FORCE_RESET_STATUS',
   CORRECT_TIMESTAMPS = 'CORRECT_TIMESTAMPS',
 
-  // Patient specific
   UPDATE_STATUS = 'UPDATE_STATUS',
   VIEW_PATIENTS = 'VIEW_PATIENTS',
   PUT_PATIENT_PAYMENT = 'PUT_PATIENT_PAYMENT',
   DELETE_PATIENT_PAYMENT = 'DELETE_PATIENT_PAYMENT',
 
-  // Data operations
   EXPORT = 'EXPORT',
   IMPORT = 'IMPORT',
   ARCHIVE = 'ARCHIVE',
@@ -62,12 +59,10 @@ export enum Action {
   DOWNLOAD = 'DOWNLOAD',
   UPLOAD = 'UPLOAD',
 
-  // Calendar sync operations
   ENABLE_CALENDAR_SYNC = 'ENABLE_CALENDAR_SYNC',
   DISABLE_CALENDAR_SYNC = 'DISABLE_CALENDAR_SYNC',
   REGENERATE_CALENDAR_LINK = 'REGENERATE_CALENDAR_LINK',
 
-  // System operations
   LOGIN = 'LOGIN',
   LOGOUT = 'LOGOUT',
   CONFIGURE = 'CONFIGURE',

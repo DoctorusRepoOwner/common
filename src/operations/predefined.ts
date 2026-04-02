@@ -3,121 +3,143 @@ import { Operation } from './operation';
 import { Resource } from './resources';
 
 /**
- * Predefined common operations for convenience
+ * Predefined operations aligned with the GraphQL schema domain.
  */
 export const Operations = {
-  // Account operations
   ACCOUNT_CREATE: new Operation(Resource.ACCOUNT, Action.CREATE),
-  ACCOUNT_READ: new Operation(Resource.ACCOUNT, Action.READ),
+  ACCOUNT_RETRIEVE: new Operation(Resource.ACCOUNT, Action.RETRIEVE),
   ACCOUNT_UPDATE: new Operation(Resource.ACCOUNT, Action.UPDATE),
-  ACCOUNT_DELETE: new Operation(Resource.ACCOUNT, Action.DELETE),
-  ACCOUNT_MANAGE: new Operation(Resource.ACCOUNT, Action.MANAGE),
-  ACCOUNT_OWNERSHIP_TRANSFER: new Operation(Resource.ACCOUNT_OWNERSHIP, Action.UPDATE),
+  ACCOUNT_GENERAL_SETTINGS_UPDATE: new Operation(Resource.ACCOUNT_GENERAL_SETTINGS, Action.UPDATE),
+  ACCOUNT_PREFERENCES_UPDATE: new Operation(Resource.ACCOUNT_PREFERENCES, Action.UPDATE),
+  ACCOUNT_LOCATION_CREATE: new Operation(Resource.ACCOUNT_LOCATION, Action.CREATE),
+  ACCOUNT_LOCATION_RETRIEVE: new Operation(Resource.ACCOUNT_LOCATION, Action.RETRIEVE),
+  ACCOUNT_LOCATION_UPDATE: new Operation(Resource.ACCOUNT_LOCATION, Action.UPDATE),
+  ACCOUNT_LOCATION_DELETE: new Operation(Resource.ACCOUNT_LOCATION, Action.DELETE),
+  ACCOUNT_SUMMARY_RETRIEVE: new Operation(Resource.ACCOUNT_SUMMARY, Action.RETRIEVE),
 
-  // Patient operations
-  PATIENT_CREATE: new Operation(Resource.PATIENT, Action.CREATE),
-  PATIENT_READ: new Operation(Resource.PATIENT, Action.READ),
-  PATIENT_UPDATE: new Operation(Resource.PATIENT, Action.UPDATE),
-  PATIENT_DELETE: new Operation(Resource.PATIENT, Action.DELETE),
-  PATIENT_LIST: new Operation(Resource.PATIENT, Action.LIST),
-  PATIENT_VIEW: new Operation(Resource.PATIENT, Action.VIEW_PATIENTS),
-  PATIENT_UPDATE_STATUS: new Operation(Resource.PATIENT, Action.UPDATE_STATUS),
+  AVAILABLE_SLOT_RETRIEVE: new Operation(Resource.AVAILABLE_SLOT, Action.RETRIEVE),
 
-  // Patient payment operations
-  PATIENT_PAYMENT_PUT: new Operation(Resource.PATIENT_PAYMENT, Action.PUT_PATIENT_PAYMENT),
-  PATIENT_PAYMENT_DELETE: new Operation(Resource.PATIENT_PAYMENT, Action.DELETE_PATIENT_PAYMENT),
+  CALCULATED_MEASURE_MODEL_RETRIEVE: new Operation(Resource.CALCULATED_MEASURE_MODEL, Action.RETRIEVE),
+  CALCULATED_MEASURE_MODEL_UPDATE: new Operation(Resource.CALCULATED_MEASURE_MODEL, Action.UPDATE),
+  CALCULATED_MEASURE_MODEL_DELETE: new Operation(Resource.CALCULATED_MEASURE_MODEL, Action.DELETE),
 
-  // Medical service operations
-  MEDICAL_SERVICE_CREATE: new Operation(Resource.MEDICAL_SERVICE, Action.CREATE),
-  MEDICAL_SERVICE_READ: new Operation(Resource.MEDICAL_SERVICE, Action.READ),
-  MEDICAL_SERVICE_UPDATE: new Operation(Resource.MEDICAL_SERVICE, Action.UPDATE),
-  MEDICAL_SERVICE_DELETE: new Operation(Resource.MEDICAL_SERVICE, Action.DELETE),
-  MEDICAL_SERVICE_MANAGE: new Operation(Resource.MEDICAL_SERVICE, Action.MANAGE),
-  MEDICAL_SERVICE_SET_STATUS: new Operation(Resource.MEDICAL_SERVICE_STATUS, Action.SET_MEDICAL_SERVICE_STATUS),
-  MEDICAL_SERVICE_SET_FEES: new Operation(Resource.MEDICAL_SERVICE_FEES, Action.SET_MEDICAL_SERVICE_FEES),
+  CALENDAR_SYNC_ENABLE: new Operation(Resource.CALENDAR_SYNC, Action.ENABLE_CALENDAR_SYNC),
+  CALENDAR_SYNC_DISABLE: new Operation(Resource.CALENDAR_SYNC, Action.DISABLE_CALENDAR_SYNC),
+  CALENDAR_TOKEN_RETRIEVE: new Operation(Resource.CALENDAR_TOKEN, Action.RETRIEVE),
+  CALENDAR_TOKEN_REGENERATE: new Operation(Resource.CALENDAR_TOKEN, Action.REGENERATE_CALENDAR_LINK),
 
-  // Medical record operations
-  MEDICAL_RECORD_CREATE: new Operation(Resource.MEDICAL_RECORD, Action.CREATE),
-  MEDICAL_RECORD_READ: new Operation(Resource.MEDICAL_RECORD, Action.READ),
-  MEDICAL_RECORD_UPDATE: new Operation(Resource.MEDICAL_RECORD, Action.UPDATE),
-  MEDICAL_RECORD_DELETE: new Operation(Resource.MEDICAL_RECORD, Action.DELETE),
-  MEDICAL_RECORD_SHARE: new Operation(Resource.MEDICAL_RECORD, Action.SHARE),
-  MEDICAL_RECORD_EXPORT: new Operation(Resource.MEDICAL_RECORD, Action.EXPORT),
+  CONTACT_UPDATE: new Operation(Resource.CONTACT, Action.PUT),
+  CONTACT_DELETE: new Operation(Resource.CONTACT, Action.DELETE),
 
-  // Prescription operations
-  PRESCRIPTION_CREATE: new Operation(Resource.PRESCRIPTION, Action.CREATE),
-  PRESCRIPTION_READ: new Operation(Resource.PRESCRIPTION, Action.READ),
-  PRESCRIPTION_UPDATE: new Operation(Resource.PRESCRIPTION, Action.UPDATE),
-  PRESCRIPTION_SIGN: new Operation(Resource.PRESCRIPTION, Action.SIGN),
-  PRESCRIPTION_PRESCRIBE: new Operation(Resource.PRESCRIPTION, Action.PRESCRIBE),
+  DOCUMENT_LAYOUT_CREATE: new Operation(Resource.DOCUMENT_LAYOUT, Action.CREATE),
+  DOCUMENT_LAYOUT_RETRIEVE: new Operation(Resource.DOCUMENT_LAYOUT, Action.RETRIEVE),
+  DOCUMENT_LAYOUT_UPDATE: new Operation(Resource.DOCUMENT_LAYOUT, Action.UPDATE),
+  DOCUMENT_LAYOUT_DELETE: new Operation(Resource.DOCUMENT_LAYOUT, Action.DELETE),
 
-  // Diagnosis operations
-  DIAGNOSIS_CREATE: new Operation(Resource.DIAGNOSIS, Action.CREATE),
-  DIAGNOSIS_READ: new Operation(Resource.DIAGNOSIS, Action.READ),
-  DIAGNOSIS_UPDATE: new Operation(Resource.DIAGNOSIS, Action.UPDATE),
-  DIAGNOSIS_DIAGNOSE: new Operation(Resource.DIAGNOSIS, Action.DIAGNOSE),
-  DIAGNOSIS_VERIFY: new Operation(Resource.DIAGNOSIS, Action.VERIFY),
+  DOCUMENT_MODEL_RETRIEVE: new Operation(Resource.DOCUMENT_MODEL, Action.RETRIEVE),
+  DOCUMENT_MODEL_UPDATE: new Operation(Resource.DOCUMENT_MODEL, Action.UPDATE),
+  DOCUMENT_MODEL_DELETE: new Operation(Resource.DOCUMENT_MODEL, Action.DELETE),
 
-  // Medical history operations
-  MEDICAL_HISTORY_CREATE: new Operation(Resource.MEDICAL_HISTORY, Action.CREATE),
-  MEDICAL_HISTORY_READ: new Operation(Resource.MEDICAL_HISTORY, Action.READ),
-  MEDICAL_HISTORY_UPDATE: new Operation(Resource.MEDICAL_HISTORY, Action.UPDATE),
-
-  // Document operations
-  UPLOADED_DOCUMENT_CREATE: new Operation(Resource.UPLOADED_DOCUMENT, Action.CREATE),
-  UPLOADED_DOCUMENT_READ: new Operation(Resource.UPLOADED_DOCUMENT, Action.READ),
-  UPLOADED_DOCUMENT_DELETE: new Operation(Resource.UPLOADED_DOCUMENT, Action.DELETE),
   GENERATED_DOCUMENT_CREATE: new Operation(Resource.GENERATED_DOCUMENT, Action.CREATE),
-  GENERATED_DOCUMENT_READ: new Operation(Resource.GENERATED_DOCUMENT, Action.READ),
+  GENERATED_DOCUMENT_RETRIEVE: new Operation(Resource.GENERATED_DOCUMENT, Action.RETRIEVE),
+  GENERATED_DOCUMENT_UPDATE: new Operation(Resource.GENERATED_DOCUMENT, Action.PUT),
+  GENERATED_DOCUMENT_DELETE: new Operation(Resource.GENERATED_DOCUMENT, Action.DELETE),
 
-  // Medical service scheduling operations (appointments)
-  MEDICAL_SERVICE_SCHEDULE: new Operation(Resource.MEDICAL_SERVICE, Action.SCHEDULE),
-  MEDICAL_SERVICE_CANCEL: new Operation(Resource.MEDICAL_SERVICE, Action.CANCEL),
-  MEDICAL_SERVICE_LIST: new Operation(Resource.MEDICAL_SERVICE, Action.LIST),
+  LOG_RECORD_RETRIEVE: new Operation(Resource.LOG_RECORD, Action.READ),
 
-  // User operations
-  USER_CREATE: new Operation(Resource.USER, Action.CREATE),
-  USER_READ: new Operation(Resource.USER, Action.READ),
-  USER_UPDATE: new Operation(Resource.USER, Action.UPDATE),
-  USER_DELETE: new Operation(Resource.USER, Action.DELETE),
-  USER_LIST: new Operation(Resource.USER, Action.LIST),
-  USER_LOGIN: new Operation(Resource.USER, Action.LOGIN),
-  USER_LOGOUT: new Operation(Resource.USER, Action.LOGOUT),
+  MEASURE_MODEL_RETRIEVE: new Operation(Resource.MEASURE_MODEL, Action.LIST),
+  MEASURE_MODEL_UPDATE: new Operation(Resource.MEASURE_MODEL, Action.PUT),
+  MEASURE_MODEL_DELETE: new Operation(Resource.MEASURE_MODEL, Action.DELETE),
 
-  // Membership operations
+  MEDICAL_HISTORY_CREATE: new Operation(Resource.MEDICAL_HISTORY, Action.PUT),
+  MEDICAL_HISTORY_RETRIEVE: new Operation(Resource.MEDICAL_HISTORY, Action.RETRIEVE),
+  MEDICAL_HISTORY_UPDATE: new Operation(Resource.MEDICAL_HISTORY, Action.PUT),
+  MEDICAL_HISTORY_DELETE: new Operation(Resource.MEDICAL_HISTORY, Action.DELETE),
+
+  MEDICAL_HISTORY_MODEL_RETRIEVE: new Operation(Resource.MEDICAL_HISTORY_MODEL, Action.LIST),
+  MEDICAL_HISTORY_MODEL_UPDATE: new Operation(Resource.MEDICAL_HISTORY_MODEL, Action.PUT),
+  MEDICAL_HISTORY_MODEL_DELETE: new Operation(Resource.MEDICAL_HISTORY_MODEL, Action.DELETE),
+
+  MEDICAL_SERVICE_CREATE: new Operation(Resource.MEDICAL_SERVICE, Action.CREATE),
+  MEDICAL_SERVICE_RETRIEVE: new Operation(Resource.MEDICAL_SERVICE, Action.RETRIEVE),
+  MEDICAL_SERVICE_UPDATE: new Operation(Resource.MEDICAL_SERVICE, Action.PUT),
+  MEDICAL_SERVICE_DELETE: new Operation(Resource.MEDICAL_SERVICE, Action.DELETE),
+  MEDICAL_SERVICE_ASSIGNEES_UPDATE: new Operation(Resource.MEDICAL_SERVICE_ASSIGNEES, Action.UPDATE),
+  MEDICAL_SERVICE_DESCRIPTION_UPDATE: new Operation(Resource.MEDICAL_SERVICE_DESCRIPTION, Action.UPDATE),
+  MEDICAL_SERVICE_FEES_UPDATE: new Operation(Resource.MEDICAL_SERVICE_FEES, Action.SET_MEDICAL_SERVICE_FEES),
+  MEDICAL_SERVICE_LOCATION_UPDATE: new Operation(Resource.MEDICAL_SERVICE_LOCATION, Action.UPDATE),
+  MEDICAL_SERVICE_NOTE_UPDATE: new Operation(Resource.MEDICAL_SERVICE_NOTE, Action.PUT),
+  MEDICAL_SERVICE_NOTE_DELETE: new Operation(Resource.MEDICAL_SERVICE_NOTE, Action.DELETE),
+  MEDICAL_SERVICE_SCHEDULE_UPDATE: new Operation(Resource.MEDICAL_SERVICE_SCHEDULE, Action.UPDATE),
+  MEDICAL_SERVICE_STATUS_UPDATE: new Operation(Resource.MEDICAL_SERVICE_STATUS, Action.SET_MEDICAL_SERVICE_STATUS),
+  MEDICAL_SERVICE_TIMESTAMPS_UPDATE: new Operation(Resource.MEDICAL_SERVICE_TIMESTAMPS, Action.CORRECT_TIMESTAMPS),
+  MEDICAL_SERVICE_CHECK_IN: new Operation(Resource.MEDICAL_SERVICE_STATUS, Action.CHECK_IN),
+  MEDICAL_SERVICE_UNDO_CHECK_IN: new Operation(Resource.MEDICAL_SERVICE_STATUS, Action.UNDO_CHECK_IN),
+  MEDICAL_SERVICE_START: new Operation(Resource.MEDICAL_SERVICE_STATUS, Action.START_SERVICE),
+  MEDICAL_SERVICE_UNSTART: new Operation(Resource.MEDICAL_SERVICE_STATUS, Action.UNSTART_SERVICE),
+  MEDICAL_SERVICE_COMPLETE: new Operation(Resource.MEDICAL_SERVICE_STATUS, Action.COMPLETE_SERVICE),
+  MEDICAL_SERVICE_REOPEN_COMPLETED: new Operation(Resource.MEDICAL_SERVICE_STATUS, Action.REOPEN_COMPLETED_SERVICE),
+  MEDICAL_SERVICE_CANCEL: new Operation(Resource.MEDICAL_SERVICE_STATUS, Action.CANCEL_SERVICE),
+  MEDICAL_SERVICE_UNDO_CANCEL: new Operation(Resource.MEDICAL_SERVICE_STATUS, Action.UNDO_CANCEL_SERVICE),
+  MEDICAL_SERVICE_FORCE_RESET: new Operation(Resource.MEDICAL_SERVICE_STATUS, Action.FORCE_RESET_STATUS),
+
   MEMBERSHIP_CREATE: new Operation(Resource.MEMBERSHIP, Action.CREATE),
-  MEMBERSHIP_READ: new Operation(Resource.MEMBERSHIP, Action.READ),
+  MEMBERSHIP_RETRIEVE: new Operation(Resource.MEMBERSHIP, Action.RETRIEVE),
   MEMBERSHIP_UPDATE: new Operation(Resource.MEMBERSHIP, Action.UPDATE),
   MEMBERSHIP_DELETE: new Operation(Resource.MEMBERSHIP, Action.DELETE),
 
-  // Audit log operations
-  AUDIT_LOG_CREATE: new Operation(Resource.AUDIT_LOG, Action.CREATE),
-  AUDIT_LOG_READ: new Operation(Resource.AUDIT_LOG, Action.READ),
-  AUDIT_LOG_LIST: new Operation(Resource.AUDIT_LOG, Action.LIST),
-  AUDIT_LOG_AUDIT: new Operation(Resource.AUDIT_LOG, Action.AUDIT),
+  MEDICATION_RETRIEVE: new Operation(Resource.MEDICATION, Action.SEARCH),
 
-  // System operations
-  SYSTEM_CONFIGURE: new Operation(Resource.SYSTEM, Action.CONFIGURE),
-  SYSTEM_AUDIT: new Operation(Resource.SYSTEM, Action.AUDIT),
+  OBSERVATION_CREATE: new Operation(Resource.OBSERVATION, Action.PUT),
+  OBSERVATION_RETRIEVE: new Operation(Resource.OBSERVATION, Action.RETRIEVE),
+  OBSERVATION_UPDATE: new Operation(Resource.OBSERVATION, Action.PUT),
+  OBSERVATION_DELETE: new Operation(Resource.OBSERVATION, Action.DELETE),
+
+  PATIENT_CREATE: new Operation(Resource.PATIENT, Action.CREATE),
+  PATIENT_RETRIEVE: new Operation(Resource.PATIENT, Action.RETRIEVE),
+  PATIENT_UPDATE: new Operation(Resource.PATIENT, Action.UPDATE),
+  PATIENT_DELETE: new Operation(Resource.PATIENT, Action.DELETE),
+  PATIENT_PROFILE_UPDATE: new Operation(Resource.PATIENT_PROFILE, Action.UPDATE),
+  PATIENT_STATUS_UPDATE: new Operation(Resource.PATIENT_STATUS, Action.UPDATE_STATUS),
+  PATIENT_MEDICAL_NOTES_UPDATE: new Operation(Resource.PATIENT_MEDICAL_NOTES, Action.UPDATE),
+  PATIENT_MEDICAL_PROPERTIES_UPDATE: new Operation(Resource.PATIENT_MEDICAL_PROPERTIES, Action.UPDATE),
+  PATIENT_PUBLIC_PROPERTIES_UPDATE: new Operation(Resource.PATIENT_PUBLIC_PROPERTIES, Action.UPDATE),
+  PATIENT_PAYMENT_UPDATE: new Operation(Resource.PATIENT_PAYMENT, Action.PUT_PATIENT_PAYMENT),
+  PATIENT_PAYMENT_RETRIEVE: new Operation(Resource.PATIENT_PAYMENT, Action.RETRIEVE),
+  PATIENT_PAYMENT_DELETE: new Operation(Resource.PATIENT_PAYMENT, Action.DELETE_PATIENT_PAYMENT),
+
+  PRESCRIPTION_CREATE: new Operation(Resource.PRESCRIPTION, Action.PUT),
+  PRESCRIPTION_RETRIEVE: new Operation(Resource.PRESCRIPTION, Action.RETRIEVE),
+  PRESCRIPTION_UPDATE: new Operation(Resource.PRESCRIPTION, Action.PUT),
+  PRESCRIPTION_DELETE: new Operation(Resource.PRESCRIPTION, Action.DELETE),
+
+  PRESCRIPTION_MODEL_RETRIEVE: new Operation(Resource.PRESCRIPTION_MODEL, Action.LIST),
+  PRESCRIPTION_MODEL_UPDATE: new Operation(Resource.PRESCRIPTION_MODEL, Action.PUT),
+  PRESCRIPTION_MODEL_DELETE: new Operation(Resource.PRESCRIPTION_MODEL, Action.DELETE),
+
+  TASK_TYPE_RETRIEVE: new Operation(Resource.TASK_TYPE, Action.LIST),
+  TASK_TYPE_UPDATE: new Operation(Resource.TASK_TYPE, Action.PUT),
+  TASK_TYPE_DELETE: new Operation(Resource.TASK_TYPE, Action.DELETE),
+
+  UPLOAD_DOCUMENT_CREATE: new Operation(Resource.UPLOAD_DOCUMENT, Action.UPLOAD),
+  UPLOAD_DOCUMENT_RETRIEVE: new Operation(Resource.UPLOAD_DOCUMENT, Action.RETRIEVE),
+  UPLOAD_DOCUMENT_UPDATE: new Operation(Resource.UPLOAD_DOCUMENT, Action.PUT),
+  UPLOAD_DOCUMENT_DELETE: new Operation(Resource.UPLOAD_DOCUMENT, Action.DELETE),
+
+  USER_RETRIEVE: new Operation(Resource.USER, Action.RETRIEVE),
+  USER_UPDATE: new Operation(Resource.USER, Action.UPDATE),
+  USER_CALENDAR_PREFERENCES_UPDATE: new Operation(Resource.USER_CALENDAR_PREFERENCES, Action.UPDATE),
+  USER_PREFERENCES_RETRIEVE: new Operation(Resource.USER_PREFERENCES, Action.RETRIEVE),
 } as const;
 
-/**
- * Get all predefined operations as an array
- */
 export function getAllOperations(): Operation[] {
   return Object.values(Operations);
 }
 
-/**
- * Get all operations for a specific resource
- */
 export function getOperationsByResource(resource: Resource): Operation[] {
   return getAllOperations().filter((op) => op.resource === resource);
 }
 
-/**
- * Get all operations for a specific action
- */
 export function getOperationsByAction(action: Action): Operation[] {
   return getAllOperations().filter((op) => op.action === action);
 }
