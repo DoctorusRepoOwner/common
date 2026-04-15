@@ -40,7 +40,7 @@ export const MEDICAL_SERVICE_STATUS_METADATA: Record<MedicalServiceStatus, Statu
     label: {
       short: {
         'us-EN': 'Waiting',
-        'fr-FR': 'En attente',
+        'fr-FR': "Salle d'attente",
       },
       long: {
         'us-EN': 'In Waiting Room',

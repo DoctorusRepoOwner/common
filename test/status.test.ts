@@ -96,7 +96,7 @@ describe('Medical Service Status', () => {
 
     it('should return short French labels when locale is fr-FR', () => {
       expect(getStatusLabel(MedicalServiceStatus.PENDING, 'fr-FR')).toBe('En attente');
-      expect(getStatusLabel(MedicalServiceStatus.ON_WAITING_ROOM, 'fr-FR')).toBe('En attente');
+      expect(getStatusLabel(MedicalServiceStatus.ON_WAITING_ROOM, 'fr-FR')).toBe("Salle d'attente");
       expect(getStatusLabel(MedicalServiceStatus.IN_PROGRESS, 'fr-FR')).toBe('En cours');
       expect(getStatusLabel(MedicalServiceStatus.COMPLETED, 'fr-FR')).toBe('Terminé');
       expect(getStatusLabel(MedicalServiceStatus.CANCELED, 'fr-FR')).toBe('Annulé');
