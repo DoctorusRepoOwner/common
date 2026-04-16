@@ -11,9 +11,9 @@ The operations module defines a shared authorization and audit vocabulary:
 Example:
 
 ```ts
-PATIENT:VIEW
-MEDICAL_SERVICE:CHECK_IN
-CALENDAR_SYNC:ENABLE
+PATIENT: VIEW;
+MEDICAL_SERVICE: CHECK_IN;
+CALENDAR_SYNC: ENABLE;
 ```
 
 ## Main Types

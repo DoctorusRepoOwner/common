@@ -66,12 +66,7 @@ const RESOURCE_CATEGORIES: {
     Resource.OBSERVATION,
     Resource.PRESCRIPTION,
   ],
-  documents: [
-    Resource.DOCUMENT_LAYOUT,
-    Resource.DOCUMENT_MODEL,
-    Resource.GENERATED_DOCUMENT,
-    Resource.UPLOAD_DOCUMENT,
-  ],
+  documents: [Resource.DOCUMENT_LAYOUT, Resource.DOCUMENT_MODEL, Resource.GENERATED_DOCUMENT, Resource.UPLOAD_DOCUMENT],
   billing: [Resource.PATIENT_PAYMENT],
   membership: [Resource.USER, Resource.MEMBERSHIP],
   integration: [Resource.CALENDAR_TOKEN, Resource.CALENDAR_SETTINGS, Resource.CALENDAR_SYNC],

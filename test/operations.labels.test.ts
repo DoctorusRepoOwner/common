@@ -1,5 +1,10 @@
 import { Action } from '../src/operations/actions';
-import { getActionLabel, getOperationLabel, getResourceCategoryLabel, getResourceLabel } from '../src/operations/labels';
+import {
+  getActionLabel,
+  getOperationLabel,
+  getResourceCategoryLabel,
+  getResourceLabel,
+} from '../src/operations/labels';
 import { Operation } from '../src/operations/operation';
 import { Resource, ResourceCategory } from '../src/operations/resources';
 

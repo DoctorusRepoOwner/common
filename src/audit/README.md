@@ -125,14 +125,15 @@ async function logLoginAttempt(
     id: uuidv4(),
     timestamp: new Date(),
     userId,
-    action: Action.LOGIN,
-    resource: Resource.ACCOUNT,
+    action: Action.VIEW,
+    resource: Resource.USER,
     result: success ? 'success' : 'failure',
     errorMessage,
     ipAddress,
     userAgent,
     metadata: {
       eventType: AuditEventType.AUTHENTICATION,
+      authAction: 'login',
     },
   };
 
@@ -213,7 +214,7 @@ async function logMedicalAction(
     metadata: {
       ...metadata,
       patientId,
-      actionLabel: getOperationLabel(new Operation(action, resource), 'us-EN'),
+      actionLabel: getOperationLabel(new Operation(resource, action), 'us-EN'),
     },
   };
 
@@ -221,16 +222,16 @@ async function logMedicalAction(
 }
 
 // Log prescription creation
-await logMedicalAction('doctor-123', Action.PRESCRIBE, Resource.PRESCRIPTION, 'prescription-789', 'patient-456', {
+await logMedicalAction('doctor-123', Action.CREATE, Resource.PRESCRIPTION, 'prescription-789', 'patient-456', {
   medication: 'Amoxicillin',
   dosage: '500mg',
   duration: '7 days',
 });
 
-// Log diagnosis
-await logMedicalAction('doctor-123', Action.DIAGNOSE, Resource.DIAGNOSIS, 'diagnosis-101', 'patient-456', {
-  condition: 'Acute bronchitis',
-  icdCode: 'J20.9',
+// Log medical history update
+await logMedicalAction('doctor-123', Action.UPDATE, Resource.MEDICAL_HISTORY, 'history-101', 'patient-456', {
+  section: 'respiratory',
+  note: 'Acute bronchitis',
 });
 ```
 
@@ -257,10 +258,10 @@ async function logSystemEvent(action: string, resource: Resource, metadata?: Rec
 }
 
 // Log scheduled backup
-await logSystemEvent('BACKUP', Resource.SYSTEM, { backupType: 'full', size: '2.5GB', duration: '45min' });
+await logSystemEvent('BACKUP', Resource.LOG_RECORDS, { backupType: 'full', size: '2.5GB', duration: '45min' });
 
 // Log automatic cleanup
-await logSystemEvent('CLEANUP', Resource.SYSTEM, { deletedRecords: 150, table: 'expired_sessions' });
+await logSystemEvent('CLEANUP', Resource.LOG_RECORDS, { deletedRecords: 150, table: 'expired_sessions' });
 ```
 
 ### Correlation and Tracing
