@@ -51,10 +51,10 @@ Defines typed actions, resources, and `Operation` pairs used for authorization, 
 ```ts
 import { Action, Operation, Resource, getOperationLabel } from '@doctorus/common';
 
-const operation = new Operation(Action.CREATE, Resource.PRESCRIPTION);
+const operation = new Operation(Resource.PRESCRIPTION, Action.CREATE);
 
 getOperationLabel(operation, 'us-EN'); // "Create Prescription"
-getOperationLabel(operation, 'fr-FR'); // "Créer Ordonnance"
+getOperationLabel(operation, 'fr-FR'); // "Creer Ordonnance"
 ```
 
 [Operations documentation](src/operations/README.md)
