@@ -2,7 +2,7 @@ import { Action, ActionAccess, getActionAccess } from './actions';
 import { Operation } from './operation';
 import { Resource } from './resources';
 
-const RESOURCE_ACTIONS: Record<Resource, Action[]> = {
+export const RESOURCE_ACTIONS = {
   [Resource.ACCOUNT]: [Action.VIEW, Action.UPDATE, Action.TRANSFER_OWNERSHIP],
   [Resource.CALCULATED_MEASURE_MODEL]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.CALENDAR_SETTINGS]: [Action.VIEW, Action.UPDATE],
@@ -43,14 +43,16 @@ const RESOURCE_ACTIONS: Record<Resource, Action[]> = {
   [Resource.UPLOAD_DOCUMENT]: [Action.VIEW, Action.CREATE, Action.DELETE],
   [Resource.USER]: [Action.VIEW, Action.UPDATE],
   [Resource.AVAILABLE_SLOTS]: [Action.VIEW],
-};
+} as const satisfies Record<Resource, readonly Action[]>;
+
+export type AllowedActionFor<R extends Resource> = (typeof RESOURCE_ACTIONS)[R][number];
 
 export function getResourceActions(resource: Resource): Action[] {
   return [...RESOURCE_ACTIONS[resource]];
 }
 
 export function getAllResourceActions(): Readonly<Record<Resource, Action[]>> {
-  return RESOURCE_ACTIONS;
+  return RESOURCE_ACTIONS as unknown as Readonly<Record<Resource, Action[]>>;
 }
 
 export function getResourceActionsByAccess(resource: Resource, access: ActionAccess): Action[] {
@@ -83,7 +85,7 @@ export function generateOperationsForResources(resources: Resource[], actions: A
   const seen = new Set<string>();
 
   resources.forEach((resource) => {
-    const allowedActions = RESOURCE_ACTIONS[resource];
+    const allowedActions = RESOURCE_ACTIONS[resource] as readonly Action[];
 
     actions.forEach((action) => {
       if (!allowedActions.includes(action)) {

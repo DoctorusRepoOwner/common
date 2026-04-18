@@ -173,6 +173,11 @@ describe('Operations Module', () => {
   });
 
   describe('Operation helpers', () => {
+    it('should create operation with factory helper', () => {
+      const op = Operation.create(Resource.PATIENT, Action.VIEW);
+      expect(op.toString()).toBe('PATIENT:VIEW');
+    });
+
     it('should serialize and parse operation strings', () => {
       const op = new Operation(Resource.PATIENT, Action.VIEW);
       expect(op.toString()).toBe('PATIENT:VIEW');

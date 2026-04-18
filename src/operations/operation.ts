@@ -1,4 +1,5 @@
 import { Action } from './actions';
+import type { AllowedActionFor } from './resource-actions';
 import { Resource } from './resources';
 
 /**
@@ -9,7 +10,14 @@ export type OPERATION = `${Resource}:${Action}`;
 /**
  * Operation in RESOURCE:ACTION format
  */
-export class Operation {
+export class Operation<R extends Resource = Resource> {
+  /**
+   * Create operation with compile-time action restriction based on resource.
+   */
+  static create<R extends Resource>(resource: R, action: AllowedActionFor<R>): Operation<R> {
+    return new Operation(resource, action);
+  }
+
   /**
    * Create operation from string
    * @param operationString - String in RESOURCE:ACTION format
@@ -33,12 +41,12 @@ export class Operation {
       return null;
     }
 
-    return new Operation(resourceStr as Resource, actionStr as Action);
+    return new Operation(resourceStr as Resource, actionStr as AllowedActionFor<Resource>);
   }
 
   constructor(
-    public readonly resource: Resource,
-    public readonly action: Action,
+    public readonly resource: R,
+    public readonly action: AllowedActionFor<R>,
   ) {}
 
   /**
@@ -58,7 +66,7 @@ export class Operation {
   /**
    * Convert to JSON representation
    */
-  toJSON(): { resource: Resource; action: Action; operation: OPERATION } {
+  toJSON(): { resource: R; action: AllowedActionFor<R>; operation: OPERATION } {
     return {
       resource: this.resource,
       action: this.action,

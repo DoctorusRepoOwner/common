@@ -21,6 +21,7 @@ export {
 export { Action, ActionAccess, getActionAccess, isReadAction, isWriteAction, getActionsByAccess } from './actions';
 export { Operation, OPERATION, getResourceFromOperation, getActionFromOperation } from './operation';
 export {
+  RESOURCE_ACTIONS,
   getResourceActions,
   getAllResourceActions,
   getResourceActionsByAccess,
@@ -28,4 +29,5 @@ export {
   getResourceOperationsByAccess,
   generateOperationsForResources,
 } from './resource-actions';
+export type { AllowedActionFor } from './resource-actions';
 export * from './labels';
