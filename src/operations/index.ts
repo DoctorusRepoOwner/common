@@ -25,6 +25,7 @@ export {
   getAllResourceActions,
   getResourceActionsByAccess,
   getAllResourceActionsByAccess,
+  getResourceOperationsByAccess,
   generateOperationsForResources,
 } from './resource-actions';
 export * from './labels';

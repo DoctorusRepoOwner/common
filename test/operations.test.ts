@@ -9,6 +9,7 @@ import {
   generateOperationsForResources,
   getResourceActions,
   getResourceActionsByAccess,
+  getResourceOperationsByAccess,
   getResourceCategories,
   getResourceFromOperation,
   getResourcesByCategories,
@@ -118,6 +119,14 @@ describe('Operations Module', () => {
       const allRead = getAllResourceActionsByAccess(ActionAccess.READ);
       expect(allRead[Resource.PATIENT]).toEqual([Action.VIEW]);
       expect(allRead[Resource.CALENDAR_SYNC]).toEqual([Action.VIEW]);
+    });
+
+    it('should build resource operations filtered by access', () => {
+      const readOps = getResourceOperationsByAccess(Resource.PATIENT, ActionAccess.READ);
+      const writeOps = getResourceOperationsByAccess(Resource.PATIENT, ActionAccess.WRITE);
+
+      expect(readOps.map((op) => op.toString())).toEqual(['PATIENT:VIEW']);
+      expect(writeOps.map((op) => op.toString())).toEqual(['PATIENT:CREATE', 'PATIENT:UPDATE', 'PATIENT:DELETE']);
     });
 
     it('should generate operations for resources based on action list', () => {

@@ -67,6 +67,12 @@ export function getAllResourceActionsByAccess(access: ActionAccess): Readonly<Re
   return filtered;
 }
 
+export function getResourceOperationsByAccess(resource: Resource, access: ActionAccess): Operation[] {
+  return RESOURCE_ACTIONS[resource]
+    .filter((action) => getActionAccess(action) === access)
+    .map((action) => new Operation(resource, action));
+}
+
 /**
  * Generate valid operations for a list of resources based on a provided action list.
  *
