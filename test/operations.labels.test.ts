@@ -22,7 +22,7 @@ describe('Operations Labels (i18n)', () => {
     expect(getActionLabel(Action.UPDATE, 'fr-FR')).toBe('Mettre a jour');
     expect(getActionLabel(Action.CREATE, 'fr-FR')).toBe('Creer');
     expect(getActionLabel(Action.CHECK_IN, 'fr-FR')).toBe('Enregistrer l arrivee');
-    expect(getActionLabel(Action.ASSIGN_ROLES, 'fr-FR')).toBe('Assigner les roles');
+    expect(getActionLabel(Action.INVITE, 'fr-FR')).toBe('Inviter');
   });
 
   it('should label resources in English (us-EN)', () => {
@@ -50,8 +50,8 @@ describe('Operations Labels (i18n)', () => {
   });
 
   it('should support resource-action order', () => {
-    const op = new Operation(Resource.CALENDAR_TOKEN, Action.ROTATE_TOKEN);
-    expect(getOperationLabel(op, 'us-EN', { order: 'resource-action' })).toBe('Calendar Token Rotate Token');
+    const op = new Operation(Resource.CALENDAR_TOKEN, Action.ROTATE);
+    expect(getOperationLabel(op, 'us-EN', { order: 'resource-action' })).toBe('Calendar Token Rotate');
   });
 
   it('should label resource categories in English and French', () => {

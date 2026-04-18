@@ -83,6 +83,7 @@ APIs:
 
 ```ts
 import {
+  ActionAccess,
   ResourceCategory,
   CORE_RESOURCES,
   CLINICAL_RESOURCES,
@@ -96,9 +97,29 @@ import {
   SYSTEM_RESOURCES,
   getResourceCategories,
   getResourcesByCategory,
+  getResourcesByCategories,
+  getActionsByAccess,
+  getActionAccess,
+  isReadAction,
+  isWriteAction,
+  getResourceActions,
+  getAllResourceActions,
+  getResourceActionsByAccess,
+  getAllResourceActionsByAccess,
+  generateOperationsForResources,
 } from '@doctorus/common';
 
 getResourcesByCategory(ResourceCategory.CLINICAL);
+getResourcesByCategories([ResourceCategory.CORE, ResourceCategory.MEMBERSHIP]);
+getResourceActions(Resource.MEDICAL_SERVICE);
+getAllResourceActions();
+getActionsByAccess(ActionAccess.READ);
+getResourceActionsByAccess(Resource.MEDICAL_SERVICE, ActionAccess.WRITE);
+getAllResourceActionsByAccess(ActionAccess.READ);
+generateOperationsForResources([Resource.PATIENT, Resource.CALENDAR_TOKEN], [Action.VIEW, Action.UPDATE]);
+getActionAccess(Action.VIEW); // READ
+isReadAction(Action.VIEW); // true
+isWriteAction(Action.UPDATE); // true
 ```
 
 Legacy helpers remain available for compatibility:
@@ -107,21 +128,6 @@ Legacy helpers remain available for compatibility:
 - `PUBLIC_RESOURCES`
 - `isMedicalResource(...)`
 - `isPublicResource(...)`
-
-## Predefined Operations
-
-Use `Operations.*` constants whenever possible.
-
-Examples:
-
-```ts
-Operations.PATIENT_VIEW;
-Operations.MEDICAL_SERVICE_CHECK_IN;
-Operations.MEDICAL_SERVICE_NOTE_UPDATE;
-Operations.CALENDAR_SYNC_ENABLE;
-Operations.CALENDAR_TOKEN_ROTATE;
-Operations.LOG_RECORDS_VIEW;
-```
 
 ## Labels and i18n
 
@@ -158,17 +164,10 @@ getOperationLabel(new Operation(Resource.MEDICAL_SERVICE, Action.CHECK_IN), 'us-
 ## Recommended Usage
 
 ```ts
-import { Operations } from '@doctorus/common';
+import { Action, Operation, Resource, getResourceActions } from '@doctorus/common';
 
-const permission = Operations.MEDICAL_SERVICE_CHECK_IN;
-```
-
-If you need a custom operation:
-
-```ts
-import { Action, Operation, Resource } from '@doctorus/common';
-
-const permission = new Operation(Resource.PATIENT, Action.UPDATE);
+const permission = new Operation(Resource.MEDICAL_SERVICE, Action.CHECK_IN);
+const allowedActions = getResourceActions(Resource.MEDICAL_SERVICE);
 ```
 
 For permission checks:
