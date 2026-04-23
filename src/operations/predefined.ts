@@ -16,7 +16,7 @@ export const Operations = {
   MEMBERSHIP_VIEW: new Operation(Resource.MEMBERSHIP, Action.VIEW),
   MEMBERSHIP_INVITE: new Operation(Resource.MEMBERSHIP, Action.INVITE),
   MEMBERSHIP_UPDATE: new Operation(Resource.MEMBERSHIP, Action.UPDATE),
-  MEMBERSHIP_REMOVE: new Operation(Resource.MEMBERSHIP, Action.REMOVE),
+  MEMBERSHIP_DELETE: new Operation(Resource.MEMBERSHIP, Action.DELETE),
 
   ROLE_VIEW: new Operation(Resource.ROLE, Action.VIEW),
   ROLE_CREATE: new Operation(Resource.ROLE, Action.CREATE),

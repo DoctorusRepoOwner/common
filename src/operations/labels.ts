@@ -17,7 +17,7 @@ const enAction: Record<Action, string> = {
   [Action.ENABLE]: 'Enable',
   [Action.GENERATE]: 'Generate',
   [Action.INVITE]: 'Invite',
-  [Action.REMOVE]: 'Remove',
+  [Action.UPSERT]: 'Create or Update',
   [Action.ROTATE]: 'Rotate',
   [Action.TRANSFER_OWNERSHIP]: 'Transfer Ownership',
 };
@@ -35,7 +35,7 @@ const frAction: Record<Action, string> = {
   [Action.ENABLE]: 'Activer',
   [Action.GENERATE]: 'Generer',
   [Action.INVITE]: 'Inviter',
-  [Action.REMOVE]: 'Retirer',
+  [Action.UPSERT]: 'Creer ou mettre a jour',
   [Action.ROTATE]: 'Tourner',
   [Action.TRANSFER_OWNERSHIP]: 'Transferer la propriete',
 };

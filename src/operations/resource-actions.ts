@@ -3,16 +3,16 @@ import { Operation } from './operation';
 import { Resource } from './resources';
 
 export const RESOURCE_ACTIONS = {
-  [Resource.ACCOUNT]: [Action.VIEW, Action.UPDATE, Action.TRANSFER_OWNERSHIP],
+  [Resource.ACCOUNT]: [Action.VIEW, Action.UPDATE, Action.TRANSFER_OWNERSHIP, Action.DISABLE, Action.ENABLE],
   [Resource.CALCULATED_MEASURE_MODEL]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.CALENDAR_SETTINGS]: [Action.VIEW, Action.UPDATE],
   [Resource.CALENDAR_SYNC]: [Action.ENABLE, Action.DISABLE, Action.VIEW],
   [Resource.CALENDAR_TOKEN]: [Action.VIEW, Action.ROTATE],
   [Resource.CONTACT]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
-  [Resource.DOCUMENT_LAYOUT]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
+  [Resource.DOCUMENT_LAYOUT]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE, Action.GENERATE],
   [Resource.DOCUMENT_MODEL]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.GENERAL_SETTINGS]: [Action.VIEW, Action.UPDATE],
-  [Resource.GENERATED_DOCUMENT]: [Action.VIEW, Action.GENERATE, Action.DELETE],
+  [Resource.GENERATED_DOCUMENT]: [Action.VIEW, Action.GENERATE, Action.DELETE, Action.UPDATE, Action.CREATE],
   [Resource.LOCATION]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.MEASURE_MODEL]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.MEDICATION_SEARCH]: [Action.VIEW],
@@ -29,7 +29,7 @@ export const RESOURCE_ACTIONS = {
     Action.ASSIGN,
   ],
   [Resource.MEDICAL_SERVICE_NOTE]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
-  [Resource.MEMBERSHIP]: [Action.VIEW, Action.INVITE, Action.UPDATE, Action.REMOVE],
+  [Resource.MEMBERSHIP]: [Action.VIEW, Action.INVITE, Action.UPDATE, Action.DELETE],
   [Resource.OBSERVATION]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.PATIENT]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.PATIENT_MEDICAL_NOTE]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
@@ -38,7 +38,7 @@ export const RESOURCE_ACTIONS = {
   [Resource.PREFERENCES]: [Action.VIEW, Action.UPDATE],
   [Resource.PRESCRIPTION]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.PRESCRIPTION_MODEL]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
-  [Resource.ROLE]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
+  [Resource.ROLE]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE, Action.ASSIGN],
   [Resource.TASK_TYPE]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.UPLOAD_DOCUMENT]: [Action.VIEW, Action.CREATE, Action.DELETE],
   [Resource.USER]: [Action.VIEW, Action.UPDATE],
@@ -98,7 +98,7 @@ export function generateOperationsForResources(resources: Resource[], actions: A
       }
 
       seen.add(key);
-      operations.push(new Operation(resource, action));
+      operations.push(new Operation(resource, action as AllowedActionFor<Resource>));
     });
   });
 

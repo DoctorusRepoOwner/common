@@ -14,7 +14,7 @@ export enum Action {
   ENABLE = 'ENABLE',
   GENERATE = 'GENERATE',
   INVITE = 'INVITE',
-  REMOVE = 'REMOVE',
+  UPSERT = 'UPSERT',
   ROTATE = 'ROTATE',
   TRANSFER_OWNERSHIP = 'TRANSFER_OWNERSHIP',
 }
@@ -42,7 +42,7 @@ const ACTION_ACCESS: Record<Action, ActionAccess> = {
   [Action.ENABLE]: ActionAccess.WRITE,
   [Action.GENERATE]: ActionAccess.WRITE,
   [Action.INVITE]: ActionAccess.WRITE,
-  [Action.REMOVE]: ActionAccess.WRITE,
+  [Action.UPSERT]: ActionAccess.WRITE,
   [Action.ROTATE]: ActionAccess.WRITE,
   [Action.TRANSFER_OWNERSHIP]: ActionAccess.WRITE,
 };
