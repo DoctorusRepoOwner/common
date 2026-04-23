@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Status module provides a comprehensive, reusable pattern for managing application statuses with rich metadata including icons, colors, and bilingual translations. Currently implements Medical Service Status with the pattern designed for extension to other entities.
+The Status module provides a comprehensive, reusable pattern for managing application statuses with rich metadata including icons, colors, and bilingual translations. Currently implements Medical Service Status and Membership Status with the pattern designed for extension to other entities.
 
 ## Features
 
@@ -15,9 +15,11 @@ The Status module provides a comprehensive, reusable pattern for managing applic
 - ✅ **Utility functions** for easy integration
 - ✅ **100% test coverage**
 
-## Medical Service Status
+## Statuses
 
-### Status Values
+### Medical Service Status
+
+#### Status Values
 
 ```typescript
 import { MedicalServiceStatus } from '@doctorus/common';
@@ -29,7 +31,7 @@ MedicalServiceStatus.COMPLETED; // 'completed'
 MedicalServiceStatus.CANCELED; // 'canceled'
 ```
 
-### Status Metadata
+#### Status Metadata
 
 Each status includes comprehensive metadata:
 
@@ -41,7 +43,7 @@ Each status includes comprehensive metadata:
 | COMPLETED       | `check_circle`      | `#4CAF50` (Green)  | Completed        | Terminé          |
 | CANCELED        | `cancel`            | `#F44336` (Red)    | Canceled         | Annulé           |
 
-### Status Transitions
+#### Status Transitions
 
 The module includes built-in business logic for valid state transitions:
 
@@ -65,6 +67,60 @@ COMPLETED
 
 CANCELED
   ↓ → PENDING (uncancel)
+```
+
+### Membership Status
+
+#### Lifecycle
+
+Describes the lifecycle state of a user's membership in an account:
+
+- **ACTIVE**: the membership is valid and grants normal access
+- **PENDING**: the membership exists but setup/invitation is not fully completed yet
+- **REVOKED**: the membership was removed and no longer grants access
+- **REFUSED**: the invitation or membership was explicitly declined and grants no access
+
+In short: only ACTIVE is fully usable, PENDING is incomplete, and REVOKED / REFUSED are inactive end states.
+
+#### Status Values
+
+```typescript
+import * as MembershipStatus from '@doctorus/common';
+
+MembershipStatus.MembershipStatus.ACTIVE; // 'active'
+MembershipStatus.MembershipStatus.PENDING; // 'pending'
+MembershipStatus.MembershipStatus.REVOKED; // 'revoked'
+MembershipStatus.MembershipStatus.REFUSED; // 'refused'
+```
+
+#### Status Metadata
+
+| Status  | Icon           | Color              | Short Label (EN) | Short Label (FR) |
+| ------- | -------------- | ------------------ | ---------------- | ---------------- |
+| ACTIVE  | `check_circle` | `#4CAF50` (Green)  | Active           | Actif            |
+| PENDING | `schedule`     | `#FF9800` (Orange) | Pending          | En attente       |
+| REVOKED | `cancel`       | `#F44336` (Red)    | Revoked          | Révoqué          |
+| REFUSED | `block`        | `#9C27B0` (Purple) | Refused          | Refusé           |
+
+#### Helper Functions
+
+```typescript
+import * as MembershipStatusModule from '@doctorus/common';
+
+const { isActiveMembership, isPendingMembership, isInactiveMembership } = MembershipStatusModule;
+
+// Check membership state
+if (isActiveMembership(status)) {
+  // Grant full access
+}
+
+if (isPendingMembership(status)) {
+  // User must complete invitation/setup
+}
+
+if (isInactiveMembership(status)) {
+  // Access denied (revoked or refused)
+}
 ```
 
 ## Usage Examples

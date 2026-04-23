@@ -28,6 +28,7 @@ import {
 
   // Status
   MedicalServiceStatus,
+  MembershipStatus,
   getStatusLabel,
   getStatusMetadata,
 
@@ -64,12 +65,15 @@ getOperationLabel(operation, 'fr-FR'); // "Creer Ordonnance"
 Provides reusable status enums and metadata with labels, descriptions, colors, and icons.
 
 ```ts
-import { MedicalServiceStatus, getStatusLabel, getStatusMetadata } from '@doctorus/common';
+import { MedicalServiceStatus, MembershipStatus, getStatusLabel, getStatusMetadata } from '@doctorus/common';
 
-const status = MedicalServiceStatus.IN_PROGRESS;
+const serviceStatus = MedicalServiceStatus.IN_PROGRESS;
+getStatusLabel(serviceStatus, 'us-EN'); // "In Progress"
+getStatusMetadata(serviceStatus).icon; // e.g. "medical_services"
 
-getStatusLabel(status, 'us-EN'); // "In Progress"
-getStatusMetadata(status).icon; // e.g. "medical_services"
+const membershipStatus = MembershipStatus.ACTIVE;
+getStatusLabel(membershipStatus, 'us-EN'); // "Active"
+getStatusMetadata(membershipStatus).color; // "#4CAF50"
 ```
 
 [Status documentation](src/status/README.md)
