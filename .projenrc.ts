@@ -193,6 +193,8 @@ const project = new typescript.TypeScriptProject({
 if (project.vscode) {
   project.vscode.settings.addSettings({
     'editor.formatOnSave': true,
+    'eslint.format.enable': true,
+    'eslint.useFlatConfig': false,
     'editor.defaultFormatter': 'esbenp.prettier-vscode',
     '[typescript]': {
       'editor.formatOnSave': true,
