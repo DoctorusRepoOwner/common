@@ -3,7 +3,14 @@ import { Operation } from './operation';
 import { Resource } from './resources';
 
 export const RESOURCE_ACTIONS = {
-  [Resource.ACCOUNT]: [Action.VIEW, Action.UPDATE, Action.TRANSFER_OWNERSHIP, Action.DISABLE, Action.ENABLE],
+  [Resource.ACCOUNT]: [
+    Action.VIEW,
+    Action.UPDATE,
+    Action.TRANSFER_OWNERSHIP,
+    Action.DISABLE,
+    Action.ENABLE,
+    Action.CREATE,
+  ],
   [Resource.CALCULATED_MEASURE_MODEL]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.CALENDAR_SETTINGS]: [Action.VIEW, Action.UPDATE],
   [Resource.CALENDAR_SYNC]: [Action.ENABLE, Action.DISABLE, Action.VIEW],
