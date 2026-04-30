@@ -636,7 +636,8 @@ export const APPOINTMENT_STATUS_METADATA: Record<AppointmentStatus, StatusMetada
 
 ### Enums
 
-- `MedicalServiceStatus` - Status enum with 5 values
+- `MedicalServiceStatus` - Status enum with 5 values (`PENDING`, `ON_WAITING_ROOM`, `IN_PROGRESS`, `COMPLETED`, `CANCELED`)
+- `MembershipStatus` - Status enum with 4 values (`ACTIVE`, `PENDING`, `REVOKED`, `REFUSED`)
 - `AccountLocationStatus` - Status enum with 4 values
 - `MedicalHistoryStatus` - Status enum with 2 values
 
@@ -711,6 +712,12 @@ export const APPOINTMENT_STATUS_METADATA: Record<AppointmentStatus, StatusMetada
 - `getStatusDescription(status, locale?)` - Get translated description
 - `getAllMedicalHistoryStatuses()` - Get all statuses
 - `isValidMedicalHistoryStatus(value)` - Validation
+
+### Membership Status Functions
+
+- `isActiveMembership(status)` - `true` when status is `ACTIVE`
+- `isPendingMembership(status)` - `true` when status is `PENDING`
+- `isInactiveMembership(status)` - `true` when status is `REVOKED` or `REFUSED`
 
 ## Testing
 

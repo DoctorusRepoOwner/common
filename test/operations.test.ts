@@ -14,6 +14,12 @@ import {
   getResourceFromOperation,
   getResourcesByCategories,
   getResourcesByCategory,
+  getResourceScope,
+  getResourcesByScope,
+  isUserResource,
+  isAccountResource,
+  USER_RESOURCES,
+  ACCOUNT_RESOURCES,
   isReadAction,
   isMedicalResource,
   isPublicResource,
@@ -23,6 +29,7 @@ import {
   PUBLIC_RESOURCES,
   Resource,
   ResourceCategory,
+  ResourceScope,
 } from '../src/operations';
 
 describe('Operations Module', () => {
@@ -41,6 +48,50 @@ describe('Operations Module', () => {
       expect(ResourceCategory.MEMBERSHIP).toBe('membership');
       expect(ResourceCategory.CLINICAL).toBe('clinical');
       expect(ResourceCategory.SYSTEM).toBe('system');
+    });
+
+    it('should tag resources by owner scope', () => {
+      expect(ResourceScope.USER).toBe('user');
+      expect(ResourceScope.ACCOUNT).toBe('account');
+
+      expect(getResourceScope(Resource.USER)).toBe(ResourceScope.USER);
+      expect(getResourceScope(Resource.PREFERENCES)).toBe(ResourceScope.USER);
+      expect(getResourceScope(Resource.CALENDAR_TOKEN)).toBe(ResourceScope.USER);
+
+      expect(getResourceScope(Resource.ACCOUNT)).toBe(ResourceScope.ACCOUNT);
+      expect(getResourceScope(Resource.PATIENT)).toBe(ResourceScope.ACCOUNT);
+      expect(getResourceScope(Resource.ROLE)).toBe(ResourceScope.ACCOUNT);
+    });
+
+    it('should classify resources by owner with helpers', () => {
+      expect(isUserResource(Resource.USER)).toBe(true);
+      expect(isUserResource(Resource.CALENDAR_SETTINGS)).toBe(true);
+      expect(isUserResource(Resource.PATIENT)).toBe(false);
+
+      expect(isAccountResource(Resource.ACCOUNT)).toBe(true);
+      expect(isAccountResource(Resource.PATIENT)).toBe(true);
+      expect(isAccountResource(Resource.USER)).toBe(false);
+    });
+
+    it('should return resources by owner', () => {
+      const userResources = getResourcesByScope(ResourceScope.USER);
+      expect(userResources).toContain(Resource.USER);
+      expect(userResources).toContain(Resource.PREFERENCES);
+      expect(userResources).not.toContain(Resource.PATIENT);
+
+      const accountResources = getResourcesByScope(ResourceScope.ACCOUNT);
+      expect(accountResources).toContain(Resource.PATIENT);
+      expect(accountResources).toContain(Resource.ACCOUNT);
+      expect(accountResources).not.toContain(Resource.USER);
+    });
+
+    it('should expose USER_RESOURCES and ACCOUNT_RESOURCES arrays', () => {
+      expect(USER_RESOURCES).toContain(Resource.USER);
+      expect(USER_RESOURCES).toContain(Resource.CALENDAR_TOKEN);
+      expect(ACCOUNT_RESOURCES).toContain(Resource.PATIENT);
+      expect(ACCOUNT_RESOURCES).toContain(Resource.ROLE);
+      const allTagged = new Set([...USER_RESOURCES, ...ACCOUNT_RESOURCES]);
+      Object.values(Resource).forEach((r) => expect(allTagged.has(r)).toBe(true));
     });
   });
 
@@ -83,7 +134,7 @@ describe('Operations Module', () => {
         Action.CANCEL,
         Action.ASSIGN,
       ]);
-      expect(getResourceActions(Resource.CALENDAR_TOKEN)).toEqual([Action.VIEW, Action.ROTATE]);
+      expect(getResourceActions(Resource.CALENDAR_TOKEN)).toEqual([Action.VIEW, Action.ROTATE, Action.GENERATE]);
       expect(getResourceActions(Resource.AVAILABLE_SLOTS)).toEqual([Action.VIEW]);
     });
 

@@ -130,6 +130,79 @@ const LEGACY_RESOURCE_CATEGORIES: {
   ],
 } as const;
 
+/**
+ * Resource owner scope:
+ * - USER: resource belongs to / is scoped to an individual user
+ * - ACCOUNT: resource belongs to / is scoped to the whole account (organisation)
+ */
+export enum ResourceScope {
+  USER = 'user',
+  ACCOUNT = 'account',
+}
+
+const RESOURCE_SCOPE: Record<Resource, ResourceScope> = {
+  // Account-scoped resources
+  [Resource.ACCOUNT]: ResourceScope.ACCOUNT,
+  [Resource.LOCATION]: ResourceScope.ACCOUNT,
+  [Resource.ROLE]: ResourceScope.ACCOUNT,
+  [Resource.MEMBERSHIP]: ResourceScope.ACCOUNT,
+  [Resource.GENERAL_SETTINGS]: ResourceScope.ACCOUNT,
+  [Resource.TASK_TYPE]: ResourceScope.ACCOUNT,
+  [Resource.DOCUMENT_LAYOUT]: ResourceScope.ACCOUNT,
+  [Resource.DOCUMENT_MODEL]: ResourceScope.ACCOUNT,
+  [Resource.MEASURE_MODEL]: ResourceScope.ACCOUNT,
+  [Resource.CALCULATED_MEASURE_MODEL]: ResourceScope.ACCOUNT,
+  [Resource.MEDICAL_HISTORY_MODEL]: ResourceScope.ACCOUNT,
+  [Resource.PRESCRIPTION_MODEL]: ResourceScope.ACCOUNT,
+  [Resource.PATIENT_PROPERTY_MODEL]: ResourceScope.ACCOUNT,
+  [Resource.MEDICATION_SEARCH]: ResourceScope.ACCOUNT,
+  [Resource.AVAILABLE_SLOTS]: ResourceScope.ACCOUNT,
+
+  // User-scoped resources
+  [Resource.USER]: ResourceScope.USER,
+  [Resource.PREFERENCES]: ResourceScope.USER,
+  [Resource.CALENDAR_SETTINGS]: ResourceScope.USER,
+  [Resource.CALENDAR_SYNC]: ResourceScope.USER,
+  [Resource.CALENDAR_TOKEN]: ResourceScope.USER,
+
+  // Clinical resources are patient/account-scoped — grouped under ACCOUNT
+  [Resource.PATIENT]: ResourceScope.ACCOUNT,
+  [Resource.CONTACT]: ResourceScope.ACCOUNT,
+  [Resource.MEDICAL_SERVICE]: ResourceScope.ACCOUNT,
+  [Resource.MEDICAL_SERVICE_NOTE]: ResourceScope.ACCOUNT,
+  [Resource.PATIENT_MEDICAL_NOTE]: ResourceScope.ACCOUNT,
+  [Resource.MEDICAL_HISTORY]: ResourceScope.ACCOUNT,
+  [Resource.OBSERVATION]: ResourceScope.ACCOUNT,
+  [Resource.PRESCRIPTION]: ResourceScope.ACCOUNT,
+  [Resource.PATIENT_PAYMENT]: ResourceScope.ACCOUNT,
+  [Resource.GENERATED_DOCUMENT]: ResourceScope.ACCOUNT,
+  [Resource.UPLOAD_DOCUMENT]: ResourceScope.ACCOUNT,
+};
+
+export const USER_RESOURCES: Resource[] = (Object.entries(RESOURCE_SCOPE) as [Resource, ResourceScope][])
+  .filter(([, owner]) => owner === ResourceScope.USER)
+  .map(([resource]) => resource);
+
+export const ACCOUNT_RESOURCES: Resource[] = (Object.entries(RESOURCE_SCOPE) as [Resource, ResourceScope][])
+  .filter(([, owner]) => owner === ResourceScope.ACCOUNT)
+  .map(([resource]) => resource);
+
+export function getResourceScope(resource: Resource): ResourceScope {
+  return RESOURCE_SCOPE[resource];
+}
+
+export function isUserResource(resource: Resource): boolean {
+  return RESOURCE_SCOPE[resource] === ResourceScope.USER;
+}
+
+export function isAccountResource(resource: Resource): boolean {
+  return RESOURCE_SCOPE[resource] === ResourceScope.ACCOUNT;
+}
+
+export function getResourcesByScope(owner: ResourceScope): Resource[] {
+  return (Object.entries(RESOURCE_SCOPE) as [Resource, ResourceScope][]).filter(([, o]) => o === owner).map(([r]) => r);
+}
+
 export const MEDICAL_RESOURCES: Resource[] = [...LEGACY_RESOURCE_CATEGORIES.medical];
 
 export const PUBLIC_RESOURCES: Resource[] = [...LEGACY_RESOURCE_CATEGORIES.public];

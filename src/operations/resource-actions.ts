@@ -14,7 +14,7 @@ export const RESOURCE_ACTIONS = {
   [Resource.CALCULATED_MEASURE_MODEL]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.CALENDAR_SETTINGS]: [Action.VIEW, Action.UPDATE],
   [Resource.CALENDAR_SYNC]: [Action.ENABLE, Action.DISABLE, Action.VIEW],
-  [Resource.CALENDAR_TOKEN]: [Action.VIEW, Action.ROTATE],
+  [Resource.CALENDAR_TOKEN]: [Action.VIEW, Action.ROTATE, Action.GENERATE],
   [Resource.CONTACT]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.DOCUMENT_LAYOUT]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE, Action.GENERATE],
   [Resource.DOCUMENT_MODEL]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],

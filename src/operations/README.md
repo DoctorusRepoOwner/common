@@ -43,8 +43,10 @@ Action.CREATE;
 Action.VIEW;
 Action.UPDATE;
 Action.DELETE;
+Action.UPSERT;
 Action.CHECK_IN;
-Action.ROTATE_TOKEN;
+Action.ROTATE;
+Action.TRANSFER_OWNERSHIP;
 ```
 
 ### `Operation`
@@ -107,6 +109,14 @@ import {
   getResourceActionsByAccess,
   getAllResourceActionsByAccess,
   generateOperationsForResources,
+  getResourceOperationsByAccess,
+  ResourceScope,
+  getResourceScope,
+  isUserResource,
+  isAccountResource,
+  getResourcesByScope,
+  USER_RESOURCES,
+  ACCOUNT_RESOURCES,
 } from '@doctorus/common';
 
 getResourcesByCategory(ResourceCategory.CLINICAL);
@@ -120,6 +130,14 @@ generateOperationsForResources([Resource.PATIENT, Resource.CALENDAR_TOKEN], [Act
 getActionAccess(Action.VIEW); // READ
 isReadAction(Action.VIEW); // true
 isWriteAction(Action.UPDATE); // true
+
+// Scope
+getResourceScope(Resource.USER); // ResourceScope.USER
+getResourcesByScope(ResourceScope.ACCOUNT); // Resource[]
+isUserResource(Resource.CALENDAR_TOKEN); // true
+
+// Operations by access level
+getResourceOperationsByAccess(Resource.MEDICAL_SERVICE, ActionAccess.WRITE); // Operation[]
 ```
 
 Legacy helpers remain available for compatibility:
@@ -128,6 +146,56 @@ Legacy helpers remain available for compatibility:
 - `PUBLIC_RESOURCES`
 - `isMedicalResource(...)`
 - `isPublicResource(...)`
+
+## Resource Scope
+
+Every `Resource` is tagged with a `ResourceScope` that indicates whether it belongs to an individual user (`USER`) or to an account/organisation (`ACCOUNT`).
+
+### Scope values
+
+```ts
+import { ResourceScope } from '@doctorus/common';
+
+ResourceScope.USER; // 'user'   — individual user data
+ResourceScope.ACCOUNT; // 'account' — organisation-wide data
+```
+
+### APIs
+
+```ts
+import {
+  ResourceScope,
+  USER_RESOURCES,
+  ACCOUNT_RESOURCES,
+  getResourceScope,
+  isUserResource,
+  isAccountResource,
+  getResourcesByScope,
+} from '@doctorus/common';
+
+// Get scope for a single resource
+getResourceScope(Resource.USER); // ResourceScope.USER
+getResourceScope(Resource.PATIENT); // ResourceScope.ACCOUNT
+
+// Type guards
+isUserResource(Resource.PREFERENCES); // true
+isAccountResource(Resource.ROLE); // true
+
+// Get all resources for a scope
+getResourcesByScope(ResourceScope.USER); // [Resource.USER, Resource.PREFERENCES, ...]
+getResourcesByScope(ResourceScope.ACCOUNT); // [Resource.ACCOUNT, Resource.PATIENT, ...]
+
+// Pre-built arrays
+USER_RESOURCES; // Resource[] scoped to the current user
+ACCOUNT_RESOURCES; // Resource[] scoped to the account/organisation
+```
+
+### Scope classification
+
+| Scope     | Resources                                                                             |
+| --------- | ------------------------------------------------------------------------------------- |
+| `USER`    | `USER`, `PREFERENCES`, `CALENDAR_SETTINGS`, `CALENDAR_SYNC`, `CALENDAR_TOKEN`         |
+| `ACCOUNT` | All remaining resources (patients, roles, memberships, clinical data, settings, etc.) |
 
 ## Labels and i18n
 

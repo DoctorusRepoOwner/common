@@ -21,10 +21,22 @@ pnpm add @doctorus/common
 import {
   // Operations
   Action,
+  ActionAccess,
   Operation,
   Resource,
+  ResourceCategory,
+  ResourceScope,
   getActionLabel,
   getOperationLabel,
+  getResourceScope,
+  isUserResource,
+  isAccountResource,
+  getResourcesByScope,
+  USER_RESOURCES,
+  ACCOUNT_RESOURCES,
+  getResourceActions,
+  getResourceActionsByAccess,
+  generateOperationsForResources,
 
   // Status
   MedicalServiceStatus,
@@ -47,15 +59,30 @@ import {
 
 ### Operations
 
-Defines typed actions, resources, and `Operation` pairs used for authorization, labeling, and audit context.
+Defines typed actions, resources, and `Operation` pairs used for authorization, labeling, and audit context. Resources are classified by `ResourceScope` (`USER` or `ACCOUNT`).
 
 ```ts
-import { Action, Operation, Resource, getOperationLabel } from '@doctorus/common';
+import {
+  Action,
+  Operation,
+  Resource,
+  ResourceScope,
+  getOperationLabel,
+  getResourceScope,
+  isUserResource,
+  getResourcesByScope,
+} from '@doctorus/common';
 
 const operation = new Operation(Resource.PRESCRIPTION, Action.CREATE);
 
 getOperationLabel(operation, 'us-EN'); // "Create Prescription"
 getOperationLabel(operation, 'fr-FR'); // "Creer Ordonnance"
+
+// Resource scope
+getResourceScope(Resource.USER); // ResourceScope.USER
+getResourceScope(Resource.PATIENT); // ResourceScope.ACCOUNT
+isUserResource(Resource.CALENDAR_TOKEN); // true
+getResourcesByScope(ResourceScope.ACCOUNT); // Resource[]
 ```
 
 [Operations documentation](src/operations/README.md)
