@@ -110,6 +110,7 @@ import {
   getAllResourceActionsByAccess,
   generateOperationsForResources,
   getResourceOperationsByAccess,
+  isValidOperation,
   ResourceScope,
   getResourceScope,
   isUserResource,
@@ -138,6 +139,10 @@ isUserResource(Resource.CALENDAR_TOKEN); // true
 
 // Operations by access level
 getResourceOperationsByAccess(Resource.MEDICAL_SERVICE, ActionAccess.WRITE); // Operation[]
+
+// Validate a resource:action pair
+isValidOperation(Resource.PATIENT, Action.VIEW);          // true
+isValidOperation(Resource.AVAILABLE_SLOTS, Action.CREATE); // false
 ```
 
 Legacy helpers remain available for compatibility:
@@ -232,10 +237,15 @@ getOperationLabel(new Operation(Resource.MEDICAL_SERVICE, Action.CHECK_IN), 'us-
 ## Recommended Usage
 
 ```ts
-import { Action, Operation, Resource, getResourceActions } from '@doctorus/common';
+import { Action, Operation, Resource, getResourceActions, isValidOperation } from '@doctorus/common';
 
 const permission = new Operation(Resource.MEDICAL_SERVICE, Action.CHECK_IN);
 const allowedActions = getResourceActions(Resource.MEDICAL_SERVICE);
+
+// Guard before building an Operation
+if (isValidOperation(resource, action)) {
+  const op = new Operation(resource, action);
+}
 ```
 
 For permission checks:

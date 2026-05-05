@@ -35,6 +35,7 @@ export {
   getAllResourceActionsByAccess,
   getResourceOperationsByAccess,
   generateOperationsForResources,
+  isValidOperation,
 } from './resource-actions';
 export type { AllowedActionFor } from './resource-actions';
 export * from './labels';

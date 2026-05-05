@@ -58,6 +58,13 @@ export function getResourceActions(resource: Resource): Action[] {
   return [...RESOURCE_ACTIONS[resource]];
 }
 
+/**
+ * Returns true if the given action is valid for the given resource.
+ */
+export function isValidOperation(resource: Resource, action: Action): boolean {
+  return (RESOURCE_ACTIONS[resource] as readonly Action[]).includes(action);
+}
+
 export function getAllResourceActions(): Readonly<Record<Resource, Action[]>> {
   return RESOURCE_ACTIONS as unknown as Readonly<Record<Resource, Action[]>>;
 }

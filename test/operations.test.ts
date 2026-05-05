@@ -7,6 +7,7 @@ import {
   getAllResourceActions,
   getAllResourceActionsByAccess,
   generateOperationsForResources,
+  isValidOperation,
   getResourceActions,
   getResourceActionsByAccess,
   getResourceOperationsByAccess,
@@ -198,6 +199,19 @@ describe('Operations Module', () => {
       const ops = generateOperationsForResources([Resource.PATIENT, Resource.PATIENT], [Action.VIEW, Action.VIEW]);
 
       expect(ops.map((op) => op.toString())).toEqual(['PATIENT:VIEW']);
+    });
+  });
+
+  describe('isValidOperation', () => {
+    it('should return true for a valid resource:action pair', () => {
+      expect(isValidOperation(Resource.PATIENT, Action.VIEW)).toBe(true);
+      expect(isValidOperation(Resource.PATIENT, Action.CREATE)).toBe(true);
+      expect(isValidOperation(Resource.CALENDAR_TOKEN, Action.ROTATE)).toBe(true);
+    });
+
+    it('should return false for an action not allowed on the resource', () => {
+      expect(isValidOperation(Resource.AVAILABLE_SLOTS, Action.CREATE)).toBe(false);
+      expect(isValidOperation(Resource.CALENDAR_TOKEN, Action.DELETE)).toBe(false);
     });
   });
 
