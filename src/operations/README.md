@@ -141,7 +141,7 @@ isUserResource(Resource.CALENDAR_TOKEN); // true
 getResourceOperationsByAccess(Resource.MEDICAL_SERVICE, ActionAccess.WRITE); // Operation[]
 
 // Validate a resource:action pair
-isValidOperation(Resource.PATIENT, Action.VIEW);          // true
+isValidOperation(Resource.PATIENT, Action.VIEW); // true
 isValidOperation(Resource.AVAILABLE_SLOTS, Action.CREATE); // false
 ```
 
