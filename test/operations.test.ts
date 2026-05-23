@@ -19,8 +19,10 @@ import {
   getResourcesByScope,
   isUserResource,
   isAccountResource,
+  isPatientResource,
   USER_RESOURCES,
   ACCOUNT_RESOURCES,
+  PATIENT_RESOURCES,
   isReadAction,
   isMedicalResource,
   isPublicResource,
@@ -39,6 +41,8 @@ describe('Operations Module', () => {
       expect(Resource.PATIENT).toBe('PATIENT');
       expect(Resource.CONTACT).toBe('CONTACT');
       expect(Resource.PATIENT_MEDICAL_NOTE).toBe('PATIENT_MEDICAL_NOTE');
+      expect(Resource.PATIENT_PUBLIC_PROPERTY).toBe('PATIENT_PUBLIC_PROPERTY');
+      expect(Resource.PATIENT_MEDICAL_PROPERTY).toBe('PATIENT_MEDICAL_PROPERTY');
       expect(Resource.PATIENT_PROPERTY_MODEL).toBe('PATIENT_PROPERTY_MODEL');
       expect(Resource.ROLE).toBe('ROLE');
       expect(Resource.AVAILABLE_SLOTS).toBe('AVAILABLE_SLOTS');
@@ -53,6 +57,7 @@ describe('Operations Module', () => {
 
     it('should tag resources by owner scope', () => {
       expect(ResourceScope.USER).toBe('user');
+      expect(ResourceScope.PATIENT).toBe('patient');
       expect(ResourceScope.ACCOUNT).toBe('account');
 
       expect(getResourceScope(Resource.USER)).toBe(ResourceScope.USER);
@@ -62,6 +67,9 @@ describe('Operations Module', () => {
       expect(getResourceScope(Resource.ACCOUNT)).toBe(ResourceScope.ACCOUNT);
       expect(getResourceScope(Resource.PATIENT)).toBe(ResourceScope.ACCOUNT);
       expect(getResourceScope(Resource.ROLE)).toBe(ResourceScope.ACCOUNT);
+
+      expect(getResourceScope(Resource.PATIENT_PUBLIC_PROPERTY)).toBe(ResourceScope.PATIENT);
+      expect(getResourceScope(Resource.PATIENT_MEDICAL_PROPERTY)).toBe(ResourceScope.PATIENT);
     });
 
     it('should classify resources by owner with helpers', () => {
@@ -72,6 +80,10 @@ describe('Operations Module', () => {
       expect(isAccountResource(Resource.ACCOUNT)).toBe(true);
       expect(isAccountResource(Resource.PATIENT)).toBe(true);
       expect(isAccountResource(Resource.USER)).toBe(false);
+
+      expect(isPatientResource(Resource.PATIENT_PUBLIC_PROPERTY)).toBe(true);
+      expect(isPatientResource(Resource.PATIENT_MEDICAL_PROPERTY)).toBe(true);
+      expect(isPatientResource(Resource.PATIENT)).toBe(false);
     });
 
     it('should return resources by owner', () => {
@@ -84,14 +96,21 @@ describe('Operations Module', () => {
       expect(accountResources).toContain(Resource.PATIENT);
       expect(accountResources).toContain(Resource.ACCOUNT);
       expect(accountResources).not.toContain(Resource.USER);
+
+      const patientResources = getResourcesByScope(ResourceScope.PATIENT);
+      expect(patientResources).toContain(Resource.PATIENT_PUBLIC_PROPERTY);
+      expect(patientResources).toContain(Resource.PATIENT_MEDICAL_PROPERTY);
+      expect(patientResources).not.toContain(Resource.PATIENT);
     });
 
-    it('should expose USER_RESOURCES and ACCOUNT_RESOURCES arrays', () => {
+    it('should expose USER_RESOURCES, ACCOUNT_RESOURCES and PATIENT_RESOURCES arrays', () => {
       expect(USER_RESOURCES).toContain(Resource.USER);
       expect(USER_RESOURCES).toContain(Resource.CALENDAR_TOKEN);
       expect(ACCOUNT_RESOURCES).toContain(Resource.PATIENT);
       expect(ACCOUNT_RESOURCES).toContain(Resource.ROLE);
-      const allTagged = new Set([...USER_RESOURCES, ...ACCOUNT_RESOURCES]);
+      expect(PATIENT_RESOURCES).toContain(Resource.PATIENT_PUBLIC_PROPERTY);
+      expect(PATIENT_RESOURCES).toContain(Resource.PATIENT_MEDICAL_PROPERTY);
+      const allTagged = new Set([...USER_RESOURCES, ...ACCOUNT_RESOURCES, ...PATIENT_RESOURCES]);
       Object.values(Resource).forEach((r) => expect(allTagged.has(r)).toBe(true));
     });
   });

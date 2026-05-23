@@ -24,6 +24,8 @@ export enum Resource {
   PATIENT = 'PATIENT',
   PATIENT_MEDICAL_NOTE = 'PATIENT_MEDICAL_NOTE',
   PATIENT_PAYMENT = 'PATIENT_PAYMENT',
+  PATIENT_PUBLIC_PROPERTY = 'PATIENT_PUBLIC_PROPERTY',
+  PATIENT_MEDICAL_PROPERTY = 'PATIENT_MEDICAL_PROPERTY',
   PATIENT_PROPERTY_MODEL = 'PATIENT_PROPERTY_MODEL',
   PREFERENCES = 'PREFERENCES',
   PRESCRIPTION = 'PRESCRIPTION',
@@ -70,6 +72,8 @@ const RESOURCE_CATEGORIES: {
     Resource.OBSERVATION,
     Resource.PRESCRIPTION,
     Resource.PATIENT_PAYMENT,
+    Resource.PATIENT_PUBLIC_PROPERTY,
+    Resource.PATIENT_MEDICAL_PROPERTY,
   ],
   documents: [Resource.DOCUMENT_LAYOUT, Resource.DOCUMENT_MODEL, Resource.GENERATED_DOCUMENT, Resource.UPLOAD_DOCUMENT],
   settings: [
@@ -108,6 +112,8 @@ const LEGACY_RESOURCE_CATEGORIES: {
     Resource.PATIENT,
     Resource.PATIENT_MEDICAL_NOTE,
     Resource.PATIENT_PAYMENT,
+    Resource.PATIENT_PUBLIC_PROPERTY,
+    Resource.PATIENT_MEDICAL_PROPERTY,
     Resource.PATIENT_PROPERTY_MODEL,
     Resource.PRESCRIPTION,
     Resource.PRESCRIPTION_MODEL,
@@ -133,10 +139,12 @@ const LEGACY_RESOURCE_CATEGORIES: {
 /**
  * Resource owner scope:
  * - USER: resource belongs to / is scoped to an individual user
+ * - PATIENT: resource belongs to / is scoped to an individual patient
  * - ACCOUNT: resource belongs to / is scoped to the whole account (organisation)
  */
 export enum ResourceScope {
   USER = 'user',
+  PATIENT = 'patient',
   ACCOUNT = 'account',
 }
 
@@ -175,6 +183,8 @@ const RESOURCE_SCOPE: Record<Resource, ResourceScope> = {
   [Resource.OBSERVATION]: ResourceScope.ACCOUNT,
   [Resource.PRESCRIPTION]: ResourceScope.ACCOUNT,
   [Resource.PATIENT_PAYMENT]: ResourceScope.ACCOUNT,
+  [Resource.PATIENT_PUBLIC_PROPERTY]: ResourceScope.PATIENT,
+  [Resource.PATIENT_MEDICAL_PROPERTY]: ResourceScope.PATIENT,
   [Resource.GENERATED_DOCUMENT]: ResourceScope.ACCOUNT,
   [Resource.UPLOAD_DOCUMENT]: ResourceScope.ACCOUNT,
 };
@@ -187,6 +197,10 @@ export const ACCOUNT_RESOURCES: Resource[] = (Object.entries(RESOURCE_SCOPE) as 
   .filter(([, owner]) => owner === ResourceScope.ACCOUNT)
   .map(([resource]) => resource);
 
+export const PATIENT_RESOURCES: Resource[] = (Object.entries(RESOURCE_SCOPE) as [Resource, ResourceScope][])
+  .filter(([, owner]) => owner === ResourceScope.PATIENT)
+  .map(([resource]) => resource);
+
 export function getResourceScope(resource: Resource): ResourceScope {
   return RESOURCE_SCOPE[resource];
 }
@@ -197,6 +211,10 @@ export function isUserResource(resource: Resource): boolean {
 
 export function isAccountResource(resource: Resource): boolean {
   return RESOURCE_SCOPE[resource] === ResourceScope.ACCOUNT;
+}
+
+export function isPatientResource(resource: Resource): boolean {
+  return RESOURCE_SCOPE[resource] === ResourceScope.PATIENT;
 }
 
 export function getResourcesByScope(owner: ResourceScope): Resource[] {

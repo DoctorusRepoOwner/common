@@ -39,6 +39,8 @@ export const RESOURCE_ACTIONS = {
   [Resource.MEMBERSHIP]: [Action.VIEW, Action.INVITE, Action.UPDATE, Action.DELETE],
   [Resource.OBSERVATION]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.PATIENT]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
+  [Resource.PATIENT_PUBLIC_PROPERTY]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
+  [Resource.PATIENT_MEDICAL_PROPERTY]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.PATIENT_MEDICAL_NOTE]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.PATIENT_PAYMENT]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.PATIENT_PROPERTY_MODEL]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
