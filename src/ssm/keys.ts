@@ -5,6 +5,7 @@ export enum SSM_PARAM_KEY {
   COGNITO_USER_POOL_ID = 'user-pool-id',
   COGNITO_USER_POOL_WEB_CLIENT_ID = 'user-pool-web-client-id',
   COGNITO_OAUTH_DOMAIN = 'oauth-domain',
+  AUTHORIZATION_CACHE_CONFIG = 'authorization-cache-config',
   RUM_GUEST_ROLE_ARN = 'rum-guest-rome-arn',
   RUM_IDENTITY_POOL_ID = 'rum-identity-pool-id',
   RUM_APP_ID = 'rum-app-id',
@@ -59,6 +60,9 @@ export const SSM_PARAM_METADATA: Record<SSM_PARAM_KEY, SSMParamMetadata> = {
   },
   [SSM_PARAM_KEY.COGNITO_OAUTH_DOMAIN]: {
     description: 'Cognito hosted UI OAuth domain for sign-in and callback flows.',
+  },
+  [SSM_PARAM_KEY.AUTHORIZATION_CACHE_CONFIG]: {
+    description: 'Configuration used by services to cache authorization decisions.',
   },
   [SSM_PARAM_KEY.RUM_GUEST_ROLE_ARN]: {
     description: 'IAM role ARN assumed by guest users for CloudWatch RUM telemetry.',

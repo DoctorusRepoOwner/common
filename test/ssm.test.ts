@@ -155,6 +155,7 @@ describe('SSM Utilities', () => {
       expect(SSM_PARAM_KEY.DB_PASSWORD).toBe('db-password');
       expect(SSM_PARAM_KEY.GRAPHQL_API_ID).toBe('graphql-api-id');
       expect(SSM_PARAM_KEY.BASE_HOST).toBe('base-host');
+      expect(SSM_PARAM_KEY.AUTHORIZATION_CACHE_CONFIG).toBe('authorization-cache-config');
     });
   });
 
