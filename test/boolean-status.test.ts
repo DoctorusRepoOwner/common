@@ -309,8 +309,7 @@ describe('Boolean Status', () => {
       expect(features).toContain('validInvalid');
       expect(features).toContain('medicalService');
       expect(features).toContain('accountLocation');
-      expect(features).toContain('medicalHistory');
-      expect(features.length).toBeGreaterThanOrEqual(7);
+      expect(features.length).toBeGreaterThanOrEqual(6);
     });
 
     it('should return unique feature names', () => {

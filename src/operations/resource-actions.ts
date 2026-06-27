@@ -23,8 +23,6 @@ export const RESOURCE_ACTIONS = {
   [Resource.LOCATION]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.MEASURE_MODEL]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.MEDICATION_SEARCH]: [Action.VIEW],
-  [Resource.MEDICAL_HISTORY]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
-  [Resource.MEDICAL_HISTORY_MODEL]: [Action.VIEW, Action.CREATE, Action.UPDATE, Action.DELETE],
   [Resource.MEDICAL_SERVICE]: [
     Action.VIEW,
     Action.CREATE,

@@ -54,8 +54,6 @@ const frResourceOverrides: Partial<Record<Resource, string>> = {
   [Resource.LOCATION]: 'Lieu',
   [Resource.MEASURE_MODEL]: 'Modele de mesure',
   [Resource.MEDICATION_SEARCH]: 'Recherche de medicaments',
-  [Resource.MEDICAL_HISTORY]: 'Antecedents medicaux',
-  [Resource.MEDICAL_HISTORY_MODEL]: "Modele d'antecedents medicaux",
   [Resource.MEDICAL_SERVICE]: 'Service medical',
   [Resource.MEDICAL_SERVICE_NOTE]: 'Note du service medical',
   [Resource.MEMBERSHIP]: 'Adhesion',

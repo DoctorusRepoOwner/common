@@ -228,10 +228,9 @@ await logMedicalAction('doctor-123', Action.CREATE, Resource.PRESCRIPTION, 'pres
   duration: '7 days',
 });
 
-// Log medical history update
-await logMedicalAction('doctor-123', Action.UPDATE, Resource.MEDICAL_HISTORY, 'history-101', 'patient-456', {
-  section: 'respiratory',
-  note: 'Acute bronchitis',
+// Log medical service note update
+await logMedicalAction('doctor-123', Action.UPDATE, Resource.MEDICAL_SERVICE_NOTE, 'note-101', 'patient-456', {
+  note: 'Acute bronchitis follow-up',
 });
 ```
 

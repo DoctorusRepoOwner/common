@@ -426,7 +426,7 @@ function renderActionsForStatus(status: MedicalServiceStatus) {
 
 ## Status Utilities: Feature-Specific Extraction
 
-The `utils` module provides a unified API for querying and extracting status metadata for any feature-specific status. This is useful when you need to work with multiple different status types (Medical Service, Account Location, Medical History) with a common interface.
+The `utils` module provides a unified API for querying and extracting status metadata for any feature-specific status. This is useful when you need to work with multiple different status types (Medical Service, Account Location) with a common interface.
 
 ### Key Features
 
@@ -584,7 +584,6 @@ function renderStatusOptions(feature: StatusFeature, locale: 'us-EN' | 'fr-FR') 
 // Usage:
 const medicalOptions = renderStatusOptions('medicalService', 'us-EN');
 const locationOptions = renderStatusOptions('accountLocation', 'fr-FR');
-const historyOptions = renderStatusOptions('medicalHistory', 'us-EN');
 ```
 
 ### Supported Features
@@ -593,7 +592,6 @@ The utilities work with these built-in features:
 
 - `'medicalService'` - Medical service workflow status (5 states)
 - `'accountLocation'` - Account location availability policy (4 states)
-- `'medicalHistory'` - Medical history record status (2 states)
 
 ## Extending the Pattern
 
@@ -639,7 +637,6 @@ export const APPOINTMENT_STATUS_METADATA: Record<AppointmentStatus, StatusMetada
 - `MedicalServiceStatus` - Status enum with 5 values (`PENDING`, `ON_WAITING_ROOM`, `IN_PROGRESS`, `COMPLETED`, `CANCELED`)
 - `MembershipStatus` - Status enum with 4 values (`ACTIVE`, `PENDING`, `REVOKED`, `REFUSED`)
 - `AccountLocationStatus` - Status enum with 4 values
-- `MedicalHistoryStatus` - Status enum with 2 values
 
 ### Types
 
@@ -690,7 +687,6 @@ export const APPOINTMENT_STATUS_METADATA: Record<AppointmentStatus, StatusMetada
 
 - `MEDICAL_SERVICE_STATUS_METADATA` - Complete metadata for medical statuses
 - `ACCOUNT_LOCATION_STATUS_METADATA` - Complete metadata for location statuses
-- `MEDICAL_HISTORY_STATUS_METADATA` - Complete metadata for history statuses
 - `METADATA_REGISTRY` - Registry mapping features to their metadata
 
 ### Account Location Functions
@@ -702,16 +698,6 @@ export const APPOINTMENT_STATUS_METADATA: Record<AppointmentStatus, StatusMetada
 - `getStatusDescription(status, locale?)` - Get translated description
 - `getAllAccountLocationStatuses()` - Get all statuses
 - `isValidAccountLocationStatus(value)` - Validation
-
-### Medical History Functions
-
-- `getStatusMetadata(status)` - Get complete metadata
-- `getStatusIcon(status)` - Get Material icon name
-- `getStatusColor(status)` - Get hex color
-- `getStatusLabel(status, locale?, format?)` - Get translated label
-- `getStatusDescription(status, locale?)` - Get translated description
-- `getAllMedicalHistoryStatuses()` - Get all statuses
-- `isValidMedicalHistoryStatus(value)` - Validation
 
 ### Membership Status Functions
 
