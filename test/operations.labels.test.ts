@@ -11,6 +11,7 @@ import { Resource, ResourceCategory } from '../src/operations/resources';
 describe('Operations Labels (i18n)', () => {
   it('should label actions in English (us-EN)', () => {
     expect(getActionLabel(Action.VIEW, 'us-EN')).toBe('View');
+    expect(getActionLabel(Action.LIST, 'us-EN')).toBe('List');
     expect(getActionLabel(Action.UPDATE, 'us-EN')).toBe('Update');
     expect(getActionLabel(Action.CREATE, 'us-EN')).toBe('Create');
     expect(getActionLabel(Action.CHECK_IN, 'us-EN')).toBe('Check In');
@@ -19,6 +20,7 @@ describe('Operations Labels (i18n)', () => {
 
   it('should label actions in French (fr-FR)', () => {
     expect(getActionLabel(Action.VIEW, 'fr-FR')).toBe('Voir');
+    expect(getActionLabel(Action.LIST, 'fr-FR')).toBe('Lister');
     expect(getActionLabel(Action.UPDATE, 'fr-FR')).toBe('Mettre a jour');
     expect(getActionLabel(Action.CREATE, 'fr-FR')).toBe('Creer');
     expect(getActionLabel(Action.CHECK_IN, 'fr-FR')).toBe('Enregistrer l arrivee');
@@ -28,13 +30,17 @@ describe('Operations Labels (i18n)', () => {
   it('should label resources in English (us-EN)', () => {
     expect(getResourceLabel(Resource.PATIENT, 'us-EN')).toBe('Patient');
     expect(getResourceLabel(Resource.GENERAL_SETTINGS, 'us-EN')).toBe('General Settings');
-    expect(getResourceLabel(Resource.AVAILABLE_SLOTS, 'us-EN')).toBe('Available Slots');
+    expect(getResourceLabel(Resource.MEDICATION, 'us-EN')).toBe('Medication');
+    expect(getResourceLabel(Resource.MEDICAL_SERVICE_SLOT, 'us-EN')).toBe('Medical Service Slot');
+    expect(getResourceLabel(Resource.CALENDAR_SETTINGS, 'us-EN')).toBe('Calendar Settings');
   });
 
   it('should label resources with French overrides (fr-FR)', () => {
     expect(getResourceLabel(Resource.ACCOUNT, 'fr-FR')).toBe('Compte');
     expect(getResourceLabel(Resource.LOCATION, 'fr-FR')).toBe('Lieu');
     expect(getResourceLabel(Resource.CALENDAR_TOKEN, 'fr-FR')).toBe('Jeton de calendrier');
+    expect(getResourceLabel(Resource.MEDICATION, 'fr-FR')).toBe('Medicament');
+    expect(getResourceLabel(Resource.MEDICAL_SERVICE_SLOT, 'fr-FR')).toBe('Creneau du service medical');
     expect(getResourceLabel(Resource.PATIENT, 'fr-FR')).toBe('Patient');
   });
 

@@ -14,8 +14,9 @@ export enum Resource {
   GENERATED_DOCUMENT = 'GENERATED_DOCUMENT',
   LOCATION = 'LOCATION',
   MEASURE_MODEL = 'MEASURE_MODEL',
-  MEDICATION_SEARCH = 'MEDICATION_SEARCH',
+  MEDICATION = 'MEDICATION',
   MEDICAL_SERVICE = 'MEDICAL_SERVICE',
+  MEDICAL_SERVICE_SLOT = 'MEDICAL_SERVICE_SLOT',
   MEDICAL_SERVICE_NOTE = 'MEDICAL_SERVICE_NOTE',
   MEMBERSHIP = 'MEMBERSHIP',
   OBSERVATION = 'OBSERVATION',
@@ -32,7 +33,6 @@ export enum Resource {
   TASK_TYPE = 'TASK_TYPE',
   UPLOAD_DOCUMENT = 'UPLOAD_DOCUMENT',
   USER = 'USER',
-  AVAILABLE_SLOTS = 'AVAILABLE_SLOTS',
 }
 
 export enum ResourceCategory {
@@ -84,8 +84,8 @@ const RESOURCE_CATEGORIES: {
     Resource.PATIENT_PROPERTY_MODEL,
   ],
   integration: [Resource.CALENDAR_TOKEN, Resource.CALENDAR_SETTINGS, Resource.CALENDAR_SYNC],
-  scheduling: [Resource.AVAILABLE_SLOTS],
-  external: [Resource.MEDICATION_SEARCH],
+  scheduling: [Resource.MEDICAL_SERVICE_SLOT],
+  external: [Resource.MEDICATION],
   system: [],
 } as const;
 
@@ -94,13 +94,13 @@ const LEGACY_RESOURCE_CATEGORIES: {
   public: Resource[];
 } = {
   medical: [
-    Resource.AVAILABLE_SLOTS,
     Resource.CALCULATED_MEASURE_MODEL,
     Resource.CONTACT,
     Resource.GENERATED_DOCUMENT,
     Resource.MEASURE_MODEL,
-    Resource.MEDICATION_SEARCH,
+    Resource.MEDICATION,
     Resource.MEDICAL_SERVICE,
+    Resource.MEDICAL_SERVICE_SLOT,
     Resource.MEDICAL_SERVICE_NOTE,
     Resource.OBSERVATION,
     Resource.PATIENT,
@@ -156,8 +156,8 @@ const RESOURCE_SCOPE: Record<Resource, ResourceScope> = {
   [Resource.CALCULATED_MEASURE_MODEL]: ResourceScope.ACCOUNT,
   [Resource.PRESCRIPTION_MODEL]: ResourceScope.ACCOUNT,
   [Resource.PATIENT_PROPERTY_MODEL]: ResourceScope.ACCOUNT,
-  [Resource.MEDICATION_SEARCH]: ResourceScope.ACCOUNT,
-  [Resource.AVAILABLE_SLOTS]: ResourceScope.ACCOUNT,
+  [Resource.MEDICATION]: ResourceScope.ACCOUNT,
+  [Resource.MEDICAL_SERVICE_SLOT]: ResourceScope.ACCOUNT,
 
   // User-scoped resources
   [Resource.USER]: ResourceScope.USER,

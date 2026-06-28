@@ -7,6 +7,7 @@ export type Locale = 'fr-FR' | 'us-EN';
 const enAction: Record<Action, string> = {
   [Action.CREATE]: 'Create',
   [Action.VIEW]: 'View',
+  [Action.LIST]: 'List',
   [Action.UPDATE]: 'Update',
   [Action.DELETE]: 'Delete',
   [Action.ASSIGN]: 'Assign',
@@ -25,6 +26,7 @@ const enAction: Record<Action, string> = {
 const frAction: Record<Action, string> = {
   [Action.CREATE]: 'Creer',
   [Action.VIEW]: 'Voir',
+  [Action.LIST]: 'Lister',
   [Action.UPDATE]: 'Mettre a jour',
   [Action.DELETE]: 'Supprimer',
   [Action.ASSIGN]: 'Assigner',
@@ -53,8 +55,9 @@ const frResourceOverrides: Partial<Record<Resource, string>> = {
   [Resource.GENERATED_DOCUMENT]: 'Document genere',
   [Resource.LOCATION]: 'Lieu',
   [Resource.MEASURE_MODEL]: 'Modele de mesure',
-  [Resource.MEDICATION_SEARCH]: 'Recherche de medicaments',
+  [Resource.MEDICATION]: 'Medicament',
   [Resource.MEDICAL_SERVICE]: 'Service medical',
+  [Resource.MEDICAL_SERVICE_SLOT]: 'Creneau du service medical',
   [Resource.MEDICAL_SERVICE_NOTE]: 'Note du service medical',
   [Resource.MEMBERSHIP]: 'Adhesion',
   [Resource.OBSERVATION]: 'Observation',
@@ -69,7 +72,6 @@ const frResourceOverrides: Partial<Record<Resource, string>> = {
   [Resource.TASK_TYPE]: 'Type de tache',
   [Resource.UPLOAD_DOCUMENT]: 'Document televerse',
   [Resource.USER]: 'Utilisateur',
-  [Resource.AVAILABLE_SLOTS]: 'Creneaux disponibles',
 };
 
 const enResourceCategory: Record<ResourceCategory, string> = {

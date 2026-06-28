@@ -45,7 +45,8 @@ describe('Operations Module', () => {
       expect(Resource.PATIENT_MEDICAL_PROPERTY).toBe('PATIENT_MEDICAL_PROPERTY');
       expect(Resource.PATIENT_PROPERTY_MODEL).toBe('PATIENT_PROPERTY_MODEL');
       expect(Resource.ROLE).toBe('ROLE');
-      expect(Resource.AVAILABLE_SLOTS).toBe('AVAILABLE_SLOTS');
+      expect(Resource.MEDICATION).toBe('MEDICATION');
+      expect(Resource.MEDICAL_SERVICE_SLOT).toBe('MEDICAL_SERVICE_SLOT');
     });
 
     it('should expose requested categories', () => {
@@ -67,6 +68,7 @@ describe('Operations Module', () => {
       expect(getResourceScope(Resource.ACCOUNT)).toBe(ResourceScope.ACCOUNT);
       expect(getResourceScope(Resource.PATIENT)).toBe(ResourceScope.ACCOUNT);
       expect(getResourceScope(Resource.ROLE)).toBe(ResourceScope.ACCOUNT);
+      expect(getResourceScope(Resource.MEDICAL_SERVICE_SLOT)).toBe(ResourceScope.ACCOUNT);
 
       expect(getResourceScope(Resource.PATIENT_PUBLIC_PROPERTY)).toBe(ResourceScope.PATIENT);
       expect(getResourceScope(Resource.PATIENT_MEDICAL_PROPERTY)).toBe(ResourceScope.PATIENT);
@@ -118,6 +120,7 @@ describe('Operations Module', () => {
   describe('Action', () => {
     it('should expose requested core actions', () => {
       expect(Action.VIEW).toBe('VIEW');
+      expect(Action.LIST).toBe('LIST');
       expect(Action.CREATE).toBe('CREATE');
       expect(Action.UPDATE).toBe('UPDATE');
       expect(Action.DELETE).toBe('DELETE');
@@ -134,10 +137,12 @@ describe('Operations Module', () => {
 
     it('should classify actions by access level', () => {
       expect(getActionAccess(Action.VIEW)).toBe(ActionAccess.READ);
+      expect(getActionAccess(Action.LIST)).toBe(ActionAccess.READ);
       expect(getActionAccess(Action.UPDATE)).toBe(ActionAccess.WRITE);
       expect(isReadAction(Action.VIEW)).toBe(true);
+      expect(isReadAction(Action.LIST)).toBe(true);
       expect(isWriteAction(Action.CREATE)).toBe(true);
-      expect(getActionsByAccess(ActionAccess.READ)).toEqual([Action.VIEW]);
+      expect(getActionsByAccess(ActionAccess.READ)).toEqual([Action.VIEW, Action.LIST]);
       expect(getActionsByAccess(ActionAccess.WRITE)).toContain(Action.DELETE);
     });
   });
@@ -145,6 +150,7 @@ describe('Operations Module', () => {
   describe('Backend APIs', () => {
     it('should fetch all actions for a resource', () => {
       expect(getResourceActions(Resource.MEDICAL_SERVICE)).toEqual([
+        Action.LIST,
         Action.VIEW,
         Action.CREATE,
         Action.UPDATE,
@@ -155,12 +161,13 @@ describe('Operations Module', () => {
         Action.ASSIGN,
       ]);
       expect(getResourceActions(Resource.CALENDAR_TOKEN)).toEqual([Action.VIEW, Action.ROTATE, Action.GENERATE]);
-      expect(getResourceActions(Resource.AVAILABLE_SLOTS)).toEqual([Action.VIEW]);
+      expect(getResourceActions(Resource.MEDICATION)).toEqual([Action.LIST]);
+      expect(getResourceActions(Resource.MEDICAL_SERVICE_SLOT)).toEqual([Action.LIST]);
     });
 
     it('should fetch all resources for one category', () => {
       expect(getResourcesByCategory(ResourceCategory.CORE)).toEqual([Resource.ACCOUNT]);
-      expect(getResourcesByCategory(ResourceCategory.SCHEDULING)).toEqual([Resource.AVAILABLE_SLOTS]);
+      expect(getResourcesByCategory(ResourceCategory.SCHEDULING)).toEqual([Resource.MEDICAL_SERVICE_SLOT]);
       expect(getResourcesByCategory(ResourceCategory.SYSTEM)).toEqual([]);
     });
 
@@ -176,11 +183,13 @@ describe('Operations Module', () => {
       const all = getAllResourceActions();
       expect(all[Resource.PATIENT]).toContain(Action.VIEW);
       expect(all[Resource.PATIENT]).toContain(Action.CREATE);
+      expect(all[Resource.MEDICATION]).toEqual([Action.LIST]);
+      expect(all[Resource.MEDICAL_SERVICE_SLOT]).toEqual([Action.LIST]);
       expect(all[Resource.CALENDAR_SYNC]).toEqual([Action.ENABLE, Action.DISABLE, Action.VIEW]);
     });
 
     it('should filter resource actions by access', () => {
-      expect(getResourceActionsByAccess(Resource.PATIENT, ActionAccess.READ)).toEqual([Action.VIEW]);
+      expect(getResourceActionsByAccess(Resource.PATIENT, ActionAccess.READ)).toEqual([Action.LIST, Action.VIEW]);
       expect(getResourceActionsByAccess(Resource.PATIENT, ActionAccess.WRITE)).toEqual([
         Action.CREATE,
         Action.UPDATE,
@@ -188,7 +197,9 @@ describe('Operations Module', () => {
       ]);
 
       const allRead = getAllResourceActionsByAccess(ActionAccess.READ);
-      expect(allRead[Resource.PATIENT]).toEqual([Action.VIEW]);
+      expect(allRead[Resource.PATIENT]).toEqual([Action.LIST, Action.VIEW]);
+      expect(allRead[Resource.MEDICATION]).toEqual([Action.LIST]);
+      expect(allRead[Resource.MEDICAL_SERVICE_SLOT]).toEqual([Action.LIST]);
       expect(allRead[Resource.CALENDAR_SYNC]).toEqual([Action.VIEW]);
     });
 
@@ -196,7 +207,7 @@ describe('Operations Module', () => {
       const readOps = getResourceOperationsByAccess(Resource.PATIENT, ActionAccess.READ);
       const writeOps = getResourceOperationsByAccess(Resource.PATIENT, ActionAccess.WRITE);
 
-      expect(readOps.map((op) => op.toString())).toEqual(['PATIENT:VIEW']);
+      expect(readOps.map((op) => op.toString())).toEqual(['PATIENT:LIST', 'PATIENT:VIEW']);
       expect(writeOps.map((op) => op.toString())).toEqual(['PATIENT:CREATE', 'PATIENT:UPDATE', 'PATIENT:DELETE']);
     });
 
@@ -225,11 +236,14 @@ describe('Operations Module', () => {
     it('should return true for a valid resource:action pair', () => {
       expect(isValidOperation(Resource.PATIENT, Action.VIEW)).toBe(true);
       expect(isValidOperation(Resource.PATIENT, Action.CREATE)).toBe(true);
+      expect(isValidOperation(Resource.MEDICATION, Action.LIST)).toBe(true);
+      expect(isValidOperation(Resource.MEDICAL_SERVICE_SLOT, Action.LIST)).toBe(true);
       expect(isValidOperation(Resource.CALENDAR_TOKEN, Action.ROTATE)).toBe(true);
     });
 
     it('should return false for an action not allowed on the resource', () => {
-      expect(isValidOperation(Resource.AVAILABLE_SLOTS, Action.CREATE)).toBe(false);
+      expect(isValidOperation(Resource.MEDICATION, Action.VIEW)).toBe(false);
+      expect(isValidOperation(Resource.MEDICAL_SERVICE_SLOT, Action.VIEW)).toBe(false);
       expect(isValidOperation(Resource.CALENDAR_TOKEN, Action.DELETE)).toBe(false);
     });
   });

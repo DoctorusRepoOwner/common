@@ -4,6 +4,7 @@
 export enum Action {
   CREATE = 'CREATE',
   VIEW = 'VIEW',
+  LIST = 'LIST',
   UPDATE = 'UPDATE',
   DELETE = 'DELETE',
   ASSIGN = 'ASSIGN',
@@ -32,6 +33,7 @@ export enum ActionAccess {
 const ACTION_ACCESS: Record<Action, ActionAccess> = {
   [Action.CREATE]: ActionAccess.WRITE,
   [Action.VIEW]: ActionAccess.READ,
+  [Action.LIST]: ActionAccess.READ,
   [Action.UPDATE]: ActionAccess.WRITE,
   [Action.DELETE]: ActionAccess.WRITE,
   [Action.ASSIGN]: ActionAccess.WRITE,

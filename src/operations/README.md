@@ -29,7 +29,8 @@ Resource.PATIENT;
 Resource.MEDICAL_SERVICE;
 Resource.DOCUMENT_LAYOUT;
 Resource.CALENDAR_TOKEN;
-Resource.AVAILABLE_SLOTS;
+Resource.MEDICATION;
+Resource.MEDICAL_SERVICE_SLOT;
 ```
 
 ### `Action`
@@ -41,6 +42,7 @@ Examples:
 ```ts
 Action.CREATE;
 Action.VIEW;
+Action.LIST;
 Action.UPDATE;
 Action.DELETE;
 Action.UPSERT;
@@ -142,7 +144,8 @@ getResourceOperationsByAccess(Resource.MEDICAL_SERVICE, ActionAccess.WRITE); // 
 
 // Validate a resource:action pair
 isValidOperation(Resource.PATIENT, Action.VIEW); // true
-isValidOperation(Resource.AVAILABLE_SLOTS, Action.CREATE); // false
+isValidOperation(Resource.MEDICAL_SERVICE_SLOT, Action.LIST); // true
+isValidOperation(Resource.CALENDAR_TOKEN, Action.DELETE); // false
 ```
 
 Legacy helpers remain available for compatibility:
