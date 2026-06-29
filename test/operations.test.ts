@@ -34,7 +34,21 @@ import {
   ResourceCategory,
   ResourceScope,
 } from '../src/operations';
-import type { AllowedOperation, AllowedOperationFor } from '../src/operations';
+import type {
+  ActionForAccess,
+  ActionFromOperation,
+  AllowedActionForAccess,
+  AllowedOperation,
+  AllowedOperationFor,
+  GeneratedOperationFor,
+  OperationFromString,
+  ResourceActions,
+  ResourceActionsByAccess,
+  ResourceForCategory,
+  ResourceForScope,
+  ResourceFromOperation,
+  ResourceOperationForAccess,
+} from '../src/operations';
 
 describe('Operations Module', () => {
   describe('Resource', () => {
@@ -106,6 +120,18 @@ describe('Operations Module', () => {
       expect(patientResources).not.toContain(Resource.PATIENT);
     });
 
+    it('should type resources by owner scope', () => {
+      const userResources: ResourceForScope<ResourceScope.USER>[] = getResourcesByScope(ResourceScope.USER);
+      const patientResources: ResourceForScope<ResourceScope.PATIENT>[] = getResourcesByScope(ResourceScope.PATIENT);
+
+      // @ts-expect-error PATIENT is account-scoped, not user-scoped.
+      const invalidUserResources: Resource.PATIENT[] = getResourcesByScope(ResourceScope.USER);
+
+      expect(userResources).toContain(Resource.USER);
+      expect(patientResources).toEqual([Resource.PATIENT_PUBLIC_PROPERTY, Resource.PATIENT_MEDICAL_PROPERTY]);
+      expect(invalidUserResources).toContain(Resource.USER);
+    });
+
     it('should expose USER_RESOURCES, ACCOUNT_RESOURCES and PATIENT_RESOURCES arrays', () => {
       expect(USER_RESOURCES).toContain(Resource.USER);
       expect(USER_RESOURCES).toContain(Resource.CALENDAR_TOKEN);
@@ -146,6 +172,20 @@ describe('Operations Module', () => {
       expect(getActionsByAccess(ActionAccess.READ)).toEqual([Action.VIEW, Action.LIST]);
       expect(getActionsByAccess(ActionAccess.WRITE)).toContain(Action.DELETE);
     });
+
+    it('should type actions by access level', () => {
+      const readActions: ActionForAccess<ActionAccess.READ>[] = getActionsByAccess(ActionAccess.READ);
+      const writeActions: ActionForAccess<ActionAccess.WRITE>[] = getActionsByAccess(ActionAccess.WRITE);
+      const viewAccess: ActionAccess.READ = getActionAccess(Action.VIEW);
+
+      // @ts-expect-error CREATE is not a read action.
+      const invalidReadActions: Action.CREATE[] = getActionsByAccess(ActionAccess.READ);
+
+      expect(readActions).toEqual([Action.VIEW, Action.LIST]);
+      expect(writeActions).toContain(Action.CREATE);
+      expect(viewAccess).toBe(ActionAccess.READ);
+      expect(invalidReadActions).toEqual([Action.VIEW, Action.LIST]);
+    });
   });
 
   describe('Backend APIs', () => {
@@ -166,10 +206,38 @@ describe('Operations Module', () => {
       expect(getResourceActions(Resource.MEDICAL_SERVICE_SLOT)).toEqual([Action.LIST]);
     });
 
+    it('should type actions by resource', () => {
+      const medicationActions: Action.LIST[] = getResourceActions(Resource.MEDICATION);
+      const patientReadActions: AllowedActionForAccess<Resource.PATIENT, ActionAccess.READ>[] =
+        getResourceActionsByAccess(Resource.PATIENT, ActionAccess.READ);
+
+      // @ts-expect-error VIEW is not allowed on MEDICATION.
+      const invalidMedicationActions: Action.VIEW[] = getResourceActions(Resource.MEDICATION);
+
+      expect(medicationActions).toEqual([Action.LIST]);
+      expect(patientReadActions).toEqual([Action.LIST, Action.VIEW]);
+      expect(invalidMedicationActions).toEqual([Action.LIST]);
+    });
+
     it('should fetch all resources for one category', () => {
       expect(getResourcesByCategory(ResourceCategory.CORE)).toEqual([Resource.ACCOUNT]);
       expect(getResourcesByCategory(ResourceCategory.SCHEDULING)).toEqual([Resource.MEDICAL_SERVICE_SLOT]);
       expect(getResourcesByCategory(ResourceCategory.SYSTEM)).toEqual([]);
+    });
+
+    it('should type resources by category', () => {
+      const coreResources: ResourceForCategory<ResourceCategory.CORE>[] = getResourcesByCategory(ResourceCategory.CORE);
+      const selectedResources: (Resource.ACCOUNT | Resource.MEDICAL_SERVICE_SLOT)[] = getResourcesByCategories([
+        ResourceCategory.CORE,
+        ResourceCategory.SCHEDULING,
+      ] as const);
+
+      // @ts-expect-error PATIENT is not a core resource.
+      const invalidCoreResources: Resource.PATIENT[] = getResourcesByCategory(ResourceCategory.CORE);
+
+      expect(coreResources).toEqual([Resource.ACCOUNT]);
+      expect(selectedResources).toEqual([Resource.ACCOUNT, Resource.MEDICAL_SERVICE_SLOT]);
+      expect(invalidCoreResources).toEqual([Resource.ACCOUNT]);
     });
 
     it('should fetch all resources for many categories', () => {
@@ -187,6 +255,22 @@ describe('Operations Module', () => {
       expect(all[Resource.MEDICATION]).toEqual([Action.LIST]);
       expect(all[Resource.MEDICAL_SERVICE_SLOT]).toEqual([Action.LIST]);
       expect(all[Resource.CALENDAR_SYNC]).toEqual([Action.ENABLE, Action.DISABLE, Action.VIEW]);
+    });
+
+    it('should type full resource action maps', () => {
+      const all: Readonly<ResourceActions> = getAllResourceActions();
+      const allRead: Readonly<ResourceActionsByAccess<ActionAccess.READ>> = getAllResourceActionsByAccess(
+        ActionAccess.READ,
+      );
+      const medicationActions: Action.LIST[] = all[Resource.MEDICATION];
+      const patientReadActions: (Action.LIST | Action.VIEW)[] = allRead[Resource.PATIENT];
+
+      // @ts-expect-error MEDICATION only allows LIST.
+      const invalidMedicationActions: Action.VIEW[] = all[Resource.MEDICATION];
+
+      expect(medicationActions).toEqual([Action.LIST]);
+      expect(patientReadActions).toEqual([Action.LIST, Action.VIEW]);
+      expect(invalidMedicationActions).toEqual([Action.LIST]);
     });
 
     it('should filter resource actions by access', () => {
@@ -212,6 +296,19 @@ describe('Operations Module', () => {
       expect(writeOps.map((op) => op.toString())).toEqual(['PATIENT:CREATE', 'PATIENT:UPDATE', 'PATIENT:DELETE']);
     });
 
+    it('should type resource operations filtered by access', () => {
+      const readOps = getResourceOperationsByAccess(Resource.PATIENT, ActionAccess.READ);
+      const typedReadOps: ResourceOperationForAccess<Resource.PATIENT, ActionAccess.READ>[] = readOps;
+      const readOperationStrings: ('PATIENT:LIST' | 'PATIENT:VIEW')[] = readOps.map((op) => op.toString());
+
+      // @ts-expect-error CREATE is filtered out of read operations.
+      const invalidReadOps: Operation<Resource.PATIENT, Action.CREATE>[] = readOps;
+
+      expect(typedReadOps.map((op) => op.toString())).toEqual(['PATIENT:LIST', 'PATIENT:VIEW']);
+      expect(readOperationStrings).toEqual(['PATIENT:LIST', 'PATIENT:VIEW']);
+      expect(invalidReadOps).toBe(readOps);
+    });
+
     it('should generate operations for resources based on action list', () => {
       const ops = generateOperationsForResources(
         [Resource.PATIENT, Resource.CALENDAR_TOKEN],
@@ -224,6 +321,37 @@ describe('Operations Module', () => {
         'CALENDAR_TOKEN:VIEW',
         'CALENDAR_TOKEN:ROTATE',
       ]);
+    });
+
+    it('should type generated operations from resource and action inputs', () => {
+      const ops = generateOperationsForResources(
+        [Resource.PATIENT, Resource.CALENDAR_TOKEN] as const,
+        [Action.VIEW, Action.UPDATE, Action.ROTATE] as const,
+      );
+      const typedOps: GeneratedOperationFor<
+        Resource.PATIENT | Resource.CALENDAR_TOKEN,
+        Action.VIEW | Action.UPDATE | Action.ROTATE
+      >[] = ops;
+
+      const patientOps = generateOperationsForResources(
+        [Resource.PATIENT] as const,
+        [Action.VIEW, Action.ROTATE] as const,
+      );
+      const patientOnlyViewOps: Operation<Resource.PATIENT, Action.VIEW>[] = patientOps;
+      const patientOperationStrings: 'PATIENT:VIEW'[] = patientOps.map((op) => op.toString());
+
+      // @ts-expect-error ROTATE is filtered out of the generated PATIENT operations.
+      const invalidPatientOps: Operation<Resource.PATIENT, Action.ROTATE>[] = patientOps;
+
+      expect(typedOps.map((op) => op.toString())).toEqual([
+        'PATIENT:VIEW',
+        'PATIENT:UPDATE',
+        'CALENDAR_TOKEN:VIEW',
+        'CALENDAR_TOKEN:ROTATE',
+      ]);
+      expect(patientOnlyViewOps.map((op) => op.toString())).toEqual(['PATIENT:VIEW']);
+      expect(patientOperationStrings).toEqual(['PATIENT:VIEW']);
+      expect(invalidPatientOps).toBe(patientOps);
     });
 
     it('should ignore duplicate inputs when generating operations', () => {
@@ -246,6 +374,17 @@ describe('Operations Module', () => {
       expect(isValidOperation(Resource.MEDICATION, Action.VIEW)).toBe(false);
       expect(isValidOperation(Resource.MEDICAL_SERVICE_SLOT, Action.VIEW)).toBe(false);
       expect(isValidOperation(Resource.CALENDAR_TOKEN, Action.DELETE)).toBe(false);
+    });
+
+    it('should narrow action type for a resource', () => {
+      const action = Action.LIST as Action;
+
+      if (isValidOperation(Resource.MEDICATION, action)) {
+        const medicationAction: Action.LIST = action;
+        expect(medicationAction).toBe(Action.LIST);
+      } else {
+        throw new Error('expected LIST to be valid for MEDICATION');
+      }
     });
   });
 
@@ -301,6 +440,19 @@ describe('Operations Module', () => {
       const parsed = Operation.fromString('PATIENT:VIEW');
       expect(parsed?.resource).toBe(Resource.PATIENT);
       expect(parsed?.action).toBe(Action.VIEW);
+    });
+
+    it('should type parsed literal operation strings', () => {
+      const parsed = Operation.fromString('CALENDAR_TOKEN:ROTATE');
+      const typedParsed: OperationFromString<'CALENDAR_TOKEN:ROTATE'> = parsed;
+      const operationString: 'CALENDAR_TOKEN:ROTATE' = typedParsed.toString();
+      const operationResource: ResourceFromOperation<'ROLE:CREATE'> = getResourceFromOperation('ROLE:CREATE');
+      const operationAction: ActionFromOperation<'CALENDAR_TOKEN:ROTATE'> =
+        getActionFromOperation('CALENDAR_TOKEN:ROTATE');
+
+      expect(operationString).toBe('CALENDAR_TOKEN:ROTATE');
+      expect(operationResource).toBe(Resource.ROLE);
+      expect(operationAction).toBe(Action.ROTATE);
     });
 
     it('should reject invalid operation strings', () => {

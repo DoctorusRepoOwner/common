@@ -27,12 +27,17 @@ export {
   getResourcesByCategory,
   getResourcesByCategories,
 } from './resources';
+export type { ResourceForScope, ResourceForCategory } from './resources';
 export { Action, ActionAccess, getActionAccess, isReadAction, isWriteAction, getActionsByAccess } from './actions';
+export type { ActionForAccess } from './actions';
 export {
   Operation,
   OPERATION,
   AllowedOperation,
   AllowedOperationFor,
+  ResourceFromOperation,
+  ActionFromOperation,
+  OperationFromString,
   getResourceFromOperation,
   getActionFromOperation,
 } from './operation';
@@ -46,5 +51,12 @@ export {
   generateOperationsForResources,
   isValidOperation,
 } from './resource-actions';
-export type { AllowedActionFor } from './resource-actions';
+export type {
+  AllowedActionFor,
+  AllowedActionForAccess,
+  GeneratedOperationFor,
+  ResourceActions,
+  ResourceActionsByAccess,
+  ResourceOperationForAccess,
+} from './resource-actions';
 export * from './labels';

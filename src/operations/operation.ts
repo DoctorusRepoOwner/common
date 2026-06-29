@@ -12,15 +12,23 @@ export type OPERATION = `${Resource}:${Action}`;
  */
 export type AllowedOperationFor<R extends Resource> = R extends Resource ? `${R}:${AllowedActionFor<R>}` : never;
 export type AllowedOperation = AllowedOperationFor<Resource>;
+export type ResourceFromOperation<O extends OPERATION> = O extends `${infer R extends Resource}:${Action}` ? R : never;
+export type ActionFromOperation<O extends OPERATION> = O extends `${Resource}:${infer A extends Action}` ? A : never;
+export type OperationFromString<O extends AllowedOperation> =
+  O extends `${infer R extends Resource}:${infer A extends Action}`
+    ? A extends AllowedActionFor<R>
+      ? Operation<R, A>
+      : never
+    : never;
 
 /**
  * Operation in RESOURCE:ACTION format
  */
-export class Operation<R extends Resource = Resource> {
+export class Operation<R extends Resource = Resource, A extends AllowedActionFor<R> = AllowedActionFor<R>> {
   /**
    * Create operation with compile-time action restriction based on resource.
    */
-  static create<R extends Resource>(resource: R, action: AllowedActionFor<R>): Operation<R> {
+  static create<R extends Resource, A extends AllowedActionFor<R>>(resource: R, action: A): Operation<R, A> {
     return new Operation(resource, action);
   }
 
@@ -29,6 +37,8 @@ export class Operation<R extends Resource = Resource> {
    * @param operationString - String in RESOURCE:ACTION format
    * @returns Operation instance or null if invalid
    */
+  static fromString<const O extends AllowedOperation>(operationString: O): OperationFromString<O>;
+  static fromString(operationString: string): Operation | null;
   static fromString(operationString: string): Operation | null {
     const parts = operationString.split(':');
     if (parts.length !== 2) {
@@ -52,14 +62,14 @@ export class Operation<R extends Resource = Resource> {
 
   constructor(
     public readonly resource: R,
-    public readonly action: AllowedActionFor<R>,
+    public readonly action: A,
   ) {}
 
   /**
    * Get operation string in RESOURCE:ACTION format
    */
-  toString(): OPERATION {
-    return `${this.resource}:${this.action}` as OPERATION;
+  toString(): `${R}:${A}` {
+    return `${this.resource}:${this.action}` as `${R}:${A}`;
   }
 
   /**
@@ -72,7 +82,7 @@ export class Operation<R extends Resource = Resource> {
   /**
    * Convert to JSON representation
    */
-  toJSON(): { resource: R; action: AllowedActionFor<R>; operation: OPERATION } {
+  toJSON(): { resource: R; action: A; operation: `${R}:${A}` } {
     return {
       resource: this.resource,
       action: this.action,
@@ -92,6 +102,8 @@ export class Operation<R extends Resource = Resource> {
  * getResourceFromOperation("INVALID:ACTION") // Returns: null
  * ```
  */
+export function getResourceFromOperation<const O extends OPERATION>(operation: O): ResourceFromOperation<O>;
+export function getResourceFromOperation(operation: string): Resource | null;
 export function getResourceFromOperation(operation: string): Resource | null {
   const parts = operation.split(':');
   if (parts.length !== 2) {
@@ -119,6 +131,8 @@ export function getResourceFromOperation(operation: string): Resource | null {
  * getActionFromOperation("PATIENT:INVALID") // Returns: null
  * ```
  */
+export function getActionFromOperation<const O extends OPERATION>(operation: O): ActionFromOperation<O>;
+export function getActionFromOperation(operation: string): Action | null;
 export function getActionFromOperation(operation: string): Action | null {
   const parts = operation.split(':');
   if (parts.length !== 2) {

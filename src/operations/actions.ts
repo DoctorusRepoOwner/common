@@ -30,7 +30,7 @@ export enum ActionAccess {
   WRITE = 'WRITE',
 }
 
-const ACTION_ACCESS: Record<Action, ActionAccess> = {
+const ACTION_ACCESS = {
   [Action.CREATE]: ActionAccess.WRITE,
   [Action.VIEW]: ActionAccess.READ,
   [Action.LIST]: ActionAccess.READ,
@@ -47,9 +47,13 @@ const ACTION_ACCESS: Record<Action, ActionAccess> = {
   [Action.UPSERT]: ActionAccess.WRITE,
   [Action.ROTATE]: ActionAccess.WRITE,
   [Action.TRANSFER_OWNERSHIP]: ActionAccess.WRITE,
-};
+} as const satisfies Record<Action, ActionAccess>;
 
-export function getActionAccess(action: Action): ActionAccess {
+export type ActionForAccess<A extends ActionAccess> = {
+  [ActionName in Action]: (typeof ACTION_ACCESS)[ActionName] extends A ? ActionName : never;
+}[Action];
+
+export function getActionAccess<A extends Action>(action: A): (typeof ACTION_ACCESS)[A] {
   return ACTION_ACCESS[action];
 }
 
@@ -61,6 +65,8 @@ export function isWriteAction(action: Action): boolean {
   return ACTION_ACCESS[action] === ActionAccess.WRITE;
 }
 
-export function getActionsByAccess(access: ActionAccess): Action[] {
-  return (Object.values(Action) as Action[]).filter((action) => ACTION_ACCESS[action] === access);
+export function getActionsByAccess<A extends ActionAccess>(access: A): ActionForAccess<A>[] {
+  return (Object.values(Action) as Action[]).filter(
+    (action) => ACTION_ACCESS[action] === access,
+  ) as ActionForAccess<A>[];
 }

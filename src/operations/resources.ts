@@ -47,17 +47,7 @@ export enum ResourceCategory {
   SYSTEM = 'system',
 }
 
-const RESOURCE_CATEGORIES: {
-  core: Resource[];
-  membership: Resource[];
-  clinical: Resource[];
-  documents: Resource[];
-  settings: Resource[];
-  integration: Resource[];
-  scheduling: Resource[];
-  external: Resource[];
-  system: Resource[];
-} = {
+const RESOURCE_CATEGORIES = {
   core: [Resource.ACCOUNT],
   membership: [Resource.USER, Resource.MEMBERSHIP],
   clinical: [
@@ -87,7 +77,7 @@ const RESOURCE_CATEGORIES: {
   scheduling: [Resource.MEDICAL_SERVICE_SLOT],
   external: [Resource.MEDICATION],
   system: [],
-} as const;
+} as const satisfies Record<ResourceCategory, readonly Resource[]>;
 
 const LEGACY_RESOURCE_CATEGORIES: {
   medical: Resource[];
@@ -142,7 +132,7 @@ export enum ResourceScope {
   ACCOUNT = 'account',
 }
 
-const RESOURCE_SCOPE: Record<Resource, ResourceScope> = {
+const RESOURCE_SCOPE = {
   // Account-scoped resources
   [Resource.ACCOUNT]: ResourceScope.ACCOUNT,
   [Resource.LOCATION]: ResourceScope.ACCOUNT,
@@ -179,7 +169,13 @@ const RESOURCE_SCOPE: Record<Resource, ResourceScope> = {
   [Resource.PATIENT_MEDICAL_PROPERTY]: ResourceScope.PATIENT,
   [Resource.GENERATED_DOCUMENT]: ResourceScope.ACCOUNT,
   [Resource.UPLOAD_DOCUMENT]: ResourceScope.ACCOUNT,
-};
+} as const satisfies Record<Resource, ResourceScope>;
+
+export type ResourceForScope<S extends ResourceScope> = {
+  [ResourceName in Resource]: (typeof RESOURCE_SCOPE)[ResourceName] extends S ? ResourceName : never;
+}[Resource];
+
+export type ResourceForCategory<C extends ResourceCategory> = (typeof RESOURCE_CATEGORIES)[C][number];
 
 export const USER_RESOURCES: Resource[] = (Object.entries(RESOURCE_SCOPE) as [Resource, ResourceScope][])
   .filter(([, owner]) => owner === ResourceScope.USER)
@@ -193,7 +189,7 @@ export const PATIENT_RESOURCES: Resource[] = (Object.entries(RESOURCE_SCOPE) as 
   .filter(([, owner]) => owner === ResourceScope.PATIENT)
   .map(([resource]) => resource);
 
-export function getResourceScope(resource: Resource): ResourceScope {
+export function getResourceScope<R extends Resource>(resource: R): (typeof RESOURCE_SCOPE)[R] {
   return RESOURCE_SCOPE[resource];
 }
 
@@ -209,8 +205,10 @@ export function isPatientResource(resource: Resource): boolean {
   return RESOURCE_SCOPE[resource] === ResourceScope.PATIENT;
 }
 
-export function getResourcesByScope(owner: ResourceScope): Resource[] {
-  return (Object.entries(RESOURCE_SCOPE) as [Resource, ResourceScope][]).filter(([, o]) => o === owner).map(([r]) => r);
+export function getResourcesByScope<S extends ResourceScope>(owner: S): ResourceForScope<S>[] {
+  return (Object.entries(RESOURCE_SCOPE) as [Resource, ResourceScope][])
+    .filter(([, o]) => o === owner)
+    .map(([r]) => r) as ResourceForScope<S>[];
 }
 
 export const MEDICAL_RESOURCES: Resource[] = [...LEGACY_RESOURCE_CATEGORIES.medical];
@@ -243,11 +241,13 @@ export function getResourceCategories(): Readonly<typeof RESOURCE_CATEGORIES> {
   return RESOURCE_CATEGORIES;
 }
 
-export function getResourcesByCategory(category: ResourceCategory): Resource[] {
-  return [...RESOURCE_CATEGORIES[category]];
+export function getResourcesByCategory<C extends ResourceCategory>(category: C): ResourceForCategory<C>[] {
+  return [...RESOURCE_CATEGORIES[category]] as ResourceForCategory<C>[];
 }
 
-export function getResourcesByCategories(categories: ResourceCategory[]): Resource[] {
+export function getResourcesByCategories<const C extends readonly ResourceCategory[]>(
+  categories: C,
+): ResourceForCategory<C[number]>[] {
   const resources = categories.flatMap((category) => RESOURCE_CATEGORIES[category]);
-  return Array.from(new Set(resources));
+  return Array.from(new Set(resources)) as ResourceForCategory<C[number]>[];
 }
