@@ -34,6 +34,7 @@ import {
   ResourceCategory,
   ResourceScope,
 } from '../src/operations';
+import type { AllowedOperation, AllowedOperationFor } from '../src/operations';
 
 describe('Operations Module', () => {
   describe('Resource', () => {
@@ -271,6 +272,23 @@ describe('Operations Module', () => {
   });
 
   describe('Operation helpers', () => {
+    it('should expose allowed operation string unions', () => {
+      const operations = ['PATIENT:VIEW', 'MEDICATION:LIST', 'MEDICAL_SERVICE:CHECK_IN'] satisfies AllowedOperation[];
+      const patientOperation = 'PATIENT:DELETE' satisfies AllowedOperationFor<Resource.PATIENT>;
+
+      expect(operations).toEqual(['PATIENT:VIEW', 'MEDICATION:LIST', 'MEDICAL_SERVICE:CHECK_IN']);
+      expect(patientOperation).toBe('PATIENT:DELETE');
+    });
+
+    it('should reject invalid operation strings at compile time', () => {
+      // @ts-expect-error MEDICATION only allows LIST.
+      void ('MEDICATION:VIEW' satisfies AllowedOperation);
+      // @ts-expect-error MEDICAL_SERVICE_SLOT only allows LIST.
+      void ('MEDICAL_SERVICE_SLOT:CREATE' satisfies AllowedOperation);
+      // @ts-expect-error Patient operation strings must start with PATIENT.
+      void ('ROLE:CREATE' satisfies AllowedOperationFor<Resource.PATIENT>);
+    });
+
     it('should create operation with factory helper', () => {
       const op = Operation.create(Resource.PATIENT, Action.VIEW);
       expect(op.toString()).toBe('PATIENT:VIEW');

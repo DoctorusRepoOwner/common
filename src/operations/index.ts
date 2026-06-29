@@ -28,7 +28,14 @@ export {
   getResourcesByCategories,
 } from './resources';
 export { Action, ActionAccess, getActionAccess, isReadAction, isWriteAction, getActionsByAccess } from './actions';
-export { Operation, OPERATION, getResourceFromOperation, getActionFromOperation } from './operation';
+export {
+  Operation,
+  OPERATION,
+  AllowedOperation,
+  AllowedOperationFor,
+  getResourceFromOperation,
+  getActionFromOperation,
+} from './operation';
 export {
   RESOURCE_ACTIONS,
   getResourceActions,

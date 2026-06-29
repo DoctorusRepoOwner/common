@@ -8,6 +8,12 @@ import { Resource } from './resources';
 export type OPERATION = `${Resource}:${Action}`;
 
 /**
+ * Valid operation string union derived from RESOURCE_ACTIONS.
+ */
+export type AllowedOperationFor<R extends Resource> = R extends Resource ? `${R}:${AllowedActionFor<R>}` : never;
+export type AllowedOperation = AllowedOperationFor<Resource>;
+
+/**
  * Operation in RESOURCE:ACTION format
  */
 export class Operation<R extends Resource = Resource> {
