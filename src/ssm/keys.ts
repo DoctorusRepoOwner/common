@@ -6,8 +6,17 @@ export enum SSM_PARAM_KEY {
   COGNITO_USER_POOL_WEB_CLIENT_ID = 'user-pool-web-client-id',
   COGNITO_OAUTH_DOMAIN = 'oauth-domain',
   AUTHORIZATION_CACHE_CONFIG = 'authorization-cache-config',
+  /**
+   * @deprecated Use MEDICAL_SPACE_DESKTOP_RUM_GUEST_ROLE_ARN or MEDICAL_SPACE_MOBILE_PWA_RUM_GUEST_ROLE_ARN.
+   */
   RUM_GUEST_ROLE_ARN = 'rum-guest-rome-arn',
+  /**
+   * @deprecated Use MEDICAL_SPACE_DESKTOP_RUM_IDENTITY_POOL_ID or MEDICAL_SPACE_MOBILE_PWA_RUM_IDENTITY_POOL_ID.
+   */
   RUM_IDENTITY_POOL_ID = 'rum-identity-pool-id',
+  /**
+   * @deprecated Use MEDICAL_SPACE_DESKTOP_RUM_APP_ID or MEDICAL_SPACE_MOBILE_PWA_RUM_APP_ID.
+   */
   RUM_APP_ID = 'rum-app-id',
   WEBSITE_RUM_GUEST_ROLE_ARN = '/website/rum/guest-role-arn',
   WEBSITE_RUM_IDENTITY_POOL_ID = '/website/rum/identity-pool-id',
@@ -16,15 +25,41 @@ export enum SSM_PARAM_KEY {
   GRAPHQL_WS_URL = 'graphql-ws-url',
   GRAPHQL_HOST = 'graphql-host',
   GRAPHQL_API_ID = 'graphql-api-id',
+  /**
+   * @deprecated Use MEDICAL_SPACE_DESKTOP_APP_URL or MEDICAL_SPACE_MOBILE_PWA_APP_URL.
+   */
   MEDICALSPACE_WEB_APP_URL = 'medicalspace-web-app-url',
+  MEDICAL_SPACE_DESKTOP_APP_URL = '/medical-space/desktop/app-url',
+  MEDICAL_SPACE_DESKTOP_RUM_APP_ID = '/medical-space/desktop/rum/app-id',
+  MEDICAL_SPACE_DESKTOP_RUM_GUEST_ROLE_ARN = '/medical-space/desktop/rum/guest-role-arn',
+  MEDICAL_SPACE_DESKTOP_RUM_IDENTITY_POOL_ID = '/medical-space/desktop/rum/identity-pool-id',
+  MEDICAL_SPACE_DESKTOP_DIST_BUCKET_NAME = '/medical-space/desktop/dist-bucket-name',
+  MEDICAL_SPACE_DESKTOP_SOURCE_MAPS_BUCKET_NAME = '/medical-space/desktop/source-maps-bucket-name',
+  MEDICAL_SPACE_DESKTOP_DISTRIBUTION_ID = '/medical-space/desktop/distribution-id',
+  MEDICAL_SPACE_MOBILE_PWA_APP_URL = '/medical-space/mobile-pwa/app-url',
+  MEDICAL_SPACE_MOBILE_PWA_RUM_APP_ID = '/medical-space/mobile-pwa/rum/app-id',
+  MEDICAL_SPACE_MOBILE_PWA_RUM_GUEST_ROLE_ARN = '/medical-space/mobile-pwa/rum/guest-role-arn',
+  MEDICAL_SPACE_MOBILE_PWA_RUM_IDENTITY_POOL_ID = '/medical-space/mobile-pwa/rum/identity-pool-id',
+  MEDICAL_SPACE_MOBILE_PWA_DIST_BUCKET_NAME = '/medical-space/mobile-pwa/dist-bucket-name',
+  MEDICAL_SPACE_MOBILE_PWA_SOURCE_MAPS_BUCKET_NAME = '/medical-space/mobile-pwa/source-maps-bucket-name',
+  MEDICAL_SPACE_MOBILE_PWA_DISTRIBUTION_ID = '/medical-space/mobile-pwa/distribution-id',
   MEDICAL_ASSETS_AWS_CLOUDFRONT_PRIVATE_KEY = 'medical-assets-dist-private-key',
   MEDICAL_ASSETS_AWS_CLOUDFRONT_KEY_ID = 'medical-assets-dist-public-key-id',
   MEDICAL_ASSETS_AWS_CLOUDFRONT_PUB_KEY = 'medical-assets-dist-public-key',
   MEDICAL_ASSETS_BUCKET_NAME = 'medical-assets-bucket-name',
   PUBLIC_ASSETS_BUCKET_NAME = 'public-assets-bucket-name',
   PUBLIC_ASSETS_DISTRIBUTION_DOMAIN_NAME = 'public-assets-dist-domain-name',
+  /**
+   * @deprecated Use MEDICAL_SPACE_DESKTOP_DIST_BUCKET_NAME or MEDICAL_SPACE_MOBILE_PWA_DIST_BUCKET_NAME.
+   */
   DIST_BUCKET_NAME = 'dist-bucket-name',
+  /**
+   * @deprecated Use MEDICAL_SPACE_DESKTOP_SOURCE_MAPS_BUCKET_NAME or MEDICAL_SPACE_MOBILE_PWA_SOURCE_MAPS_BUCKET_NAME.
+   */
   MAPS_BUCKET_NAME = 'maps-bucket-name',
+  /**
+   * @deprecated Use MEDICAL_SPACE_DESKTOP_DISTRIBUTION_ID or MEDICAL_SPACE_MOBILE_PWA_DISTRIBUTION_ID.
+   */
   DISTRIBUTION_ID = 'distribution-id',
   WEBSITE_DIST_BUCKET_NAME = '/website/dist-bucket-name',
   WEBSITE_DIST_MAPS_BUCKET_NAME = '/website/dist-maps-bucket-name',
@@ -65,13 +100,13 @@ export const SSM_PARAM_METADATA: Record<SSM_PARAM_KEY, SSMParamMetadata> = {
     description: 'Configuration used by services to cache authorization decisions.',
   },
   [SSM_PARAM_KEY.RUM_GUEST_ROLE_ARN]: {
-    description: 'IAM role ARN assumed by guest users for CloudWatch RUM telemetry.',
+    description: 'Legacy IAM role ARN assumed by guest users for CloudWatch RUM telemetry.',
   },
   [SSM_PARAM_KEY.RUM_IDENTITY_POOL_ID]: {
-    description: 'Cognito Identity Pool identifier used by CloudWatch RUM guest access.',
+    description: 'Legacy Cognito Identity Pool identifier used by CloudWatch RUM guest access.',
   },
   [SSM_PARAM_KEY.RUM_APP_ID]: {
-    description: 'CloudWatch RUM application identifier for the main application.',
+    description: 'Legacy CloudWatch RUM application identifier for the main application.',
   },
   [SSM_PARAM_KEY.WEBSITE_RUM_GUEST_ROLE_ARN]: {
     description: 'IAM role ARN assumed by website guest users for CloudWatch RUM telemetry.',
@@ -95,7 +130,49 @@ export const SSM_PARAM_METADATA: Record<SSM_PARAM_KEY, SSMParamMetadata> = {
     description: 'AWS AppSync GraphQL API identifier.',
   },
   [SSM_PARAM_KEY.MEDICALSPACE_WEB_APP_URL]: {
-    description: 'Base URL of the MedicalSpace web application.',
+    description: 'Legacy base URL of the MedicalSpace web application.',
+  },
+  [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_APP_URL]: {
+    description: 'Base URL of the Medical Space desktop application.',
+  },
+  [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_RUM_APP_ID]: {
+    description: 'CloudWatch RUM application identifier for the Medical Space desktop application.',
+  },
+  [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_RUM_GUEST_ROLE_ARN]: {
+    description: 'IAM role ARN assumed by desktop guest users for Medical Space CloudWatch RUM telemetry.',
+  },
+  [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_RUM_IDENTITY_POOL_ID]: {
+    description: 'Cognito Identity Pool identifier used by Medical Space desktop CloudWatch RUM guest access.',
+  },
+  [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_DIST_BUCKET_NAME]: {
+    description: 'S3 distribution bucket name for Medical Space desktop static files.',
+  },
+  [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_SOURCE_MAPS_BUCKET_NAME]: {
+    description: 'S3 bucket name storing Medical Space desktop source maps.',
+  },
+  [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_DISTRIBUTION_ID]: {
+    description: 'CloudFront distribution identifier for the Medical Space desktop application.',
+  },
+  [SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_APP_URL]: {
+    description: 'Base URL of the Medical Space mobile PWA.',
+  },
+  [SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_RUM_APP_ID]: {
+    description: 'CloudWatch RUM application identifier for the Medical Space mobile PWA.',
+  },
+  [SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_RUM_GUEST_ROLE_ARN]: {
+    description: 'IAM role ARN assumed by mobile PWA guest users for Medical Space CloudWatch RUM telemetry.',
+  },
+  [SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_RUM_IDENTITY_POOL_ID]: {
+    description: 'Cognito Identity Pool identifier used by Medical Space mobile PWA CloudWatch RUM guest access.',
+  },
+  [SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_DIST_BUCKET_NAME]: {
+    description: 'S3 distribution bucket name for Medical Space mobile PWA static files.',
+  },
+  [SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_SOURCE_MAPS_BUCKET_NAME]: {
+    description: 'S3 bucket name storing Medical Space mobile PWA source maps.',
+  },
+  [SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_DISTRIBUTION_ID]: {
+    description: 'CloudFront distribution identifier for the Medical Space mobile PWA.',
   },
   [SSM_PARAM_KEY.MEDICAL_ASSETS_AWS_CLOUDFRONT_PRIVATE_KEY]: {
     description: 'CloudFront private key used to sign URLs or cookies for medical assets.',
@@ -116,13 +193,13 @@ export const SSM_PARAM_METADATA: Record<SSM_PARAM_KEY, SSMParamMetadata> = {
     description: 'CloudFront distribution domain name serving public assets.',
   },
   [SSM_PARAM_KEY.DIST_BUCKET_NAME]: {
-    description: 'Primary S3 distribution bucket name for application static files.',
+    description: 'Legacy primary S3 distribution bucket name for application static files.',
   },
   [SSM_PARAM_KEY.MAPS_BUCKET_NAME]: {
-    description: 'S3 bucket name used for map-related assets or tiles.',
+    description: 'Legacy S3 bucket name used for map-related assets or tiles.',
   },
   [SSM_PARAM_KEY.DISTRIBUTION_ID]: {
-    description: 'CloudFront distribution identifier for the main application.',
+    description: 'Legacy CloudFront distribution identifier for the main application.',
   },
   [SSM_PARAM_KEY.WEBSITE_DIST_BUCKET_NAME]: {
     description: 'S3 distribution bucket name for the public website.',

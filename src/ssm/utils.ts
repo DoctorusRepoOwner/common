@@ -16,6 +16,10 @@ import { SSM_PARAM_KEY } from './keys';
  * ```
  */
 export function buildSSMPath(env: string | null, key: SSM_PARAM_KEY): string {
+  if (key.startsWith('/')) {
+    return key;
+  }
+
   return env ? `/${env}/${key}` : `/${key}`;
 }
 
@@ -52,6 +56,11 @@ export function buildSSMPathWithPrefix(prefix: string, key: SSM_PARAM_KEY): stri
  * ```
  */
 export function extractEnvFromPath(path: string): string | null {
+  const enumValues = Object.values(SSM_PARAM_KEY) as string[];
+  if (enumValues.includes(path)) {
+    return null;
+  }
+
   const match = path.match(/^\/([^/]+)\//);
   return match ? match[1] : null;
 }
@@ -71,11 +80,20 @@ export function extractEnvFromPath(path: string): string | null {
  * ```
  */
 export function extractKeyFromPath(path: string): SSM_PARAM_KEY | null {
+  const enumValues = Object.values(SSM_PARAM_KEY) as string[];
+  const scopedKey = enumValues
+    .filter((value) => value.startsWith('/'))
+    .sort((a, b) => b.length - a.length)
+    .find((value) => path === value || path.endsWith(value));
+
+  if (scopedKey) {
+    return scopedKey as SSM_PARAM_KEY;
+  }
+
   const parts = path.split('/');
   const keyValue = parts[parts.length - 1];
 
   // Check if the key value matches any enum value
-  const enumValues = Object.values(SSM_PARAM_KEY) as string[];
   if (enumValues.includes(keyValue)) {
     return keyValue as SSM_PARAM_KEY;
   }

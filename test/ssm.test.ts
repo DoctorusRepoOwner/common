@@ -36,6 +36,14 @@ describe('SSM Utilities', () => {
       expect(path1).toBe('/base-host');
       expect(path2).toBe('/email-from-address');
     });
+
+    it('should return scoped parameter paths without adding an environment prefix', () => {
+      const desktopPath = buildSSMPath('prod', SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_APP_URL);
+      const mobilePwaPath = buildSSMPath('prod', SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_APP_URL);
+
+      expect(desktopPath).toBe('/medical-space/desktop/app-url');
+      expect(mobilePwaPath).toBe('/medical-space/mobile-pwa/app-url');
+    });
   });
 
   describe('buildSSMPathWithPrefix', () => {
@@ -80,6 +88,11 @@ describe('SSM Utilities', () => {
       const env = extractEnvFromPath('/db-user');
       expect(env).toBeNull();
     });
+
+    it('should return null for scoped parameter paths', () => {
+      expect(extractEnvFromPath('/medical-space/desktop/app-url')).toBeNull();
+      expect(extractEnvFromPath('/medical-space/mobile-pwa/app-url')).toBeNull();
+    });
   });
 
   describe('extractKeyFromPath', () => {
@@ -103,6 +116,13 @@ describe('SSM Utilities', () => {
       expect(key).toBeNull();
     });
 
+    it('should extract key from scoped parameter paths', () => {
+      expect(extractKeyFromPath('/medical-space/desktop/app-url')).toBe(SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_APP_URL);
+      expect(extractKeyFromPath('/medical-space/mobile-pwa/app-url')).toBe(
+        SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_APP_URL,
+      );
+    });
+
     it('should handle all SSM_PARAM_KEY values', () => {
       const testCases = [
         {
@@ -116,6 +136,14 @@ describe('SSM Utilities', () => {
         {
           path: '/staging/rum-app-id',
           expected: SSM_PARAM_KEY.RUM_APP_ID,
+        },
+        {
+          path: '/medical-space/desktop/rum/app-id',
+          expected: SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_RUM_APP_ID,
+        },
+        {
+          path: '/medical-space/mobile-pwa/rum/app-id',
+          expected: SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_RUM_APP_ID,
         },
       ];
 
@@ -156,6 +184,42 @@ describe('SSM Utilities', () => {
       expect(SSM_PARAM_KEY.GRAPHQL_API_ID).toBe('graphql-api-id');
       expect(SSM_PARAM_KEY.BASE_HOST).toBe('base-host');
       expect(SSM_PARAM_KEY.AUTHORIZATION_CACHE_CONFIG).toBe('authorization-cache-config');
+    });
+
+    it('should have all Medical Space desktop and mobile PWA keys', () => {
+      const testCases: Array<[SSM_PARAM_KEY, string]> = [
+        [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_APP_URL, '/medical-space/desktop/app-url'],
+        [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_RUM_APP_ID, '/medical-space/desktop/rum/app-id'],
+        [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_RUM_GUEST_ROLE_ARN, '/medical-space/desktop/rum/guest-role-arn'],
+        [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_RUM_IDENTITY_POOL_ID, '/medical-space/desktop/rum/identity-pool-id'],
+        [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_DIST_BUCKET_NAME, '/medical-space/desktop/dist-bucket-name'],
+        [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_SOURCE_MAPS_BUCKET_NAME, '/medical-space/desktop/source-maps-bucket-name'],
+        [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_DISTRIBUTION_ID, '/medical-space/desktop/distribution-id'],
+        [SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_APP_URL, '/medical-space/mobile-pwa/app-url'],
+        [SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_RUM_APP_ID, '/medical-space/mobile-pwa/rum/app-id'],
+        [SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_RUM_GUEST_ROLE_ARN, '/medical-space/mobile-pwa/rum/guest-role-arn'],
+        [SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_RUM_IDENTITY_POOL_ID, '/medical-space/mobile-pwa/rum/identity-pool-id'],
+        [SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_DIST_BUCKET_NAME, '/medical-space/mobile-pwa/dist-bucket-name'],
+        [
+          SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_SOURCE_MAPS_BUCKET_NAME,
+          '/medical-space/mobile-pwa/source-maps-bucket-name',
+        ],
+        [SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_DISTRIBUTION_ID, '/medical-space/mobile-pwa/distribution-id'],
+      ];
+
+      testCases.forEach(([key, expected]) => {
+        expect(key).toBe(expected);
+      });
+    });
+
+    it('should keep legacy generic key values unchanged', () => {
+      expect(SSM_PARAM_KEY.MEDICALSPACE_WEB_APP_URL).toBe('medicalspace-web-app-url');
+      expect(SSM_PARAM_KEY.RUM_GUEST_ROLE_ARN).toBe('rum-guest-rome-arn');
+      expect(SSM_PARAM_KEY.RUM_IDENTITY_POOL_ID).toBe('rum-identity-pool-id');
+      expect(SSM_PARAM_KEY.RUM_APP_ID).toBe('rum-app-id');
+      expect(SSM_PARAM_KEY.DIST_BUCKET_NAME).toBe('dist-bucket-name');
+      expect(SSM_PARAM_KEY.MAPS_BUCKET_NAME).toBe('maps-bucket-name');
+      expect(SSM_PARAM_KEY.DISTRIBUTION_ID).toBe('distribution-id');
     });
   });
 

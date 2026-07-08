@@ -34,11 +34,13 @@ import {
 ```ts
 SSM_PARAM_KEY.DB_USER; // "db-user"
 SSM_PARAM_KEY.GRAPHQL_API_ID; // "graphql-api-id"
+SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_APP_URL; // "/medical-space/desktop/app-url"
 SSM_PARAM_KEY.WEBSITE_DIST_BUCKET_NAME; // "/website/dist-bucket-name"
 ```
 
 Some keys are environment-scoped and are typically stored under `/{env}/{key}`.
-Some keys already include their own prefix such as `/website/...` or `/cicd/...`.
+Some keys already include their own scoped path such as `/medical-space/...`, `/website/...`, or `/cicd/...`.
+Scoped path values are used as-is and should not be nested under an additional environment segment.
 
 ## Parameter Descriptions
 
@@ -66,6 +68,9 @@ buildSSMPath('prod', SSM_PARAM_KEY.COGNITO_USER_POOL_ID);
 
 buildSSMPath(null, SSM_PARAM_KEY.DB_USER);
 // "/db-user"
+
+buildSSMPath('prod', SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_APP_URL);
+// "/medical-space/desktop/app-url"
 ```
 
 ### `buildSSMPathWithPrefix(prefix, key)`
@@ -105,11 +110,14 @@ extractEnvFromPath('/db-user');
 
 ### `extractKeyFromPath(path)`
 
-Returns the final path segment if it matches a known `SSM_PARAM_KEY` value.
+Returns the matching `SSM_PARAM_KEY` value for flat keys or full scoped paths.
 
 ```ts
 extractKeyFromPath('/prod/db-password');
 // SSM_PARAM_KEY.DB_PASSWORD
+
+extractKeyFromPath('/medical-space/mobile-pwa/app-url');
+// SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_APP_URL
 ```
 
 ### `isEnvAgnostic(path)`
@@ -152,8 +160,16 @@ buildSSMPathWithPrefix('/shared', SSM_PARAM_KEY.CICD_GITHUB_OIDC_PROVIDER_ARN);
 // "/shared/cicd/github-oidc-provider-arn"
 ```
 
+### Work with Medical Space platform keys
+
+```ts
+buildSSMPath('prod', SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_DIST_BUCKET_NAME);
+// "/medical-space/mobile-pwa/dist-bucket-name"
+```
+
 ## Notes
 
 - `SSM_PARAM_METADATA` is guaranteed to cover every `SSM_PARAM_KEY`.
 - Raw enum values remain unchanged, so existing integrations continue to work.
+- Generic MedicalSpace, RUM, dist bucket, source maps, and distribution keys remain available as legacy values.
 - Descriptions are intended to explain purpose, not to expose secret values.
