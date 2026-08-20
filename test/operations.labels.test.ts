@@ -33,6 +33,8 @@ describe('Operations Labels (i18n)', () => {
     expect(getResourceLabel(Resource.MEDICATION, 'us-EN')).toBe('Medication');
     expect(getResourceLabel(Resource.MEDICAL_SERVICE_SLOT, 'us-EN')).toBe('Medical Service Slot');
     expect(getResourceLabel(Resource.CALENDAR_SETTINGS, 'us-EN')).toBe('Calendar Settings');
+    expect(getResourceLabel(Resource.SPONSORED_CONTENT, 'us-EN')).toBe('Sponsored Content');
+    expect(getResourceLabel(Resource.AD_CAMPAIGN, 'us-EN')).toBe('Sponsored Campaign');
   });
 
   it('should label resources with French overrides (fr-FR)', () => {
@@ -42,6 +44,8 @@ describe('Operations Labels (i18n)', () => {
     expect(getResourceLabel(Resource.MEDICATION, 'fr-FR')).toBe('Medicament');
     expect(getResourceLabel(Resource.MEDICAL_SERVICE_SLOT, 'fr-FR')).toBe('Creneau du service medical');
     expect(getResourceLabel(Resource.PATIENT, 'fr-FR')).toBe('Patient');
+    expect(getResourceLabel(Resource.SPONSORED_CONTENT, 'fr-FR')).toBe('Contenu sponsorise');
+    expect(getResourceLabel(Resource.AD_CAMPAIGN, 'fr-FR')).toBe('Campagne sponsorisee');
   });
 
   it('should format operation labels from Operation object (locale variants)', () => {
@@ -65,5 +69,7 @@ describe('Operations Labels (i18n)', () => {
     expect(getResourceCategoryLabel(ResourceCategory.CLINICAL, 'fr-FR')).toBe('Clinique');
     expect(getResourceCategoryLabel(ResourceCategory.SETTINGS, 'us-EN')).toBe('Settings');
     expect(getResourceCategoryLabel(ResourceCategory.SETTINGS, 'fr-FR')).toBe('Parametres');
+    expect(getResourceCategoryLabel(ResourceCategory.SPONSORED_CONTENT, 'us-EN')).toBe('Sponsored Content');
+    expect(getResourceCategoryLabel(ResourceCategory.SPONSORED_CONTENT, 'fr-FR')).toBe('Contenu sponsorise');
   });
 });

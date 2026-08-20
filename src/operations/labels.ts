@@ -42,8 +42,22 @@ const frAction: Record<Action, string> = {
   [Action.TRANSFER_OWNERSHIP]: 'Transferer la propriete',
 };
 
+const enResourceOverrides: Partial<Record<Resource, string>> = {
+  [Resource.AD_CAMPAIGN]: 'Sponsored Campaign',
+  [Resource.AD_INTERACTION]: 'Sponsored Interaction',
+  [Resource.AD_PARTNER]: 'Sponsored Partner',
+  [Resource.AD_PREFERENCE]: 'Sponsored Preference',
+  [Resource.AD_REPORT]: 'Sponsored Report',
+  [Resource.SPONSORED_CONTENT]: 'Sponsored Content',
+};
+
 const frResourceOverrides: Partial<Record<Resource, string>> = {
   [Resource.ACCOUNT]: 'Compte',
+  [Resource.AD_CAMPAIGN]: 'Campagne sponsorisee',
+  [Resource.AD_INTERACTION]: 'Interaction sponsorisee',
+  [Resource.AD_PARTNER]: 'Partenaire sponsor',
+  [Resource.AD_PREFERENCE]: 'Preference sponsorisee',
+  [Resource.AD_REPORT]: 'Rapport sponsorise',
   [Resource.CALCULATED_MEASURE_MODEL]: 'Modele de mesure calculee',
   [Resource.CALENDAR_SETTINGS]: 'Parametres du calendrier',
   [Resource.CALENDAR_SYNC]: 'Synchronisation du calendrier',
@@ -69,6 +83,7 @@ const frResourceOverrides: Partial<Record<Resource, string>> = {
   [Resource.PRESCRIPTION]: 'Ordonnance',
   [Resource.PRESCRIPTION_MODEL]: "Modele d'ordonnance",
   [Resource.ROLE]: 'Role',
+  [Resource.SPONSORED_CONTENT]: 'Contenu sponsorise',
   [Resource.TASK_TYPE]: 'Type de tache',
   [Resource.UPLOAD_DOCUMENT]: 'Document televerse',
   [Resource.USER]: 'Utilisateur',
@@ -84,6 +99,7 @@ const enResourceCategory: Record<ResourceCategory, string> = {
   [ResourceCategory.SCHEDULING]: 'Scheduling',
   [ResourceCategory.EXTERNAL]: 'External',
   [ResourceCategory.SYSTEM]: 'System',
+  [ResourceCategory.SPONSORED_CONTENT]: 'Sponsored Content',
 };
 
 const frResourceCategory: Record<ResourceCategory, string> = {
@@ -96,6 +112,7 @@ const frResourceCategory: Record<ResourceCategory, string> = {
   [ResourceCategory.SCHEDULING]: 'Planification',
   [ResourceCategory.EXTERNAL]: 'Externe',
   [ResourceCategory.SYSTEM]: 'Systeme',
+  [ResourceCategory.SPONSORED_CONTENT]: 'Contenu sponsorise',
 };
 
 function humanizeKey(key: string): string {
@@ -112,7 +129,7 @@ export function getActionLabel(action: Action, locale: Locale = 'us-EN'): string
 
 export function getResourceLabel(resource: Resource, locale: Locale = 'us-EN'): string {
   if (locale === 'fr-FR') return frResourceOverrides[resource] ?? humanizeKey(resource);
-  return humanizeKey(resource);
+  return enResourceOverrides[resource] ?? humanizeKey(resource);
 }
 
 export function getResourceCategoryLabel(category: ResourceCategory, locale: Locale = 'us-EN'): string {

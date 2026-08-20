@@ -4,6 +4,7 @@ import {
   getActionsByAccess,
   getActionAccess,
   getActionFromOperation,
+  getAllResources,
   getAllResourceActions,
   getAllResourceActionsByAccess,
   generateOperationsForResources,
@@ -20,9 +21,11 @@ import {
   isUserResource,
   isAccountResource,
   isPatientResource,
+  isPlatformResource,
   USER_RESOURCES,
   ACCOUNT_RESOURCES,
   PATIENT_RESOURCES,
+  PLATFORM_RESOURCES,
   isReadAction,
   isMedicalResource,
   isPublicResource,
@@ -33,6 +36,7 @@ import {
   Resource,
   ResourceCategory,
   ResourceScope,
+  SPONSORED_CONTENT_RESOURCES,
 } from '../src/operations';
 import type {
   ActionForAccess,
@@ -62,6 +66,12 @@ describe('Operations Module', () => {
       expect(Resource.ROLE).toBe('ROLE');
       expect(Resource.MEDICATION).toBe('MEDICATION');
       expect(Resource.MEDICAL_SERVICE_SLOT).toBe('MEDICAL_SERVICE_SLOT');
+      expect(Resource.SPONSORED_CONTENT).toBe('SPONSORED_CONTENT');
+      expect(Resource.AD_INTERACTION).toBe('AD_INTERACTION');
+      expect(Resource.AD_PREFERENCE).toBe('AD_PREFERENCE');
+      expect(Resource.AD_PARTNER).toBe('AD_PARTNER');
+      expect(Resource.AD_CAMPAIGN).toBe('AD_CAMPAIGN');
+      expect(Resource.AD_REPORT).toBe('AD_REPORT');
     });
 
     it('should expose requested categories', () => {
@@ -69,12 +79,14 @@ describe('Operations Module', () => {
       expect(ResourceCategory.MEMBERSHIP).toBe('membership');
       expect(ResourceCategory.CLINICAL).toBe('clinical');
       expect(ResourceCategory.SYSTEM).toBe('system');
+      expect(ResourceCategory.SPONSORED_CONTENT).toBe('sponsored_content');
     });
 
     it('should tag resources by owner scope', () => {
       expect(ResourceScope.USER).toBe('user');
       expect(ResourceScope.PATIENT).toBe('patient');
       expect(ResourceScope.ACCOUNT).toBe('account');
+      expect(ResourceScope.PLATFORM).toBe('platform');
 
       expect(getResourceScope(Resource.USER)).toBe(ResourceScope.USER);
       expect(getResourceScope(Resource.PREFERENCES)).toBe(ResourceScope.USER);
@@ -84,6 +96,14 @@ describe('Operations Module', () => {
       expect(getResourceScope(Resource.PATIENT)).toBe(ResourceScope.ACCOUNT);
       expect(getResourceScope(Resource.ROLE)).toBe(ResourceScope.ACCOUNT);
       expect(getResourceScope(Resource.MEDICAL_SERVICE_SLOT)).toBe(ResourceScope.ACCOUNT);
+
+      expect(getResourceScope(Resource.SPONSORED_CONTENT)).toBe(ResourceScope.PLATFORM);
+      expect(getResourceScope(Resource.AD_PARTNER)).toBe(ResourceScope.PLATFORM);
+      expect(getResourceScope(Resource.AD_CAMPAIGN)).toBe(ResourceScope.PLATFORM);
+      expect(getResourceScope(Resource.AD_REPORT)).toBe(ResourceScope.PLATFORM);
+
+      expect(getResourceScope(Resource.AD_INTERACTION)).toBe(ResourceScope.USER);
+      expect(getResourceScope(Resource.AD_PREFERENCE)).toBe(ResourceScope.USER);
 
       expect(getResourceScope(Resource.PATIENT_PUBLIC_PROPERTY)).toBe(ResourceScope.PATIENT);
       expect(getResourceScope(Resource.PATIENT_MEDICAL_PROPERTY)).toBe(ResourceScope.PATIENT);
@@ -101,6 +121,10 @@ describe('Operations Module', () => {
       expect(isPatientResource(Resource.PATIENT_PUBLIC_PROPERTY)).toBe(true);
       expect(isPatientResource(Resource.PATIENT_MEDICAL_PROPERTY)).toBe(true);
       expect(isPatientResource(Resource.PATIENT)).toBe(false);
+
+      expect(isPlatformResource(Resource.SPONSORED_CONTENT)).toBe(true);
+      expect(isPlatformResource(Resource.AD_CAMPAIGN)).toBe(true);
+      expect(isPlatformResource(Resource.USER)).toBe(false);
     });
 
     it('should return resources by owner', () => {
@@ -118,6 +142,14 @@ describe('Operations Module', () => {
       expect(patientResources).toContain(Resource.PATIENT_PUBLIC_PROPERTY);
       expect(patientResources).toContain(Resource.PATIENT_MEDICAL_PROPERTY);
       expect(patientResources).not.toContain(Resource.PATIENT);
+
+      const platformResources = getResourcesByScope(ResourceScope.PLATFORM);
+      expect(platformResources).toEqual([
+        Resource.SPONSORED_CONTENT,
+        Resource.AD_PARTNER,
+        Resource.AD_CAMPAIGN,
+        Resource.AD_REPORT,
+      ]);
     });
 
     it('should type resources by owner scope', () => {
@@ -132,14 +164,20 @@ describe('Operations Module', () => {
       expect(invalidUserResources).toContain(Resource.USER);
     });
 
-    it('should expose USER_RESOURCES, ACCOUNT_RESOURCES and PATIENT_RESOURCES arrays', () => {
+    it('should expose USER_RESOURCES, ACCOUNT_RESOURCES, PATIENT_RESOURCES and PLATFORM_RESOURCES arrays', () => {
       expect(USER_RESOURCES).toContain(Resource.USER);
       expect(USER_RESOURCES).toContain(Resource.CALENDAR_TOKEN);
       expect(ACCOUNT_RESOURCES).toContain(Resource.PATIENT);
       expect(ACCOUNT_RESOURCES).toContain(Resource.ROLE);
       expect(PATIENT_RESOURCES).toContain(Resource.PATIENT_PUBLIC_PROPERTY);
       expect(PATIENT_RESOURCES).toContain(Resource.PATIENT_MEDICAL_PROPERTY);
-      const allTagged = new Set([...USER_RESOURCES, ...ACCOUNT_RESOURCES, ...PATIENT_RESOURCES]);
+      expect(PLATFORM_RESOURCES).toEqual([
+        Resource.SPONSORED_CONTENT,
+        Resource.AD_PARTNER,
+        Resource.AD_CAMPAIGN,
+        Resource.AD_REPORT,
+      ]);
+      const allTagged = new Set([...USER_RESOURCES, ...ACCOUNT_RESOURCES, ...PATIENT_RESOURCES, ...PLATFORM_RESOURCES]);
       Object.values(Resource).forEach((r) => expect(allTagged.has(r)).toBe(true));
     });
   });
@@ -204,6 +242,17 @@ describe('Operations Module', () => {
       expect(getResourceActions(Resource.CALENDAR_TOKEN)).toEqual([Action.VIEW, Action.ROTATE, Action.GENERATE]);
       expect(getResourceActions(Resource.MEDICATION)).toEqual([Action.LIST]);
       expect(getResourceActions(Resource.MEDICAL_SERVICE_SLOT)).toEqual([Action.LIST]);
+      expect(getResourceActions(Resource.SPONSORED_CONTENT)).toEqual([Action.VIEW, Action.UPDATE]);
+      expect(getResourceActions(Resource.AD_INTERACTION)).toEqual([Action.CREATE]);
+      expect(getResourceActions(Resource.AD_PREFERENCE)).toEqual([Action.UPDATE]);
+      expect(getResourceActions(Resource.AD_PARTNER)).toEqual([Action.LIST, Action.VIEW, Action.UPSERT, Action.UPDATE]);
+      expect(getResourceActions(Resource.AD_CAMPAIGN)).toEqual([
+        Action.LIST,
+        Action.VIEW,
+        Action.UPSERT,
+        Action.UPDATE,
+      ]);
+      expect(getResourceActions(Resource.AD_REPORT)).toEqual([Action.VIEW]);
     });
 
     it('should type actions by resource', () => {
@@ -223,6 +272,7 @@ describe('Operations Module', () => {
       expect(getResourcesByCategory(ResourceCategory.CORE)).toEqual([Resource.ACCOUNT]);
       expect(getResourcesByCategory(ResourceCategory.SCHEDULING)).toEqual([Resource.MEDICAL_SERVICE_SLOT]);
       expect(getResourcesByCategory(ResourceCategory.SYSTEM)).toEqual([]);
+      expect(getResourcesByCategory(ResourceCategory.SPONSORED_CONTENT)).toEqual(SPONSORED_CONTENT_RESOURCES);
     });
 
     it('should type resources by category', () => {
@@ -407,6 +457,8 @@ describe('Operations Module', () => {
       expect(MEDICAL_RESOURCES).toContain(Resource.PATIENT);
       expect(PUBLIC_RESOURCES).toContain(Resource.USER);
       expect(MEDICAL_RESOURCES.filter((r) => PUBLIC_RESOURCES.includes(r))).toHaveLength(0);
+      expect(PUBLIC_RESOURCES).not.toContain(Resource.SPONSORED_CONTENT);
+      expect(new Set(getAllResources())).toEqual(new Set(Object.values(Resource)));
     });
   });
 
@@ -477,6 +529,14 @@ describe('Operations Module', () => {
       expect(categories.clinical).toContain(Resource.CONTACT);
       expect(categories.settings).toContain(Resource.PATIENT_PROPERTY_MODEL);
       expect(categories.system).toEqual([]);
+      expect(categories.sponsored_content).toEqual([
+        Resource.SPONSORED_CONTENT,
+        Resource.AD_PARTNER,
+        Resource.AD_CAMPAIGN,
+        Resource.AD_INTERACTION,
+        Resource.AD_PREFERENCE,
+        Resource.AD_REPORT,
+      ]);
     });
   });
 });

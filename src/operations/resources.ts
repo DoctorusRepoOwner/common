@@ -3,6 +3,11 @@
  */
 export enum Resource {
   ACCOUNT = 'ACCOUNT',
+  AD_CAMPAIGN = 'AD_CAMPAIGN',
+  AD_INTERACTION = 'AD_INTERACTION',
+  AD_PARTNER = 'AD_PARTNER',
+  AD_PREFERENCE = 'AD_PREFERENCE',
+  AD_REPORT = 'AD_REPORT',
   CALCULATED_MEASURE_MODEL = 'CALCULATED_MEASURE_MODEL',
   CALENDAR_SETTINGS = 'CALENDAR_SETTINGS',
   CALENDAR_SYNC = 'CALENDAR_SYNC',
@@ -30,6 +35,7 @@ export enum Resource {
   PRESCRIPTION = 'PRESCRIPTION',
   PRESCRIPTION_MODEL = 'PRESCRIPTION_MODEL',
   ROLE = 'ROLE',
+  SPONSORED_CONTENT = 'SPONSORED_CONTENT',
   TASK_TYPE = 'TASK_TYPE',
   UPLOAD_DOCUMENT = 'UPLOAD_DOCUMENT',
   USER = 'USER',
@@ -45,6 +51,7 @@ export enum ResourceCategory {
   SCHEDULING = 'scheduling',
   EXTERNAL = 'external',
   SYSTEM = 'system',
+  SPONSORED_CONTENT = 'sponsored_content',
 }
 
 const RESOURCE_CATEGORIES = {
@@ -77,6 +84,14 @@ const RESOURCE_CATEGORIES = {
   scheduling: [Resource.MEDICAL_SERVICE_SLOT],
   external: [Resource.MEDICATION],
   system: [],
+  sponsored_content: [
+    Resource.SPONSORED_CONTENT,
+    Resource.AD_PARTNER,
+    Resource.AD_CAMPAIGN,
+    Resource.AD_INTERACTION,
+    Resource.AD_PREFERENCE,
+    Resource.AD_REPORT,
+  ],
 } as const satisfies Record<ResourceCategory, readonly Resource[]>;
 
 const LEGACY_RESOURCE_CATEGORIES: {
@@ -125,14 +140,22 @@ const LEGACY_RESOURCE_CATEGORIES: {
  * - USER: resource belongs to / is scoped to an individual user
  * - PATIENT: resource belongs to / is scoped to an individual patient
  * - ACCOUNT: resource belongs to / is scoped to the whole account (organisation)
+ * - PLATFORM: resource belongs to / is scoped to the Doctorus platform
  */
 export enum ResourceScope {
   USER = 'user',
   PATIENT = 'patient',
   ACCOUNT = 'account',
+  PLATFORM = 'platform',
 }
 
 const RESOURCE_SCOPE = {
+  // Platform-scoped resources
+  [Resource.SPONSORED_CONTENT]: ResourceScope.PLATFORM,
+  [Resource.AD_PARTNER]: ResourceScope.PLATFORM,
+  [Resource.AD_CAMPAIGN]: ResourceScope.PLATFORM,
+  [Resource.AD_REPORT]: ResourceScope.PLATFORM,
+
   // Account-scoped resources
   [Resource.ACCOUNT]: ResourceScope.ACCOUNT,
   [Resource.LOCATION]: ResourceScope.ACCOUNT,
@@ -155,6 +178,8 @@ const RESOURCE_SCOPE = {
   [Resource.CALENDAR_SETTINGS]: ResourceScope.USER,
   [Resource.CALENDAR_SYNC]: ResourceScope.USER,
   [Resource.CALENDAR_TOKEN]: ResourceScope.USER,
+  [Resource.AD_INTERACTION]: ResourceScope.USER,
+  [Resource.AD_PREFERENCE]: ResourceScope.USER,
 
   // Clinical resources are patient/account-scoped — grouped under ACCOUNT
   [Resource.PATIENT]: ResourceScope.ACCOUNT,
@@ -189,6 +214,10 @@ export const PATIENT_RESOURCES: Resource[] = (Object.entries(RESOURCE_SCOPE) as 
   .filter(([, owner]) => owner === ResourceScope.PATIENT)
   .map(([resource]) => resource);
 
+export const PLATFORM_RESOURCES: Resource[] = (Object.entries(RESOURCE_SCOPE) as [Resource, ResourceScope][])
+  .filter(([, owner]) => owner === ResourceScope.PLATFORM)
+  .map(([resource]) => resource);
+
 export function getResourceScope<R extends Resource>(resource: R): (typeof RESOURCE_SCOPE)[R] {
   return RESOURCE_SCOPE[resource];
 }
@@ -203,6 +232,10 @@ export function isAccountResource(resource: Resource): boolean {
 
 export function isPatientResource(resource: Resource): boolean {
   return RESOURCE_SCOPE[resource] === ResourceScope.PATIENT;
+}
+
+export function isPlatformResource(resource: Resource): boolean {
+  return RESOURCE_SCOPE[resource] === ResourceScope.PLATFORM;
 }
 
 export function getResourcesByScope<S extends ResourceScope>(owner: S): ResourceForScope<S>[] {
@@ -224,6 +257,7 @@ export const INTEGRATION_RESOURCES: Resource[] = [...RESOURCE_CATEGORIES.integra
 export const SCHEDULING_RESOURCES: Resource[] = [...RESOURCE_CATEGORIES.scheduling];
 export const EXTERNAL_RESOURCES: Resource[] = [...RESOURCE_CATEGORIES.external];
 export const SYSTEM_RESOURCES: Resource[] = [...RESOURCE_CATEGORIES.system];
+export const SPONSORED_CONTENT_RESOURCES: Resource[] = [...RESOURCE_CATEGORIES.sponsored_content];
 
 export function isMedicalResource(resource: Resource): boolean {
   return LEGACY_RESOURCE_CATEGORIES.medical.indexOf(resource) !== -1;
@@ -234,7 +268,11 @@ export function isPublicResource(resource: Resource): boolean {
 }
 
 export function getAllResources(): Resource[] {
-  return [...LEGACY_RESOURCE_CATEGORIES.medical, ...LEGACY_RESOURCE_CATEGORIES.public];
+  return [
+    ...LEGACY_RESOURCE_CATEGORIES.medical,
+    ...LEGACY_RESOURCE_CATEGORIES.public,
+    ...RESOURCE_CATEGORIES.sponsored_content,
+  ];
 }
 
 export function getResourceCategories(): Readonly<typeof RESOURCE_CATEGORIES> {
