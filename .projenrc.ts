@@ -189,6 +189,8 @@ const project = new typescript.TypeScriptProject({
   vscode: true,
 });
 
+project.npmignore?.exclude('/esm/');
+
 // Configure VS Code settings
 if (project.vscode) {
   project.vscode.settings.addSettings({
