@@ -5,6 +5,10 @@ export enum SSM_PARAM_KEY {
   COGNITO_USER_POOL_ID = 'user-pool-id',
   COGNITO_USER_POOL_WEB_CLIENT_ID = 'user-pool-web-client-id',
   COGNITO_OAUTH_DOMAIN = 'oauth-domain',
+  SPONSORED_CONTENT_ADMIN_HTTP_API_URL = 'sponsored-content-admin-api-http-url',
+  SPONSORED_CONTENT_ADMIN_COGNITO_USER_POOL_ID = 'sponsored-content-admin-cognito-user-pool-id',
+  SPONSORED_CONTENT_ADMIN_COGNITO_USER_POOL_WEB_CLIENT_ID = 'sponsored-content-admin-cognito-user-pool-web-client-id',
+  SPONSORED_CONTENT_ADMIN_COGNITO_OAUTH_DOMAIN = 'sponsored-content-admin-cognito-oauth-domain',
   AUTHORIZATION_CACHE_CONFIG = 'authorization-cache-config',
   /**
    * @deprecated Use MEDICAL_SPACE_DESKTOP_RUM_GUEST_ROLE_ARN or MEDICAL_SPACE_MOBILE_PWA_RUM_GUEST_ROLE_ARN.
@@ -95,6 +99,18 @@ export const SSM_PARAM_METADATA: Record<SSM_PARAM_KEY, SSMParamMetadata> = {
   },
   [SSM_PARAM_KEY.COGNITO_OAUTH_DOMAIN]: {
     description: 'Cognito hosted UI OAuth domain for sign-in and callback flows.',
+  },
+  [SSM_PARAM_KEY.SPONSORED_CONTENT_ADMIN_HTTP_API_URL]: {
+    description: 'HTTP API endpoint URL for the sponsored content admin application.',
+  },
+  [SSM_PARAM_KEY.SPONSORED_CONTENT_ADMIN_COGNITO_USER_POOL_ID]: {
+    description: 'Cognito User Pool identifier for sponsored content admin authentication.',
+  },
+  [SSM_PARAM_KEY.SPONSORED_CONTENT_ADMIN_COGNITO_USER_POOL_WEB_CLIENT_ID]: {
+    description: 'Cognito web app client identifier for sponsored content admin authentication.',
+  },
+  [SSM_PARAM_KEY.SPONSORED_CONTENT_ADMIN_COGNITO_OAUTH_DOMAIN]: {
+    description: 'Cognito hosted UI OAuth domain for sponsored content admin authentication.',
   },
   [SSM_PARAM_KEY.AUTHORIZATION_CACHE_CONFIG]: {
     description: 'Configuration used by services to cache authorization decisions.',

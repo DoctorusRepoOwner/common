@@ -186,6 +186,19 @@ describe('SSM Utilities', () => {
       expect(SSM_PARAM_KEY.AUTHORIZATION_CACHE_CONFIG).toBe('authorization-cache-config');
     });
 
+    it('should have all sponsored content admin keys', () => {
+      expect(SSM_PARAM_KEY.SPONSORED_CONTENT_ADMIN_HTTP_API_URL).toBe('sponsored-content-admin-api-http-url');
+      expect(SSM_PARAM_KEY.SPONSORED_CONTENT_ADMIN_COGNITO_USER_POOL_ID).toBe(
+        'sponsored-content-admin-cognito-user-pool-id',
+      );
+      expect(SSM_PARAM_KEY.SPONSORED_CONTENT_ADMIN_COGNITO_USER_POOL_WEB_CLIENT_ID).toBe(
+        'sponsored-content-admin-cognito-user-pool-web-client-id',
+      );
+      expect(SSM_PARAM_KEY.SPONSORED_CONTENT_ADMIN_COGNITO_OAUTH_DOMAIN).toBe(
+        'sponsored-content-admin-cognito-oauth-domain',
+      );
+    });
+
     it('should have all Medical Space desktop and mobile PWA keys', () => {
       const testCases: Array<[SSM_PARAM_KEY, string]> = [
         [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_APP_URL, '/medical-space/desktop/app-url'],
