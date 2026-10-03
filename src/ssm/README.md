@@ -170,6 +170,4 @@ buildSSMPath('prod', SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_DIST_BUCKET_NAME);
 ## Notes
 
 - `SSM_PARAM_METADATA` is guaranteed to cover every `SSM_PARAM_KEY`.
-- Raw enum values remain unchanged, so existing integrations continue to work.
-- Generic MedicalSpace, RUM, dist bucket, source maps, and distribution keys remain available as legacy values.
 - Descriptions are intended to explain purpose, not to expose secret values.

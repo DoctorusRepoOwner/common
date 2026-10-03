@@ -134,10 +134,6 @@ describe('SSM Utilities', () => {
           expected: SSM_PARAM_KEY.EMAIL_FROM_ADDRESS,
         },
         {
-          path: '/staging/rum-app-id',
-          expected: SSM_PARAM_KEY.RUM_APP_ID,
-        },
-        {
           path: '/medical-space/desktop/rum/app-id',
           expected: SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_RUM_APP_ID,
         },
@@ -186,17 +182,12 @@ describe('SSM Utilities', () => {
       expect(SSM_PARAM_KEY.AUTHORIZATION_CACHE_CONFIG).toBe('authorization-cache-config');
     });
 
-    it('should have all sponsored content admin keys', () => {
+    it('should have all administration keys', () => {
       expect(SSM_PARAM_KEY.SPONSORED_CONTENT_ADMIN_HTTP_API_URL).toBe('sponsored-content-admin-api-http-url');
-      expect(SSM_PARAM_KEY.SPONSORED_CONTENT_ADMIN_COGNITO_USER_POOL_ID).toBe(
-        'sponsored-content-admin-cognito-user-pool-id',
-      );
-      expect(SSM_PARAM_KEY.SPONSORED_CONTENT_ADMIN_COGNITO_USER_POOL_WEB_CLIENT_ID).toBe(
-        'sponsored-content-admin-cognito-user-pool-web-client-id',
-      );
-      expect(SSM_PARAM_KEY.SPONSORED_CONTENT_ADMIN_COGNITO_OAUTH_DOMAIN).toBe(
-        'sponsored-content-admin-cognito-oauth-domain',
-      );
+      expect(SSM_PARAM_KEY.DOCTORUS_ADMIN_HTTP_API_URL).toBe('doctorus-admin-api-http-url');
+      expect(SSM_PARAM_KEY.ADMIN_COGNITO_USER_POOL_ID).toBe('admin-cognito-user-pool-id');
+      expect(SSM_PARAM_KEY.ADMIN_COGNITO_USER_POOL_WEB_CLIENT_ID).toBe('admin-cognito-user-pool-web-client-id');
+      expect(SSM_PARAM_KEY.ADMIN_COGNITO_OAUTH_DOMAIN).toBe('admin-cognito-oauth-domain');
     });
 
     it('should have all Medical Space desktop and mobile PWA keys', () => {
@@ -223,16 +214,6 @@ describe('SSM Utilities', () => {
       testCases.forEach(([key, expected]) => {
         expect(key).toBe(expected);
       });
-    });
-
-    it('should keep legacy generic key values unchanged', () => {
-      expect(SSM_PARAM_KEY.MEDICALSPACE_WEB_APP_URL).toBe('medicalspace-web-app-url');
-      expect(SSM_PARAM_KEY.RUM_GUEST_ROLE_ARN).toBe('rum-guest-rome-arn');
-      expect(SSM_PARAM_KEY.RUM_IDENTITY_POOL_ID).toBe('rum-identity-pool-id');
-      expect(SSM_PARAM_KEY.RUM_APP_ID).toBe('rum-app-id');
-      expect(SSM_PARAM_KEY.DIST_BUCKET_NAME).toBe('dist-bucket-name');
-      expect(SSM_PARAM_KEY.MAPS_BUCKET_NAME).toBe('maps-bucket-name');
-      expect(SSM_PARAM_KEY.DISTRIBUTION_ID).toBe('distribution-id');
     });
   });
 
