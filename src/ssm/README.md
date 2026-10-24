@@ -15,6 +15,7 @@ It is intentionally small:
 
 ```ts
 import {
+  SSM_APPLICATION_PREFIX,
   SSM_PARAM_KEY,
   SSM_PARAM_METADATA,
   getSSMParamDescription,
@@ -36,6 +37,16 @@ SSM_PARAM_KEY.DB_USER; // "db-user"
 SSM_PARAM_KEY.GRAPHQL_API_ID; // "graphql-api-id"
 SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_APP_URL; // "/medical-space/desktop/app-url"
 SSM_PARAM_KEY.WEBSITE_DIST_BUCKET_NAME; // "/website/dist-bucket-name"
+```
+
+`SSM_APPLICATION_PREFIX` defines the stable prefix for each deployed frontend application.
+Combine it with `SSM_PARAM_KEY.COGNITO_USER_POOL_CLIENT_ID` instead of duplicating complete paths.
+
+```ts
+SSM_APPLICATION_PREFIX.MEDICAL_SPACE_DESKTOP; // "/medical-space/desktop"
+SSM_APPLICATION_PREFIX.MEDICAL_SPACE_MOBILE_PWA; // "/medical-space/mobile-pwa"
+SSM_APPLICATION_PREFIX.DOCTORUS_ADMINISTRATION; // "/doctorus-administration"
+SSM_APPLICATION_PREFIX.SPONSORED_CONTENT_MANAGER; // "/sponsored-content-manager"
 ```
 
 Some keys are environment-scoped and are typically stored under `/{env}/{key}`.
@@ -83,6 +94,9 @@ buildSSMPathWithPrefix('/myapp/prod', SSM_PARAM_KEY.GRAPHQL_API_ID);
 
 buildSSMPathWithPrefix('/platform', SSM_PARAM_KEY.WEBSITE_DIST_BUCKET_NAME);
 // "/platform/website/dist-bucket-name"
+
+buildSSMPathWithPrefix(SSM_APPLICATION_PREFIX.MEDICAL_SPACE_DESKTOP, SSM_PARAM_KEY.COGNITO_USER_POOL_CLIENT_ID);
+// "/medical-space/desktop/cognito-user-pool-client-id"
 ```
 
 ### `buildICalTokenPath(userId)`
@@ -106,6 +120,9 @@ extractEnvFromPath('/prod/user-pool-id');
 
 extractEnvFromPath('/db-user');
 // null
+
+extractEnvFromPath('/medical-space/mobile-pwa/cognito-user-pool-client-id');
+// null (application-scoped, not environment-scoped)
 ```
 
 ### `extractKeyFromPath(path)`

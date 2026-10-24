@@ -1,4 +1,4 @@
-import { SSM_PARAM_KEY } from './keys';
+import { SSM_APPLICATION_PREFIX, SSM_PARAM_KEY } from './keys';
 
 /**
  * Build SSM parameter path with optional environment prefix
@@ -58,6 +58,11 @@ export function buildSSMPathWithPrefix(prefix: string, key: SSM_PARAM_KEY): stri
 export function extractEnvFromPath(path: string): string | null {
   const enumValues = Object.values(SSM_PARAM_KEY) as string[];
   if (enumValues.includes(path)) {
+    return null;
+  }
+
+  const applicationPrefixes = Object.values(SSM_APPLICATION_PREFIX) as string[];
+  if (applicationPrefixes.some((prefix) => path === prefix || path.startsWith(`${prefix}/`))) {
     return null;
   }
 

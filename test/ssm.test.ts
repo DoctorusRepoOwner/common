@@ -1,5 +1,6 @@
 import {
   getSSMParamDescription,
+  SSM_APPLICATION_PREFIX,
   SSM_PARAM_KEY,
   SSM_PARAM_METADATA,
   buildSSMPath,
@@ -61,6 +62,19 @@ describe('SSM Utilities', () => {
       const path = buildSSMPathWithPrefix('/myapp/prod', SSM_PARAM_KEY.BASE_HOST);
       expect(path).toBe('/myapp/prod/base-host');
     });
+
+    it('should build every application-specific Cognito client path', () => {
+      const testCases: Array<[SSM_APPLICATION_PREFIX, string]> = [
+        [SSM_APPLICATION_PREFIX.MEDICAL_SPACE_DESKTOP, '/medical-space/desktop/cognito-user-pool-client-id'],
+        [SSM_APPLICATION_PREFIX.MEDICAL_SPACE_MOBILE_PWA, '/medical-space/mobile-pwa/cognito-user-pool-client-id'],
+        [SSM_APPLICATION_PREFIX.DOCTORUS_ADMINISTRATION, '/doctorus-administration/cognito-user-pool-client-id'],
+        [SSM_APPLICATION_PREFIX.SPONSORED_CONTENT_MANAGER, '/sponsored-content-manager/cognito-user-pool-client-id'],
+      ];
+
+      testCases.forEach(([prefix, expected]) => {
+        expect(buildSSMPathWithPrefix(prefix, SSM_PARAM_KEY.COGNITO_USER_POOL_CLIENT_ID)).toBe(expected);
+      });
+    });
   });
 
   describe('extractEnvFromPath', () => {
@@ -93,6 +107,13 @@ describe('SSM Utilities', () => {
       expect(extractEnvFromPath('/medical-space/desktop/app-url')).toBeNull();
       expect(extractEnvFromPath('/medical-space/mobile-pwa/app-url')).toBeNull();
     });
+
+    it('should return null for composed application paths', () => {
+      Object.values(SSM_APPLICATION_PREFIX).forEach((prefix) => {
+        const path = buildSSMPathWithPrefix(prefix, SSM_PARAM_KEY.COGNITO_USER_POOL_CLIENT_ID);
+        expect(extractEnvFromPath(path)).toBeNull();
+      });
+    });
   });
 
   describe('extractKeyFromPath', () => {
@@ -121,6 +142,13 @@ describe('SSM Utilities', () => {
       expect(extractKeyFromPath('/medical-space/mobile-pwa/app-url')).toBe(
         SSM_PARAM_KEY.MEDICAL_SPACE_MOBILE_PWA_APP_URL,
       );
+    });
+
+    it('should extract the shared key from composed application paths', () => {
+      Object.values(SSM_APPLICATION_PREFIX).forEach((prefix) => {
+        const path = buildSSMPathWithPrefix(prefix, SSM_PARAM_KEY.COGNITO_USER_POOL_CLIENT_ID);
+        expect(extractKeyFromPath(path)).toBe(SSM_PARAM_KEY.COGNITO_USER_POOL_CLIENT_ID);
+      });
     });
 
     it('should handle all SSM_PARAM_KEY values', () => {
@@ -180,6 +208,7 @@ describe('SSM Utilities', () => {
       expect(SSM_PARAM_KEY.GRAPHQL_API_ID).toBe('graphql-api-id');
       expect(SSM_PARAM_KEY.BASE_HOST).toBe('base-host');
       expect(SSM_PARAM_KEY.AUTHORIZATION_CACHE_CONFIG).toBe('authorization-cache-config');
+      expect(SSM_PARAM_KEY.COGNITO_USER_POOL_CLIENT_ID).toBe('cognito-user-pool-client-id');
     });
 
     it('should have all administration keys', () => {
@@ -213,6 +242,17 @@ describe('SSM Utilities', () => {
 
       testCases.forEach(([key, expected]) => {
         expect(key).toBe(expected);
+      });
+    });
+  });
+
+  describe('SSM_APPLICATION_PREFIX enum', () => {
+    it('should expose one prefix for every frontend application', () => {
+      expect(SSM_APPLICATION_PREFIX).toEqual({
+        MEDICAL_SPACE_DESKTOP: '/medical-space/desktop',
+        MEDICAL_SPACE_MOBILE_PWA: '/medical-space/mobile-pwa',
+        DOCTORUS_ADMINISTRATION: '/doctorus-administration',
+        SPONSORED_CONTENT_MANAGER: '/sponsored-content-manager',
       });
     });
   });

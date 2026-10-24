@@ -38,6 +38,7 @@ import {
   AuditEvent,
 
   // SSM
+  SSM_APPLICATION_PREFIX,
   SSM_PARAM_KEY,
   SSM_PARAM_METADATA,
   getSSMParamDescription,
@@ -101,9 +102,11 @@ Defines known SSM parameter keys and utilities to build, inspect, and describe p
 
 \`\`\`ts
 import {
+  SSM_APPLICATION_PREFIX,
   SSM_PARAM_KEY,
   getSSMParamDescription,
   buildSSMPath,
+  buildSSMPathWithPrefix,
   extractKeyFromPath,
 } from '@doctorus/common';
 
@@ -112,6 +115,11 @@ const key = SSM_PARAM_KEY.DB_PASSWORD;
 buildSSMPath('prod', key); // "/prod/db-password"
 getSSMParamDescription(key); // "Database password used by application services."
 extractKeyFromPath('/prod/db-password'); // SSM_PARAM_KEY.DB_PASSWORD
+
+buildSSMPathWithPrefix(
+  SSM_APPLICATION_PREFIX.MEDICAL_SPACE_DESKTOP,
+  SSM_PARAM_KEY.COGNITO_USER_POOL_CLIENT_ID,
+); // "/medical-space/desktop/cognito-user-pool-client-id"
 \`\`\`
 
 [SSM documentation](src/ssm/README.md)

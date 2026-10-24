@@ -1,13 +1,23 @@
 /**
  * SSM Parameter Store keys used across AWS stacks
  */
+export enum SSM_APPLICATION_PREFIX {
+  MEDICAL_SPACE_DESKTOP = '/medical-space/desktop',
+  MEDICAL_SPACE_MOBILE_PWA = '/medical-space/mobile-pwa',
+  DOCTORUS_ADMINISTRATION = '/doctorus-administration',
+  SPONSORED_CONTENT_MANAGER = '/sponsored-content-manager',
+}
+
 export enum SSM_PARAM_KEY {
   COGNITO_USER_POOL_ID = 'user-pool-id',
+  /** @deprecated Use COGNITO_USER_POOL_CLIENT_ID with an SSM_APPLICATION_PREFIX. */
   COGNITO_USER_POOL_WEB_CLIENT_ID = 'user-pool-web-client-id',
+  COGNITO_USER_POOL_CLIENT_ID = 'cognito-user-pool-client-id',
   COGNITO_OAUTH_DOMAIN = 'oauth-domain',
   SPONSORED_CONTENT_ADMIN_HTTP_API_URL = 'sponsored-content-admin-api-http-url',
   DOCTORUS_ADMIN_HTTP_API_URL = 'doctorus-admin-api-http-url',
   ADMIN_COGNITO_USER_POOL_ID = 'admin-cognito-user-pool-id',
+  /** @deprecated Use COGNITO_USER_POOL_CLIENT_ID with an administration SSM_APPLICATION_PREFIX. */
   ADMIN_COGNITO_USER_POOL_WEB_CLIENT_ID = 'admin-cognito-user-pool-web-client-id',
   ADMIN_COGNITO_OAUTH_DOMAIN = 'admin-cognito-oauth-domain',
   AUTHORIZATION_CACHE_CONFIG = 'authorization-cache-config',
@@ -69,6 +79,9 @@ export const SSM_PARAM_METADATA: Record<SSM_PARAM_KEY, SSMParamMetadata> = {
   },
   [SSM_PARAM_KEY.COGNITO_USER_POOL_WEB_CLIENT_ID]: {
     description: 'Cognito web app client identifier used by frontend authentication flows.',
+  },
+  [SSM_PARAM_KEY.COGNITO_USER_POOL_CLIENT_ID]: {
+    description: 'Cognito app client identifier scoped by the consuming application prefix.',
   },
   [SSM_PARAM_KEY.COGNITO_OAUTH_DOMAIN]: {
     description: 'Cognito hosted UI OAuth domain for sign-in and callback flows.',
