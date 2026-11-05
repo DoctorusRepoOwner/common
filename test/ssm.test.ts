@@ -219,6 +219,11 @@ describe('SSM Utilities', () => {
       expect(SSM_PARAM_KEY.ADMIN_COGNITO_OAUTH_DOMAIN).toBe('admin-cognito-oauth-domain');
     });
 
+    it('should have all public website RUM keys', () => {
+      expect(SSM_PARAM_KEY.PUBLIC_WEBSITE_RUM_CLIENT_CONFIGURATION).toBe('/public-website/rum/client-configuration');
+      expect(SSM_PARAM_KEY.PUBLIC_WEBSITE_RUM_INGESTION_STATE).toBe('/public-website/rum/ingestion-state');
+    });
+
     it('should have all Medical Space desktop and mobile PWA keys', () => {
       const testCases: Array<[SSM_PARAM_KEY, string]> = [
         [SSM_PARAM_KEY.MEDICAL_SPACE_DESKTOP_APP_URL, '/medical-space/desktop/app-url'],
@@ -269,6 +274,15 @@ describe('SSM Utilities', () => {
 
     it('should return a description via helper', () => {
       expect(getSSMParamDescription(SSM_PARAM_KEY.DB_PASSWORD)).toBe('Database password used by application services.');
+    });
+
+    it('should describe the public website resource-policy RUM parameters', () => {
+      expect(getSSMParamDescription(SSM_PARAM_KEY.PUBLIC_WEBSITE_RUM_CLIENT_CONFIGURATION)).toBe(
+        'Client configuration for public website CloudWatch RUM resource-policy ingestion.',
+      );
+      expect(getSSMParamDescription(SSM_PARAM_KEY.PUBLIC_WEBSITE_RUM_INGESTION_STATE)).toBe(
+        'CloudWatch RUM resource-policy ingestion state for the public website.',
+      );
     });
   });
 });

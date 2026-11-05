@@ -24,6 +24,8 @@ export enum SSM_PARAM_KEY {
   WEBSITE_RUM_GUEST_ROLE_ARN = '/website/rum/guest-role-arn',
   WEBSITE_RUM_IDENTITY_POOL_ID = '/website/rum/identity-pool-id',
   WEBSITE_RUM_APP_ID = '/website/rum/app-id',
+  PUBLIC_WEBSITE_RUM_CLIENT_CONFIGURATION = '/public-website/rum/client-configuration',
+  PUBLIC_WEBSITE_RUM_INGESTION_STATE = '/public-website/rum/ingestion-state',
   GRAPHQL_HTTP_URL = 'graphql-http-url',
   GRAPHQL_WS_URL = 'graphql-ws-url',
   GRAPHQL_HOST = 'graphql-host',
@@ -112,6 +114,12 @@ export const SSM_PARAM_METADATA: Record<SSM_PARAM_KEY, SSMParamMetadata> = {
   },
   [SSM_PARAM_KEY.WEBSITE_RUM_APP_ID]: {
     description: 'CloudWatch RUM application identifier for the public website.',
+  },
+  [SSM_PARAM_KEY.PUBLIC_WEBSITE_RUM_CLIENT_CONFIGURATION]: {
+    description: 'Client configuration for public website CloudWatch RUM resource-policy ingestion.',
+  },
+  [SSM_PARAM_KEY.PUBLIC_WEBSITE_RUM_INGESTION_STATE]: {
+    description: 'CloudWatch RUM resource-policy ingestion state for the public website.',
   },
   [SSM_PARAM_KEY.GRAPHQL_HTTP_URL]: {
     description: 'HTTPS endpoint URL for GraphQL API requests.',
